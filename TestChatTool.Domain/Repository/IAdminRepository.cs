@@ -5,7 +5,7 @@ namespace TestChatTool.Domain.Repository
 {
     public interface IAdminRepository
     {
-        (Exception ex, Admin result) CreateAdmin(Admin info);
-        (Exception ex, Admin result) QueryAdmin(string acc);
+        (Exception ex, Admin result) Create(Admin info);
+        (Exception ex, Admin result) Query(string acc);
     }
 }

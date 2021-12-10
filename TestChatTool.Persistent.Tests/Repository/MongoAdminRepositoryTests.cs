@@ -28,7 +28,7 @@ namespace TestChatTool.Persistent.Tests.Repository
         [TestMethod]
         public void create_admin()
         {
-            var result = _repository.CreateAdmin(NewAdmin("admin", "admin"));
+            var result = _repository.Create(NewAdmin("admin", "admin"));
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
@@ -37,9 +37,9 @@ namespace TestChatTool.Persistent.Tests.Repository
         [TestMethod]
         public void create_admin_exist()
         {
-            _repository.CreateAdmin(NewAdmin("admin", "admin"));
+            _repository.Create(NewAdmin("admin", "admin"));
 
-            var result = _repository.CreateAdmin(NewAdmin("admin", string.Empty));
+            var result = _repository.Create(NewAdmin("admin", string.Empty));
 
             Assert.IsNotNull(result.ex);
             Console.WriteLine(result.ex.Message);
@@ -48,9 +48,9 @@ namespace TestChatTool.Persistent.Tests.Repository
         [TestMethod]
         public void query_admin()
         {
-            _repository.CreateAdmin(NewAdmin("admin", "admin"));
+            _repository.Create(NewAdmin("admin", "admin"));
 
-            var result = _repository.QueryAdmin("admin");
+            var result = _repository.Query("admin");
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);

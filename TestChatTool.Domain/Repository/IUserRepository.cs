@@ -5,9 +5,9 @@ namespace TestChatTool.Domain.Repository
 {
     public interface IUserRepository
     {
-        (Exception ex, User result) CreateUser(User info);
-        (Exception ex, User result) QueryUser(string acc);
-        (Exception ex, User result) UpdateUser(User info);
+        (Exception ex, User result) Create(User info);
+        (Exception ex, User result) Query(string acc);
+        (Exception ex, User result) Update(User info);
         (Exception ex, bool isSuccess) ResetPwd(string acc, string oldPwd, string newPwd);
     }
 }

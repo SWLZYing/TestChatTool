@@ -28,7 +28,7 @@ namespace TestChatTool.Persistent.Tests.Repository
         [TestMethod]
         public void cerate_user()
         {
-            var result = _repository.CreateUser(NewUser("User001", "Pwd001", "u001"));
+            var result = _repository.Create(NewUser("User001", "Pwd001", "u001"));
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
@@ -37,9 +37,9 @@ namespace TestChatTool.Persistent.Tests.Repository
         [TestMethod]
         public void cerate_user_exist()
         {
-            _repository.CreateUser(NewUser("User001", "Pwd001", "u001"));
+            _repository.Create(NewUser("User001", "Pwd001", "u001"));
 
-            var result = _repository.CreateUser(NewUser("User001", string.Empty, string.Empty));
+            var result = _repository.Create(NewUser("User001", string.Empty, string.Empty));
 
             Assert.IsNotNull(result.ex);
             Console.WriteLine(result.ex.Message);
@@ -48,9 +48,9 @@ namespace TestChatTool.Persistent.Tests.Repository
         [TestMethod]
         public void query_user()
         {
-            _repository.CreateUser(NewUser("query", "query", "query"));
+            _repository.Create(NewUser("query", "query", "query"));
 
-            var result = _repository.QueryUser("query");
+            var result = _repository.Query("query");
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
@@ -59,18 +59,19 @@ namespace TestChatTool.Persistent.Tests.Repository
         [TestMethod]
         public void update_user()
         {
-            _repository.CreateUser(NewUser("old", "old", "old"));
+            _repository.Create(NewUser("old", "old", "old"));
 
-            var result = _repository.UpdateUser(NewUser("old", string.Empty, "new"));
+            var result = _repository.Update(NewUser("old", string.Empty, "new"));
 
             Assert.IsNull(result.ex);
+            Assert.AreEqual("new", result.result.NickName);
             Console.WriteLine(result.result);
         }
 
         [TestMethod]
         public void reset_pwd()
         {
-            _repository.CreateUser(NewUser("old", "old", "old"));
+            _repository.Create(NewUser("old", "old", "old"));
 
             var result = _repository.ResetPwd("old", "old", "new");
 

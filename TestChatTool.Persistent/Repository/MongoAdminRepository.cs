@@ -16,7 +16,7 @@ namespace TestChatTool.Persistent.Repository
                 .GetCollection<Admin>("Admin");
         }
 
-        public (Exception ex, Admin result) CreateAdmin(Admin info)
+        public (Exception ex, Admin result) Create(Admin info)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace TestChatTool.Persistent.Repository
             }
         }
 
-        public (Exception ex, Admin result) QueryAdmin(string acc)
+        public (Exception ex, Admin result) Query(string acc)
         {
             try
             {

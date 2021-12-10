@@ -17,7 +17,7 @@ namespace TestChatTool.Persistent.Repository
         }
 
 
-        public (Exception ex, User result) CreateUser(User info)
+        public (Exception ex, User result) Create(User info)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace TestChatTool.Persistent.Repository
             }
         }
 
-        public (Exception ex, User result) QueryUser(string acc)
+        public (Exception ex, User result) Query(string acc)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace TestChatTool.Persistent.Repository
             }
         }
 
-        public (Exception ex, User result) UpdateUser(User info)
+        public (Exception ex, User result) Update(User info)
         {
             try
             {
