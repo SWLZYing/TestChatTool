@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using System;
+using System.Threading;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 using TestChatTool.Persistent.Repository;
@@ -11,8 +12,7 @@ namespace TestChatTool.Persistent.Tests.Repository
     public class MongoUserRepositoryTests
     {
         private IMongoUserRepository _repository;
-
-        private const string _context = "mongodb://admin:123456@localhost:27017";
+        private const string _context = "mongodb://localhost:27017";
 
         [TestInitialize]
         public void Init()
@@ -28,20 +28,64 @@ namespace TestChatTool.Persistent.Tests.Repository
         [TestMethod]
         public void cerate_user()
         {
-            var result = _repository.CreateUser(new User
+            var result = _repository.CreateUser(NewUser("User001", "Pwd001", "u001"));
+
+            Assert.IsNull(result.ex);
+            Console.WriteLine(result.result);
+        }
+
+        [TestMethod]
+        public void query_user()
+        {
+            _repository.CreateUser(NewUser("query", "query", "query"));
+
+            var result = _repository.QueryUser("query");
+
+            Assert.IsNull(result.ex);
+            Console.WriteLine(result.result);
+        }
+
+        [TestMethod]
+        public void update_user()
+        {
+            _repository.CreateUser(NewUser("old", "old", "old"));
+
+            // 確認是否更新UpdateDateTime
+            Thread.Sleep(5000);
+
+            var result = _repository.UpdateUser(NewUser("old", "", "new"));
+
+            Assert.IsNull(result.ex);
+            Console.WriteLine(result.result);
+        }
+
+        [TestMethod]
+        public void reset_pwd()
+        {
+            _repository.CreateUser(NewUser("old", "old", "old"));
+
+            // 確認是否更新UpdateDateTime
+            Thread.Sleep(5000);
+
+            var result = _repository.ResetPwd("old", "old", "new");
+
+            Assert.IsNull(result.ex);
+            Assert.IsTrue(result.isSuccess);
+        }
+
+        private User NewUser(string acc, string pwd, string name)
+        {
+            return new User
             {
-                Account = "user001",
-                Password = "pwd001",
-                NickName = "u001",
+                Account = acc,
+                Password = pwd,
+                NickName = name,
                 Status = 0,
                 ErrCount = 0,
                 LastDatetime = DateTime.MinValue,
                 CreateDatetime = DateTime.Now,
                 UpdateDatetime = DateTime.Now,
-            });
-
-            Assert.IsNull(result.ex);
-            Console.WriteLine(result.result);
+            };
         }
     }
 }

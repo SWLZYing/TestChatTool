@@ -3,9 +3,8 @@ using Newtonsoft.Json;
 
 namespace TestChatTool.Domain.Model
 {
-    public class User
+    public class User : MongoModelBase
     {
-        public string _id { get; set; }
         public string Account { get; set; }
         public string Password { get; set; }
         public string NickName { get; set; }
