@@ -3,7 +3,7 @@ using TestChatTool.Domain.Model;
 
 namespace TestChatTool.Domain.Repository
 {
-    public interface IMongoUserRepository
+    public interface IUserRepository
     {
         (Exception ex, User result) CreateUser(User info);
         (Exception ex, User result) QueryUser(string acc);

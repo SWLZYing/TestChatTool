@@ -11,7 +11,7 @@ namespace TestChatTool.Persistent.Tests.Repository
     [TestClass]
     public class MongoUserRepositoryTests
     {
-        private IMongoUserRepository _repository;
+        private IUserRepository _repository;
         private const string _context = "mongodb://localhost:27017";
 
         [TestInitialize]
@@ -19,7 +19,7 @@ namespace TestChatTool.Persistent.Tests.Repository
         {
             var client = new MongoClient(_context);
             var db = client.GetDatabase("TestChatTool");
-            // 清空資料表確保資料正確
+            // 清空測試資料表確保資料正確
             db.DropCollection("User");
 
             _repository = new MongoUserRepository(client);
@@ -32,6 +32,17 @@ namespace TestChatTool.Persistent.Tests.Repository
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
+        }
+
+        [TestMethod]
+        public void cerate_user_exist()
+        {
+            _repository.CreateUser(NewUser("User001", "Pwd001", "u001"));
+
+            var result = _repository.CreateUser(NewUser("User001", string.Empty, string.Empty));
+
+            Assert.IsNotNull(result.ex);
+            Console.WriteLine(result.ex.Message);
         }
 
         [TestMethod]
@@ -50,10 +61,7 @@ namespace TestChatTool.Persistent.Tests.Repository
         {
             _repository.CreateUser(NewUser("old", "old", "old"));
 
-            // 確認是否更新UpdateDateTime
-            Thread.Sleep(5000);
-
-            var result = _repository.UpdateUser(NewUser("old", "", "new"));
+            var result = _repository.UpdateUser(NewUser("old", string.Empty, "new"));
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
@@ -63,9 +71,6 @@ namespace TestChatTool.Persistent.Tests.Repository
         public void reset_pwd()
         {
             _repository.CreateUser(NewUser("old", "old", "old"));
-
-            // 確認是否更新UpdateDateTime
-            Thread.Sleep(5000);
 
             var result = _repository.ResetPwd("old", "old", "new");
 

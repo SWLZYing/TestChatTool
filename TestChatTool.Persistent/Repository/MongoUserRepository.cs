@@ -5,17 +5,15 @@ using TestChatTool.Domain.Repository;
 
 namespace TestChatTool.Persistent.Repository
 {
-    public class MongoUserRepository : IMongoUserRepository
+    public class MongoUserRepository : IUserRepository
     {
-        private readonly MongoClient _client;
-        private readonly IMongoDatabase _mongoDb;
         private readonly IMongoCollection<User> _collection;
 
         public MongoUserRepository(MongoClient client)
         {
-            _client = client;
-            _mongoDb = _client.GetDatabase("TestChatTool");
-            _collection = _mongoDb.GetCollection<User>("User");
+            _collection = client
+                .GetDatabase("TestChatTool")
+                .GetCollection<User>("User");
         }
 
 
@@ -25,9 +23,11 @@ namespace TestChatTool.Persistent.Repository
             {
                 _collection.InsertOne(info);
 
-                var result = _collection.Find(f => f.Account == info.Account).FirstOrDefault();
-
-                return (null, result);
+                return (null, info);
+            }
+            catch (MongoDuplicateKeyException mEx)
+            {
+                return (mEx, null);
             }
             catch (Exception ex)
             {
@@ -39,9 +39,7 @@ namespace TestChatTool.Persistent.Repository
         {
             try
             {
-                var result = _collection.Find(f => f.Account == acc).FirstOrDefault();
-
-                return (null, result);
+                return (null, _collection.Find(f => f.Account == acc).FirstOrDefault());
             }
             catch (Exception ex)
             {
@@ -58,11 +56,10 @@ namespace TestChatTool.Persistent.Repository
                     .Set(s => s.NickName, info.NickName)
                     .Set(s => s.UpdateDatetime, DateTime.Now);
 
-                _collection.UpdateOne(filter, update);
-
-                var result = _collection.Find(f => f.Account == info.Account).FirstOrDefault();
-
-                return (null, result);
+                return (null, _collection.FindOneAndUpdate(
+                    filter,
+                    update,
+                    new FindOneAndUpdateOptions<User, User>() { IsUpsert = false, ReturnDocument = ReturnDocument.After }));
             }
             catch (Exception ex)
             {
@@ -81,15 +78,15 @@ namespace TestChatTool.Persistent.Repository
                     .Set(s => s.Password, newPwd)
                     .Set(s => s.UpdateDatetime, DateTime.Now);
 
-                var isSuccess = _collection.UpdateOne(filter, update, new UpdateOptions() { IsUpsert = false }).MatchedCount > 0;
-
-                return (null, isSuccess);
+                return (null, _collection.UpdateOne(
+                    filter,
+                    update,
+                    new UpdateOptions() { IsUpsert = false }).ModifiedCount > 0);
             }
             catch (Exception ex)
             {
                 return (ex, false);
             }
-
         }
     }
 }
