@@ -3,7 +3,7 @@ using System;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 
-namespace TestChatTool.Persistent.Repository
+namespace TestChatTool.Persistent.MongoRepository
 {
     public class MongoChatRoomRepository : IChatRoomRepository
     {

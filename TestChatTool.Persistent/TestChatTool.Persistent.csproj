@@ -117,10 +117,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MongoRepository\MongoOnLineUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\MongoAdminRepository.cs" />
-    <Compile Include="Repository\MongoChatRoomRepository.cs" />
-    <Compile Include="Repository\MongoUserRepository.cs" />
+    <Compile Include="MongoRepository\MongoAdminRepository.cs" />
+    <Compile Include="MongoRepository\MongoChatRoomRepository.cs" />
+    <Compile Include="MongoRepository\MongoUserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TestChatTool.Domain\TestChatTool.Domain.csproj">

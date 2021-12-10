@@ -1,12 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using System;
-using System.Threading;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
-using TestChatTool.Persistent.Repository;
+using TestChatTool.Persistent.MongoRepository;
 
-namespace TestChatTool.Persistent.Tests.Repository
+namespace TestChatTool.Persistent.Tests.MongoRepository
 {
     [TestClass]
     public class MongoUserRepositoryTests

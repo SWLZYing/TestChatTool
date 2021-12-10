@@ -122,10 +122,12 @@
   <ItemGroup>
     <Compile Include="Model\Admin.cs" />
     <Compile Include="Model\ChatRoom.cs" />
+    <Compile Include="Model\OnLineUser.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\IAdminRepository.cs" />
     <Compile Include="Repository\IChatRoomRepository.cs" />
+    <Compile Include="Repository\IOnLineUserRepository.cs" />
     <Compile Include="Repository\IUserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
