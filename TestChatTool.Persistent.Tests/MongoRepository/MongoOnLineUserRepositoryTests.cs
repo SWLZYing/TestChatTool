@@ -40,10 +40,23 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             // 進入聊天室
             Console.WriteLine(_repository.Upsert(new OnLineUser().GenerateInstance("USER001", "u1", "DC_CAT")));
             // 變換聊天室
-            var result = _repository.Upsert(new OnLineUser().GenerateInstance("USER001", "", "DC_GOG"));
+            var result = _repository.Upsert(new OnLineUser().GenerateInstance("USER001", string.Empty, "DC_GOG"));
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
+        }
+
+        [TestMethod]
+        public void query_room_users()
+        {
+            _repository.Upsert(new OnLineUser().GenerateInstance("USER001", "u1", "DC_CAT"));
+            _repository.Upsert(new OnLineUser().GenerateInstance("USER002", "u2", "DC_GOG"));
+            _repository.Upsert(new OnLineUser().GenerateInstance("USER003", "u3", "DC_GOG"));
+
+            var result = _repository.FindRoomUser("DC_GOG");
+
+            Assert.IsNull(result.ex);
+            Assert.AreEqual(2, result.result.Count);
         }
     }
 }

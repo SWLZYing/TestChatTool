@@ -47,7 +47,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void query_room()
         {
-            _repository.Create(new ChatRoom().GenerateInstance("DC_CATS", "Cat Room"));
+            _repository.Create(new ChatRoom().GenerateInstance("DC_CAT", "Cat Room"));
             var result = _repository.Query("DC_CAT");
 
             Assert.IsNull(result.ex);

@@ -31,7 +31,7 @@ namespace TestChatTool.Persistent.MongoRepository
                 var filter = Builders<OnLineUser>.Filter.Eq(e => e.Account, info.Account);
                 var update = Builders<OnLineUser>.Update
                     .SetOnInsert(s => s.Account, info.Account)
-                    .SetOnInsert(s => s.NickName, info.NickName)
+                    .Set(s => s.NickName, info.NickName)
                     .Set(s => s.RoomCode, info.RoomCode)
                     .Set(s => s.UpdateDatetime, DateTime.Now);
 
@@ -48,7 +48,14 @@ namespace TestChatTool.Persistent.MongoRepository
 
         public (Exception ex, List<OnLineUser> result) FindRoomUser(string code)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return (null, _collection.Find(f => f.RoomCode == code).ToList());
+            }
+            catch (Exception ex)
+            {
+                return (ex, null);
+            }
         }
     }
 }
