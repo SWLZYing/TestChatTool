@@ -46,14 +46,14 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, ChatRoom result) Update(ChatRoom info)
+        public (Exception ex, ChatRoom result) Update(string code, string name)
         {
             try
             {
-                var filter = Builders<ChatRoom>.Filter.Eq(e => e.Code, info.Code);
+                var filter = Builders<ChatRoom>.Filter.Eq(e => e.Code, code);
                 var update = Builders<ChatRoom>.Update
-                    .Set(s => s.Name, info.Name)
-                    .Set(s => s.UpdateDatetime, info.UpdateDatetime);
+                    .Set(s => s.Name, name)
+                    .Set(s => s.UpdateDatetime, DateTime.Now);
 
                 return (null, _collection.FindOneAndUpdate(
                     filter,

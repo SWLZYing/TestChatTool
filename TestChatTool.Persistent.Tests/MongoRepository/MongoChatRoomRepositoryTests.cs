@@ -28,7 +28,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void create_room()
         {
-            var result = _repository.Create(NewRoom("DC_CAT", "Cat Room"));
+            var result = _repository.Create(new ChatRoom().GenerateInstance("DC_CAT", "Cat Room"));
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
@@ -37,8 +37,8 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void create_room_exist()
         {
-            _repository.Create(NewRoom("DC_CAT", "Cat Room"));
-            var result = _repository.Create(NewRoom("DC_CAT", string.Empty));
+            _repository.Create(new ChatRoom().GenerateInstance("DC_CAT", "Cat Room"));
+            var result = _repository.Create(new ChatRoom().GenerateInstance("DC_CAT", string.Empty));
 
             Assert.IsNotNull(result.ex);
             Console.WriteLine(result.ex.Message);
@@ -47,7 +47,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void query_room()
         {
-            _repository.Create(NewRoom("DC_CATS", "Cat Room"));
+            _repository.Create(new ChatRoom().GenerateInstance("DC_CATS", "Cat Room"));
             var result = _repository.Query("DC_CAT");
 
             Assert.IsNull(result.ex);
@@ -55,25 +55,14 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         }
 
         [TestMethod]
-        public void update_room()
+        public void update_room_name()
         {
-            _repository.Create(NewRoom("old", "old"));
-            var result = _repository.Update(NewRoom("old", "new"));
+            Console.WriteLine(_repository.Create(new ChatRoom().GenerateInstance("DC_CAT", "Cat Room")));
+            
+            var result = _repository.Update("DC_CAT", "New Cat Room");
 
             Assert.IsNull(result.ex);
-            Assert.AreEqual("new", result.result.Name);
             Console.WriteLine(result.result);
-        }
-
-        private static ChatRoom NewRoom(string code, string name)
-        {
-            return new ChatRoom
-            {
-                Code = code,
-                Name = name,
-                CreateDatetime = DateTime.Now,
-                UpdateDatetime = DateTime.Now,
-            };
         }
     }
 }

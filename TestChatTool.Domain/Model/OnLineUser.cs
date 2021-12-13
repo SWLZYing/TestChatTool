@@ -12,6 +12,17 @@ namespace TestChatTool.Domain.Model
         public string RoomCode { get; set; }
         public DateTime UpdateDatetime { get; set; }
 
+        public OnLineUser GenerateInstance(string acc, string name, string code)
+        {
+            return new OnLineUser
+            {
+                Account = acc,
+                NickName = name,
+                RoomCode = code,
+                UpdateDatetime = DateTime.Now,
+            };
+        }
+
         public override string ToString() => JsonConvert.SerializeObject(this);
     }
 }

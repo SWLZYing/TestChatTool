@@ -7,6 +7,6 @@ namespace TestChatTool.Domain.Repository
     {
         (Exception ex, ChatRoom result) Create(ChatRoom info);
         (Exception ex, ChatRoom result) Query(string code);
-        (Exception ex, ChatRoom result) Update(ChatRoom info);
+        (Exception ex, ChatRoom result) Update(string code, string name);
     }
 }

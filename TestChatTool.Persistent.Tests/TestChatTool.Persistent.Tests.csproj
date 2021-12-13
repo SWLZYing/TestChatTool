@@ -124,6 +124,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MongoRepository\MongoOnLineUserRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MongoRepository\MongoAdminRepositoryTests.cs" />
     <Compile Include="MongoRepository\MongoChatRoomRepositoryTests.cs" />

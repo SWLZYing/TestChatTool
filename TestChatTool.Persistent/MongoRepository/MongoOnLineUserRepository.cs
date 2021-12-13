@@ -15,34 +15,35 @@ namespace TestChatTool.Persistent.MongoRepository
             _collection = client
                 .GetDatabase("TestChatTool")
                 .GetCollection<OnLineUser>("OnLineUser");
+
+            _collection.Indexes.CreateMany(new CreateIndexModel<OnLineUser>[]
+            {
+                new CreateIndexModel<OnLineUser>(
+                    Builders<OnLineUser>.IndexKeys.Descending(p => p.UpdateDatetime),
+                    new CreateIndexOptions(){ ExpireAfter = TimeSpan.FromSeconds(30)})
+            });
         }
 
-        public (Exception ex, OnLineUser result) Creeate(OnLineUser info)
+        public (Exception ex, OnLineUser result) Upsert(OnLineUser info)
         {
             try
             {
-                _collection.InsertOne(info);
+                var filter = Builders<OnLineUser>.Filter.Eq(e => e.Account, info.Account);
+                var update = Builders<OnLineUser>.Update
+                    .SetOnInsert(s => s.Account, info.Account)
+                    .SetOnInsert(s => s.NickName, info.NickName)
+                    .Set(s => s.RoomCode, info.RoomCode)
+                    .Set(s => s.UpdateDatetime, DateTime.Now);
 
-                return (null, info);
-            }
-            catch (MongoDuplicateKeyException mEx)
-            {
-                return (mEx, null);
+                return (null, _collection.FindOneAndUpdate(
+                     filter,
+                     update,
+                     new FindOneAndUpdateOptions<OnLineUser, OnLineUser>() { IsUpsert = true, ReturnDocument = ReturnDocument.After }));
             }
             catch (Exception ex)
             {
                 return (ex, null);
             }
-        }
-
-        public (Exception ex, OnLineUser result) Update(OnLineUser info)
-        {
-            throw new NotImplementedException();
-        }
-
-        public (Exception ex, bool isSuccess) Delete(string acc)
-        {
-            throw new NotImplementedException();
         }
 
         public (Exception ex, List<OnLineUser> result) FindRoomUser(string code)

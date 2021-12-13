@@ -8,9 +8,9 @@ using TestChatTool.Persistent.MongoRepository;
 namespace TestChatTool.Persistent.Tests.MongoRepository
 {
     [TestClass]
-    public class MongoAdminRepositoryTests
+    public class MongoOnLineUserRepositoryTests
     {
-        private IAdminRepository _repository;
+        private IOnLineUserRepository _repository;
         private const string _context = "mongodb://localhost:27017";
 
         [TestInitialize]
@@ -20,37 +20,27 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var db = client.GetDatabase("TestChatTool");
 
             // 清空測試資料表確保資料正確
-            db.DropCollection("Admin");
+            db.DropCollection("OnLineUser");
 
-            _repository = new MongoAdminRepository(client);
+            _repository = new MongoOnLineUserRepository(client);
         }
 
         [TestMethod]
-        public void create_admin()
+        public void insert_online_user()
         {
-            var result = _repository.Create(new Admin().GenerateInstance("admin", "admin"));
+            var result = _repository.Upsert(new OnLineUser().GenerateInstance("USER001", "u1", "DC_CAT"));
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
         }
 
         [TestMethod]
-        public void create_admin_exist()
+        public void update_online_user()
         {
-            _repository.Create(new Admin().GenerateInstance("admin", "admin"));
-
-            var result = _repository.Create(new Admin().GenerateInstance("admin", "admin"));
-
-            Assert.IsNotNull(result.ex);
-            Console.WriteLine(result.ex.Message);
-        }
-
-        [TestMethod]
-        public void query_admin()
-        {
-            _repository.Create(new Admin().GenerateInstance("admin", "admin"));
-
-            var result = _repository.Query("admin");
+            // 進入聊天室
+            Console.WriteLine(_repository.Upsert(new OnLineUser().GenerateInstance("USER001", "u1", "DC_CAT")));
+            // 變換聊天室
+            var result = _repository.Upsert(new OnLineUser().GenerateInstance("USER001", "", "DC_GOG"));
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
