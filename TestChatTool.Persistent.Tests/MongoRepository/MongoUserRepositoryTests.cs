@@ -27,7 +27,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void cerate_user()
         {
-            var result = _repository.Create(new User().GenerateInstance("User001", "Pwd001", "u001"));
+            var result = _repository.Create(User.GenerateInstance("User001", "Pwd001", "u001"));
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
@@ -36,9 +36,9 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void cerate_user_exist()
         {
-            _repository.Create(new User().GenerateInstance("User001", "Pwd001", "u001"));
+            _repository.Create(User.GenerateInstance("User001", "Pwd001", "u001"));
 
-            var result = _repository.Create(new User().GenerateInstance("User001", string.Empty, string.Empty));
+            var result = _repository.Create(User.GenerateInstance("User001", string.Empty, string.Empty));
 
             Assert.IsNotNull(result.ex);
             Console.WriteLine(result.ex.Message);
@@ -47,7 +47,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void query_user()
         {
-            _repository.Create(new User().GenerateInstance("query", "query", "query"));
+            _repository.Create(User.GenerateInstance("query", "query", "query"));
 
             var result = _repository.Query("query");
 
@@ -58,9 +58,9 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void update_user()
         {
-            Console.WriteLine(_repository.Create(new User().GenerateInstance("old", "old", "old")));
+            Console.WriteLine(_repository.Create(User.GenerateInstance("old", "old", "old")));
 
-            var result = _repository.Update(new User().GenerateInstance("old", string.Empty, "new"));
+            var result = _repository.Update(User.GenerateInstance("old", string.Empty, "new"));
 
             Assert.IsNull(result.ex);
             Assert.AreEqual("new", result.result.NickName);
@@ -70,7 +70,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void reset_pwd()
         {
-            _repository.Create(new User().GenerateInstance("old", "old", "old"));
+            _repository.Create(User.GenerateInstance("old", "old", "old"));
 
             var result = _repository.ResetPwd("old", "old", "new");
 

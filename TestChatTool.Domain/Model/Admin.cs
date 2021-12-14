@@ -14,7 +14,7 @@ namespace TestChatTool.Domain.Model
         public DateTime CreateDatetime { get; set; }
         public DateTime UpdateDatetime { get; set; }
 
-        public Admin GenerateInstance(string acc, string pwd)
+        public static Admin GenerateInstance(string acc, string pwd)
         {
             return new Admin
             {

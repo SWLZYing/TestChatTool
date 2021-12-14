@@ -12,7 +12,7 @@ namespace TestChatTool.Domain.Model
         public DateTime CreateDatetime { get; set; }
         public DateTime UpdateDatetime { get; set; }
 
-        public ChatRoom GenerateInstance(string code, string name)
+        public static ChatRoom GenerateInstance(string code, string name)
         {
             return new ChatRoom
             {

@@ -16,7 +16,7 @@ namespace TestChatTool.Domain.Model
         public DateTime CreateDatetime { get; set; }
         public DateTime UpdateDatetime { get; set; }
 
-        public User GenerateInstance(string acc, string pwd, string name)
+        public static User GenerateInstance(string acc, string pwd, string name)
         {
             return new User
             {

@@ -28,7 +28,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void create_admin()
         {
-            var result = _repository.Create(new Admin().GenerateInstance("admin", "admin"));
+            var result = _repository.Create(Admin.GenerateInstance("admin", "admin"));
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
@@ -37,9 +37,9 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void create_admin_exist()
         {
-            _repository.Create(new Admin().GenerateInstance("admin", "admin"));
+            _repository.Create(Admin.GenerateInstance("admin", "admin"));
 
-            var result = _repository.Create(new Admin().GenerateInstance("admin", "admin"));
+            var result = _repository.Create(Admin.GenerateInstance("admin", "admin"));
 
             Assert.IsNotNull(result.ex);
             Console.WriteLine(result.ex.Message);
@@ -48,7 +48,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void query_admin()
         {
-            _repository.Create(new Admin().GenerateInstance("admin", "admin"));
+            _repository.Create(Admin.GenerateInstance("admin", "admin"));
 
             var result = _repository.Query("admin");
 

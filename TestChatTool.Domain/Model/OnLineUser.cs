@@ -12,7 +12,7 @@ namespace TestChatTool.Domain.Model
         public string RoomCode { get; set; }
         public DateTime UpdateDatetime { get; set; }
 
-        public OnLineUser GenerateInstance(string acc, string name, string code)
+        public static OnLineUser GenerateInstance(string acc, string name, string code)
         {
             return new OnLineUser
             {
