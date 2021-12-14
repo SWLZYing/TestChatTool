@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestChatTool.Domain", "Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestChatTool.Persistent.Tests", "TestChatTool.Persistent.Tests\TestChatTool.Persistent.Tests.csproj", "{F2067169-EF82-4A0C-9695-182A28E6BB9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestChatTool.Service", "TestChatTool.Service\TestChatTool.Service.csproj", "{B4F71386-C96B-4A7E-91F9-4C5ACA542B43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F2067169-EF82-4A0C-9695-182A28E6BB9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2067169-EF82-4A0C-9695-182A28E6BB9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2067169-EF82-4A0C-9695-182A28E6BB9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4F71386-C96B-4A7E-91F9-4C5ACA542B43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4F71386-C96B-4A7E-91F9-4C5ACA542B43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4F71386-C96B-4A7E-91F9-4C5ACA542B43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4F71386-C96B-4A7E-91F9-4C5ACA542B43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

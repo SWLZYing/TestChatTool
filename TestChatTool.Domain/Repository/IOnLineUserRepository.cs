@@ -9,5 +9,6 @@ namespace TestChatTool.Domain.Repository
         (Exception ex, OnLineUser result) Upsert(OnLineUser info);
 
         (Exception ex, List<OnLineUser> result) FindRoomUser(string code);
+        (Exception ex, List<(string, int)> result) FindAllUserCountByRoom();
     }
 }

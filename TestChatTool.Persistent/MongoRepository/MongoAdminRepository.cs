@@ -38,7 +38,9 @@ namespace TestChatTool.Persistent.MongoRepository
         {
             try
             {
-                return (null, _collection.Find(f => f.Account == acc).FirstOrDefault());
+                var result = _collection.Find(f => f.Account == acc).FirstOrDefault();
+
+                return (null, result);
             }
             catch (Exception ex)
             {

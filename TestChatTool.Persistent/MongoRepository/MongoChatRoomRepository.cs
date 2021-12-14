@@ -38,7 +38,9 @@ namespace TestChatTool.Persistent.MongoRepository
         {
             try
             {
-                return (null, _collection.Find(f => f.Code == code).FirstOrDefault());
+                var result = _collection.Find(f => f.Code == code).FirstOrDefault();
+
+                return (null, result);
             }
             catch (Exception ex)
             {
@@ -55,10 +57,12 @@ namespace TestChatTool.Persistent.MongoRepository
                     .Set(s => s.Name, name)
                     .Set(s => s.UpdateDatetime, DateTime.Now);
 
-                return (null, _collection.FindOneAndUpdate(
+                var result = _collection.FindOneAndUpdate(
                     filter,
                     update,
-                    new FindOneAndUpdateOptions<ChatRoom, ChatRoom>() { IsUpsert = false, ReturnDocument = ReturnDocument.After }));
+                    new FindOneAndUpdateOptions<ChatRoom, ChatRoom>() { IsUpsert = false, ReturnDocument = ReturnDocument.After });
+
+                return (null, result);
             }
             catch (Exception ex)
             {

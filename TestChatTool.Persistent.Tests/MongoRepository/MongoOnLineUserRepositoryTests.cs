@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using System;
+using System.Linq;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 using TestChatTool.Persistent.MongoRepository;
@@ -57,6 +58,23 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
 
             Assert.IsNull(result.ex);
             Assert.AreEqual(2, result.result.Count);
+        }
+
+        [TestMethod]
+        public void query_all_room_user_count()
+        {
+            _repository.Upsert(new OnLineUser().GenerateInstance("USER001", "u1", "DC_CAT"));
+            _repository.Upsert(new OnLineUser().GenerateInstance("USER002", "u2", "DC_GOG"));
+            _repository.Upsert(new OnLineUser().GenerateInstance("USER003", "u3", "DC_GOG"));
+            _repository.Upsert(new OnLineUser().GenerateInstance("USER004", "u4", "DC_BIRD"));
+
+            var result = _repository.FindAllUserCountByRoom();
+
+            Assert.IsNull(result.ex);
+            Assert.AreEqual(3, result.result.Count);
+
+            var str = string.Join(", ", result.result.Select(s => $"{s.Item1}:{s.Item2}"));
+            Console.WriteLine($"Room's User Count => {str}.");
         }
     }
 }

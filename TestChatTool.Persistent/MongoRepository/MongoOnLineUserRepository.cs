@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 
@@ -35,10 +36,12 @@ namespace TestChatTool.Persistent.MongoRepository
                     .Set(s => s.RoomCode, info.RoomCode)
                     .Set(s => s.UpdateDatetime, DateTime.Now);
 
-                return (null, _collection.FindOneAndUpdate(
+                var result = _collection.FindOneAndUpdate(
                      filter,
                      update,
-                     new FindOneAndUpdateOptions<OnLineUser, OnLineUser>() { IsUpsert = true, ReturnDocument = ReturnDocument.After }));
+                     new FindOneAndUpdateOptions<OnLineUser, OnLineUser>() { IsUpsert = true, ReturnDocument = ReturnDocument.After });
+
+                return (null, result);
             }
             catch (Exception ex)
             {
@@ -50,7 +53,28 @@ namespace TestChatTool.Persistent.MongoRepository
         {
             try
             {
-                return (null, _collection.Find(f => f.RoomCode == code).ToList());
+                var result = _collection.Find(f => f.RoomCode == code).ToList();
+
+                return (null, result);
+            }
+            catch (Exception ex)
+            {
+                return (ex, null);
+            }
+        }
+
+        public (Exception ex, List<(string, int)> result) FindAllUserCountByRoom()
+        {
+            try
+            {
+                var result = _collection.Find(f => f.RoomCode != string.Empty).ToList();
+
+                var byRoom = result
+                    .GroupBy(g => g.RoomCode)
+                    .Select(s => new ValueTuple<string, int>(s.Key, s.Count()))
+                    .ToList();
+
+                return (null, byRoom);
             }
             catch (Exception ex)
             {

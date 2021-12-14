@@ -16,7 +16,6 @@ namespace TestChatTool.Persistent.MongoRepository
                 .GetCollection<User>("User");
         }
 
-
         public (Exception ex, User result) Create(User info)
         {
             try
@@ -39,7 +38,9 @@ namespace TestChatTool.Persistent.MongoRepository
         {
             try
             {
-                return (null, _collection.Find(f => f.Account == acc).FirstOrDefault());
+                var result = _collection.Find(f => f.Account == acc).FirstOrDefault();
+
+                return (null, result);
             }
             catch (Exception ex)
             {
@@ -56,10 +57,12 @@ namespace TestChatTool.Persistent.MongoRepository
                     .Set(s => s.NickName, info.NickName)
                     .Set(s => s.UpdateDatetime, DateTime.Now);
 
-                return (null, _collection.FindOneAndUpdate(
+                var result = _collection.FindOneAndUpdate(
                     filter,
                     update,
-                    new FindOneAndUpdateOptions<User, User>() { IsUpsert = false, ReturnDocument = ReturnDocument.After }));
+                    new FindOneAndUpdateOptions<User, User>() { IsUpsert = false, ReturnDocument = ReturnDocument.After });
+
+                return (null, result);
             }
             catch (Exception ex)
             {
@@ -78,10 +81,12 @@ namespace TestChatTool.Persistent.MongoRepository
                     .Set(s => s.Password, newPwd)
                     .Set(s => s.UpdateDatetime, DateTime.Now);
 
-                return (null, _collection.UpdateOne(
+                var result = _collection.UpdateOne(
                     filter,
                     update,
-                    new UpdateOptions() { IsUpsert = false }).ModifiedCount > 0);
+                    new UpdateOptions() { IsUpsert = false }).ModifiedCount > 0;
+
+                return (null, result);
             }
             catch (Exception ex)
             {
