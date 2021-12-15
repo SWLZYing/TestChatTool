@@ -10,6 +10,9 @@ namespace TestChatTool.Domain.Model
         public string Account { get; set; }
         public string Password { get; set; }
         public string NickName { get; set; }
+        /// <summary>
+        /// 狀態 0-未啟用 1-啟用 2-鎖定 3-解除鎖定(未重啟)
+        /// </summary>
         public int Status { get; set; }
         public int ErrCount { get; set; }
         public DateTime LastDatetime { get; set; }

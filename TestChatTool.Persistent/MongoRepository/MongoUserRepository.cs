@@ -93,5 +93,57 @@ namespace TestChatTool.Persistent.MongoRepository
                 return (ex, false);
             }
         }
+
+        public (Exception ex, bool isSuccess) SetErrCountAndStatus(string acc, int errCount, int status = 0)
+        {
+            try
+            {
+                var filter = Builders<User>.Filter.And(
+                    Builders<User>.Filter.Eq(e => e.Account, acc));
+                var update = status > 0
+                    ? Builders<User>.Update
+                    .Set(s => s.ErrCount, errCount)
+                    .Set(s => s.Status, status)
+                    .Set(s => s.UpdateDatetime, DateTime.Now)
+                    : Builders<User>.Update
+                    .Set(s => s.ErrCount, errCount)
+                    .Set(s => s.UpdateDatetime, DateTime.Now);
+
+                var result = _collection.UpdateOne(
+                    filter,
+                    update,
+                    new UpdateOptions() { IsUpsert = false }).ModifiedCount > 0;
+
+                return (null, result);
+            }
+            catch (Exception ex)
+            {
+                return (ex, false);
+            }
+        }
+
+        public (Exception ex, User result) SignInRefresh(string acc)
+        {
+            try
+            {
+                var filter = Builders<User>.Filter.And(
+                    Builders<User>.Filter.Eq(e => e.Account, acc));
+                var update = Builders<User>.Update
+                    .Set(s => s.ErrCount, 0)
+                    .Set(s => s.LastDatetime, DateTime.Now)
+                    .Set(s => s.UpdateDatetime, DateTime.Now);
+
+                var result = _collection.FindOneAndUpdate(
+                    filter,
+                    update,
+                    new FindOneAndUpdateOptions<User, User>() { IsUpsert = false, ReturnDocument = ReturnDocument.After });
+
+                return (null, result);
+            }
+            catch (Exception ex)
+            {
+                return (ex, null);
+            }
+        }
     }
 }
