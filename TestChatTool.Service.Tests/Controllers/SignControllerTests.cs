@@ -19,7 +19,7 @@ namespace TestChatTool.Service.Tests.Controllers
         private Mock<IOnLineUserRepository> _onLineRepo;
 
         [TestInitialize]
-        public void Into()
+        public void Init()
         {
             _adminRepo = new Mock<IAdminRepository>();
             _userRepo = new Mock<IUserRepository>();
@@ -80,7 +80,7 @@ namespace TestChatTool.Service.Tests.Controllers
         public void user_sign_in()
         {
             var into = User.GenerateInstance("user", "pass".ToMD5(), "u");
-            into.Status = 1;
+            into.Status = UserStatusType.Enable;
 
             _userRepo.Setup(s => s.Query(It.IsAny<string>()))
                 .Returns((null, into));
@@ -112,7 +112,7 @@ namespace TestChatTool.Service.Tests.Controllers
         public void user_lock()
         {
             var into = User.GenerateInstance("user", "pass".ToMD5(), "u");
-            into.Status = 2;
+            into.Status = UserStatusType.Lock;
 
             _userRepo.Setup(s => s.Query(It.IsAny<string>()))
                 .Returns((null, into));
@@ -128,11 +128,11 @@ namespace TestChatTool.Service.Tests.Controllers
         public void user_sign_in_pass_err()
         {
             var into = User.GenerateInstance("user", "pass".ToMD5(), "u");
-            into.Status = 1;
+            into.Status = UserStatusType.Enable;
 
             _userRepo.Setup(s => s.Query(It.IsAny<string>()))
                 .Returns((null, into));
-            _userRepo.Setup(s => s.SetErrCountAndStatus(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+            _userRepo.Setup(s => s.SetErrCountAndStatus(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<UserStatusType>()))
                 .Returns((null, true));
 
             var controller = new SignController(_adminRepo.Object, _userRepo.Object, _onLineRepo.Object);
@@ -146,12 +146,12 @@ namespace TestChatTool.Service.Tests.Controllers
         public void user_sign_in_pass_err_to_Lock()
         {
             var into = User.GenerateInstance("user", "pass".ToMD5(), "u");
-            into.Status = 1;
+            into.Status = UserStatusType.Enable;
             into.ErrCount = 2;
 
             _userRepo.Setup(s => s.Query(It.IsAny<string>()))
                 .Returns((null, into));
-            _userRepo.Setup(s => s.SetErrCountAndStatus(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+            _userRepo.Setup(s => s.SetErrCountAndStatus(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<UserStatusType>()))
                 .Returns((null, true));
 
             var controller = new SignController(_adminRepo.Object, _userRepo.Object, _onLineRepo.Object);

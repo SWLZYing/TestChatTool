@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using System;
+using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 
@@ -20,6 +21,8 @@ namespace TestChatTool.Persistent.MongoRepository
         {
             try
             {
+                info.Password = info.Password.ToMD5();
+
                 _collection.InsertOne(info);
 
                 return (null, true, false);

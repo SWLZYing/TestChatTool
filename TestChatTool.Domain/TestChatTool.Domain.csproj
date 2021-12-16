@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="Enum\AdminType.cs" />
     <Compile Include="Enum\ErrorType.cs" />
+    <Compile Include="Enum\UserStatusType.cs" />
     <Compile Include="Extension\StringEncryptExtensions.cs" />
     <Compile Include="Extension\StringExtensions.cs" />
     <Compile Include="Model\Admin.cs" />

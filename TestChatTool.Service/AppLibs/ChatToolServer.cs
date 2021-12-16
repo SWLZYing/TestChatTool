@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.Caching;
 using System.Threading;
 using System.Threading.Tasks;
-using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 
@@ -52,7 +51,7 @@ namespace TestChatTool.Service.AppLibs
 
                 if (adminQ.result == null)
                 {
-                    var pwd = "admin".ToMD5();
+                    var pwd = "admin";
                     var admin = Admin.GenerateInstance("admin", pwd);
 
                     var adminC = adminRepo.Create(admin);

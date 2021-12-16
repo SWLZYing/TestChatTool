@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using System;
-using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 using TestChatTool.Persistent.MongoRepository;
@@ -29,7 +28,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void create_admin()
         {
-            var result = _repository.Create(Admin.GenerateInstance("admin", "admin".ToMD5()));
+            var result = _repository.Create(Admin.GenerateInstance("admin", "admin"));
 
             Assert.IsNull(result.ex);
             Assert.IsTrue(result.isSuccess);
@@ -38,9 +37,9 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void create_admin_exist()
         {
-            _repository.Create(Admin.GenerateInstance("admin", "admin".ToMD5()));
+            _repository.Create(Admin.GenerateInstance("admin", "admin"));
 
-            var result = _repository.Create(Admin.GenerateInstance("admin", "admin".ToMD5()));
+            var result = _repository.Create(Admin.GenerateInstance("admin", "admin"));
 
             Assert.IsNotNull(result.ex);
             Assert.IsTrue(result.isAccDuplicate);
@@ -50,7 +49,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void query_admin()
         {
-            _repository.Create(Admin.GenerateInstance("admin", "admin".ToMD5()));
+            _repository.Create(Admin.GenerateInstance("admin", "admin"));
 
             var result = _repository.Query("admin");
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using System;
-using TestChatTool.Domain.Extension;
+using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 using TestChatTool.Persistent.MongoRepository;
@@ -28,12 +28,12 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void cerate_user()
         {
-            var into = User.GenerateInstance("user", "pass".ToMD5(), "u");
-            into.Status = 1;
+            var into = User.GenerateInstance("user", "pass", "u");
+            into.Status = UserStatusType.Enable;
             var result = _repository.Create(into);
 
             Assert.IsNull(result.ex);
-            Console.WriteLine(result.result);
+            Assert.IsTrue(result.isSuccess);
         }
 
         [TestMethod]
@@ -44,7 +44,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.Create(User.GenerateInstance("User001", string.Empty, string.Empty));
 
             Assert.IsNotNull(result.ex);
-            Console.WriteLine(result.ex.Message);
+            Assert.IsTrue(result.isAccDuplicate);
         }
 
         [TestMethod]
@@ -97,7 +97,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         {
             Console.WriteLine(_repository.Create(User.GenerateInstance("user", "pwd", "u")));
 
-            var result = _repository.SetErrCountAndStatus("user", 0, 3);
+            var result = _repository.SetErrCountAndStatus("user", 0, UserStatusType.Unlock);
 
             Assert.IsNull(result.ex);
             Assert.IsTrue(result.isSuccess);

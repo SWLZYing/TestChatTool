@@ -1,6 +1,7 @@
 ﻿using System;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
+using TestChatTool.Domain.Enum;
 
 namespace TestChatTool.Domain.Model
 {
@@ -13,8 +14,8 @@ namespace TestChatTool.Domain.Model
         /// <summary>
         /// 狀態 0-未啟用 1-啟用 2-鎖定 3-解除鎖定(未重啟)
         /// </summary>
-        public int Status { get; set; }
-        public int ErrCount { get; set; }
+        public UserStatusType Status { get; set; } = 0;
+        public int ErrCount { get; set; } = 0;
         public DateTime? LastDatetime { get; set; }
         public DateTime CreateDatetime { get; set; }
         public DateTime UpdateDatetime { get; set; }
@@ -26,7 +27,7 @@ namespace TestChatTool.Domain.Model
                 Account = acc,
                 Password = pwd,
                 NickName = name,
-                Status = 0,
+                Status = UserStatusType.Disabled,
                 ErrCount = 0,
                 CreateDatetime = DateTime.Now,
                 UpdateDatetime = DateTime.Now,

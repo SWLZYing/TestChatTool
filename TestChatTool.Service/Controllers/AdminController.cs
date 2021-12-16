@@ -34,6 +34,7 @@ namespace TestChatTool.Service.Controllers
                     return new AdminCreateResponse
                     {
                         Code = (int)ErrorType.FieldNull,
+                        IsSuccess = false,
                         ErrorMsg = "帳號/密碼必填",
                     };
                 }
@@ -43,7 +44,7 @@ namespace TestChatTool.Service.Controllers
                 var result = _adminRepository.Create(new Admin
                 {
                     Account = request.Account,
-                    Password = request.Password.ToMD5(),
+                    Password = request.Password,
                     AccountType = request.AccountType,
                     CreateDatetime = now,
                     UpdateDatetime = now,
@@ -56,6 +57,7 @@ namespace TestChatTool.Service.Controllers
                         return new AdminCreateResponse
                         {
                             Code = (int)ErrorType.AccExist,
+                            IsSuccess = result.isSuccess,
                             ErrorMsg = "帳號已存在",
                         };
                     }
@@ -64,6 +66,7 @@ namespace TestChatTool.Service.Controllers
                     return new AdminCreateResponse
                     {
                         Code = (int)ErrorType.SystemError,
+                        IsSuccess = result.isSuccess,
                         ErrorMsg = result.ex.Message,
                     };
                 }
@@ -71,7 +74,7 @@ namespace TestChatTool.Service.Controllers
                 return new AdminCreateResponse
                 {
                     Code = (int)ErrorType.Success,
-                    IsSuccess = true,
+                    IsSuccess = result.isSuccess,
                 };
             }
             catch (Exception ex)
@@ -80,6 +83,7 @@ namespace TestChatTool.Service.Controllers
                 return new AdminCreateResponse
                 {
                     Code = (int)ErrorType.SystemError,
+                    IsSuccess = false,
                     ErrorMsg = ex.Message,
                 };
             }
@@ -92,7 +96,7 @@ namespace TestChatTool.Service.Controllers
             {
                 if (account.IsNullOrWhiteSpace())
                 {
-                    _logger.Warn($"{nameof(AdminController)}.{nameof(Create)} 未輸入查詢帳號");
+                    _logger.Warn($"{nameof(AdminController)}.{nameof(Query)} 未輸入查詢帳號");
 
                     return new AdminQueryResponse
                     {

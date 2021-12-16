@@ -1,5 +1,7 @@
 ﻿using MongoDB.Driver;
 using System;
+using TestChatTool.Domain.Enum;
+using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 
@@ -16,21 +18,28 @@ namespace TestChatTool.Persistent.MongoRepository
                 .GetCollection<User>("User");
         }
 
-        public (Exception ex, User result) Create(User info)
+        public (Exception ex, bool isSuccess, bool isAccDuplicate) Create(User info)
         {
             try
             {
+                info.Password = info.Password.ToMD5();
+
                 _collection.InsertOne(info);
 
-                return (null, info);
+                return (null, true, false);
             }
-            catch (MongoDuplicateKeyException mEx)
+            catch (MongoWriteException mEx)
             {
-                return (mEx, null);
+                if (mEx.WriteError.Category == ServerErrorCategory.DuplicateKey)
+                {
+                    return (mEx, false, true);
+                }
+
+                return (mEx, false, false);
             }
             catch (Exception ex)
             {
-                return (ex, null);
+                return (ex, false, false);
             }
         }
 
@@ -76,9 +85,9 @@ namespace TestChatTool.Persistent.MongoRepository
             {
                 var filter = Builders<User>.Filter.And(
                     Builders<User>.Filter.Eq(e => e.Account, acc),
-                    Builders<User>.Filter.Eq(e => e.Password, oldPwd));
+                    Builders<User>.Filter.Eq(e => e.Password, oldPwd.ToMD5()));
                 var update = Builders<User>.Update
-                    .Set(s => s.Password, newPwd)
+                    .Set(s => s.Password, newPwd.ToMD5())
                     .Set(s => s.UpdateDatetime, DateTime.Now);
 
                 var result = _collection.UpdateOne(
@@ -94,7 +103,7 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, bool isSuccess) SetErrCountAndStatus(string acc, int errCount, int status = 0)
+        public (Exception ex, bool isSuccess) SetErrCountAndStatus(string acc, int errCount, UserStatusType status = UserStatusType.Disabled)
         {
             try
             {
@@ -103,7 +112,7 @@ namespace TestChatTool.Persistent.MongoRepository
                 var update = status > 0
                     ? Builders<User>.Update
                     .Set(s => s.ErrCount, errCount)
-                    .Set(s => s.Status, status)
+                    .Set(s => (int)s.Status, (int)status)
                     .Set(s => s.UpdateDatetime, DateTime.Now)
                     : Builders<User>.Update
                     .Set(s => s.ErrCount, errCount)

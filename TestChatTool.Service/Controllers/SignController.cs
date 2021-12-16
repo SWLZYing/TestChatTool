@@ -12,6 +12,8 @@ namespace TestChatTool.Service.Controllers
     [Route("api/Sign/{Action}")]
     public class SignController : ApiController
     {
+        private static object _signLock = new object();
+
         private readonly IAdminRepository _adminRepository;
         private readonly IUserRepository _userRepository;
         private readonly IOnLineUserRepository _onLineUserRepository;
@@ -44,45 +46,49 @@ namespace TestChatTool.Service.Controllers
                     };
                 }
 
-                var result = _adminRepository.Query(request.Account);
-
-                if (result.ex != null)
+                _signLock = request.Account;
+                lock (_signLock)
                 {
-                    _logger.Error($"{nameof(AdminSignIn)} Get Exception");
+                    var result = _adminRepository.Query(request.Account);
+
+                    if (result.ex != null)
+                    {
+                        _logger.Error($"{nameof(AdminSignIn)} Get Exception");
+                        return new AdminSignInResponse
+                        {
+                            Code = (int)ErrorType.SystemError,
+                            ErrorMsg = result.ex.Message,
+                        };
+                    }
+
+                    if (result.result == null)
+                    {
+                        _logger.Warn($"{nameof(AdminSignIn)} 查無此帳號");
+
+                        return new AdminSignInResponse
+                        {
+                            Code = (int)ErrorType.AccError,
+                            ErrorMsg = "查無此帳號",
+                        };
+                    }
+
+                    if (result.result.Password != request.Password.ToMD5())
+                    {
+                        _logger.Warn($"{nameof(AdminSignIn)} 密碼錯誤");
+
+                        return new AdminSignInResponse
+                        {
+                            Code = (int)ErrorType.PwdError,
+                            ErrorMsg = "密碼錯誤",
+                        };
+                    }
+
                     return new AdminSignInResponse
                     {
-                        Code = (int)ErrorType.SystemError,
-                        ErrorMsg = result.ex.Message,
+                        Code = (int)ErrorType.Success,
+                        Data = result.result,
                     };
                 }
-
-                if (result.result == null)
-                {
-                    _logger.Warn($"{nameof(AdminSignIn)} 查無此帳號");
-
-                    return new AdminSignInResponse
-                    {
-                        Code = (int)ErrorType.AccError,
-                        ErrorMsg = "查無此帳號",
-                    };
-                }
-
-                if (result.result.Password != request.Password.ToMD5())
-                {
-                    _logger.Warn($"{nameof(AdminSignIn)} 密碼錯誤");
-
-                    return new AdminSignInResponse
-                    {
-                        Code = (int)ErrorType.PwdError,
-                        ErrorMsg = "密碼錯誤",
-                    };
-                }
-
-                return new AdminSignInResponse
-                {
-                    Code = (int)ErrorType.Success,
-                    Data = result.result,
-                };
             }
             catch (Exception ex)
             {
@@ -111,93 +117,91 @@ namespace TestChatTool.Service.Controllers
                     };
                 }
 
-                var query = _userRepository.Query(request.Account);
-
-                if (query.ex != null)
+                _signLock = request.Account;
+                lock (_signLock)
                 {
-                    _logger.Error($"{nameof(UserSignIn)} Get Exception");
-                    return new UserSignInResponse
-                    {
-                        Code = (int)ErrorType.SystemError,
-                        ErrorMsg = query.ex.Message,
-                    };
-                }
+                    var query = _userRepository.Query(request.Account);
 
-                if (query.result == null)
-                {
-                    _logger.Warn($"{nameof(UserSignIn)} 查無此帳號");
-
-                    return new UserSignInResponse
-                    {
-                        Code = (int)ErrorType.AccError,
-                        ErrorMsg = "查無此帳號",
-                    };
-                }
-
-                // 帳號狀態 未啟用/鎖定
-                if (query.result.Status == 0 || query.result.Status == 2)
-                {
-                    return new UserSignInResponse
-                    {
-                        Code = query.result.Status == 0 ? (int)ErrorType.AccNotVerify : (int)ErrorType.AccLock,
-                        ErrorMsg = query.result.Status == 0 ? "帳號待審核" : "帳號鎖定中 請聯繫管理員解鎖",
-                    };
-                }
-
-                // 帳號狀態 啟用/解鎖(未更換密碼)
-                // 密碼錯誤
-                if (query.result.Password != request.Password.ToMD5())
-                {
-                    var errCount = query.result.ErrCount + 1;
-
-                    // 更新錯誤次數 連續錯誤三次帳號鎖定
-                    var err = errCount < 3
-                        ? _userRepository.SetErrCountAndStatus(query.result.Account, errCount)
-                        : _userRepository.SetErrCountAndStatus(query.result.Account, errCount, 2);
-
-                    if (err.ex != null)
+                    if (query.ex != null)
                     {
                         _logger.Error($"{nameof(UserSignIn)} Get Exception");
                         return new UserSignInResponse
                         {
                             Code = (int)ErrorType.SystemError,
-                            ErrorMsg = err.ex.Message,
+                            ErrorMsg = query.ex.Message,
                         };
                     }
 
-                    _logger.Warn($"{nameof(UserSignIn)} 密碼錯誤 次數:{errCount}");
+                    if (query.result == null)
+                    {
+                        _logger.Warn($"{nameof(UserSignIn)} 查無此帳號");
+
+                        return new UserSignInResponse
+                        {
+                            Code = (int)ErrorType.AccError,
+                            ErrorMsg = "查無此帳號",
+                        };
+                    }
+
+                    // 帳號狀態 未啟用/鎖定
+                    if (query.result.Status == UserStatusType.Disabled || query.result.Status == UserStatusType.Lock)
+                    {
+                        return new UserSignInResponse
+                        {
+                            Code = query.result.Status == 0 ? (int)ErrorType.AccNotVerify : (int)ErrorType.AccLock,
+                            ErrorMsg = query.result.Status == 0 ? "帳號待審核" : "帳號鎖定中 請聯繫管理員解鎖",
+                        };
+                    }
+
+                    // 帳號狀態 啟用/解鎖(未更換密碼)
+                    // 密碼錯誤
+                    if (query.result.Password != request.Password.ToMD5())
+                    {
+                        var errCount = query.result.ErrCount + 1;
+
+                        // 更新錯誤次數 連續錯誤三次帳號鎖定
+                        var err = errCount < 3
+                            ? _userRepository.SetErrCountAndStatus(query.result.Account, errCount)
+                            : _userRepository.SetErrCountAndStatus(query.result.Account, errCount, UserStatusType.Lock);
+
+                        if (err.ex != null)
+                        {
+                            _logger.Error($"{nameof(UserSignIn)} Get Exception");
+                            return new UserSignInResponse
+                            {
+                                Code = (int)ErrorType.SystemError,
+                                ErrorMsg = err.ex.Message,
+                            };
+                        }
+
+                        _logger.Warn($"{nameof(UserSignIn)} 密碼錯誤 次數:{errCount}");
+
+                        return new UserSignInResponse
+                        {
+                            Code = errCount < 3 ? (int)ErrorType.PwdError : (int)ErrorType.PwdErrorToLock,
+                            ErrorMsg = errCount < 3 ? "密碼錯誤" : "密碼錯誤三次 帳號已鎖定",
+                        };
+                    }
+
+                    // 密碼正確
+                    var signIn = _userRepository.SignInRefresh(query.result.Account);
+
+                    if (signIn.ex != null)
+                    {
+                        _logger.Error($"{nameof(UserSignIn)} Get Exception");
+                        return new UserSignInResponse
+                        {
+                            Code = (int)ErrorType.SystemError,
+                            ErrorMsg = signIn.ex.Message,
+                        };
+                    }
 
                     return new UserSignInResponse
                     {
-                        Code = errCount < 3 ? (int)ErrorType.PwdError : (int)ErrorType.PwdErrorToLock,
-                        ErrorMsg = errCount < 3 ? "密碼錯誤" : "密碼錯誤三次 帳號已鎖定",
+                        Code = (int)ErrorType.Success,
+                        Data = signIn.result,
                     };
                 }
-
-                // 密碼正確
-                var signIn = _userRepository.SignInRefresh(query.result.Account);
-
-                if (signIn.ex != null)
-                {
-                    _logger.Error($"{nameof(UserSignIn)} Get Exception");
-                    return new UserSignInResponse
-                    {
-                        Code = (int)ErrorType.SystemError,
-                        ErrorMsg = signIn.ex.Message,
-                    };
-                }
-
-                // 進入大廳
-                var onLine = _onLineUserRepository.Upsert(OnLineUser.GenerateInstance(
-                    signIn.result.Account,
-                    signIn.result.NickName,
-                    "HALL"));
-
-                return new UserSignInResponse
-                {
-                    Code = (int)ErrorType.Success,
-                    Data = signIn.result,
-                };
             }
             catch (Exception ex)
             {

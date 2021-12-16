@@ -15,13 +15,13 @@ namespace TestChatTool.Service.Tests.Controllers
         private Mock<IAdminRepository> _repo;
 
         [TestInitialize]
-        public void Into()
+        public void Init()
         {
             _repo = new Mock<IAdminRepository>();
         }
 
         [TestMethod]
-        public void create_normal()
+        public void create_account_for_normal()
         {
             _repo.Setup(s => s.Create(It.IsAny<Admin>()))
                 .Returns((null, true, false));
@@ -36,6 +36,7 @@ namespace TestChatTool.Service.Tests.Controllers
             });
 
             Assert.AreEqual((int)ErrorType.Success, result.Code);
+            Assert.IsTrue(result.IsSuccess);
         }
 
         [TestMethod]
@@ -54,6 +55,7 @@ namespace TestChatTool.Service.Tests.Controllers
             });
 
             Assert.AreEqual((int)ErrorType.AccExist, result.Code);
+            Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
