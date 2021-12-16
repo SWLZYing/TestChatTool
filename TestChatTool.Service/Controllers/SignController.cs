@@ -29,7 +29,7 @@ namespace TestChatTool.Service.Controllers
         }
 
         [HttpPost]
-        public AdminSignInResponse AdminSignIn([FromBody] SignInRequest request)
+        public AdminSignInResponse AdminSignIn(SignInRequest request)
         {
             try
             {
@@ -48,7 +48,12 @@ namespace TestChatTool.Service.Controllers
 
                 if (result.ex != null)
                 {
-                    throw result.ex;
+                    _logger.Error($"{nameof(AdminSignIn)} Get Exception");
+                    return new AdminSignInResponse
+                    {
+                        Code = (int)ErrorType.SystemError,
+                        ErrorMsg = result.ex.Message,
+                    };
                 }
 
                 if (result.result == null)
@@ -84,14 +89,14 @@ namespace TestChatTool.Service.Controllers
                 _logger.Error($"{nameof(AdminSignIn)} Get Exception");
                 return new AdminSignInResponse
                 {
-                    Code = (int)ErrorType.Failed,
+                    Code = (int)ErrorType.SystemError,
                     ErrorMsg = ex.Message,
                 };
             }
         }
 
         [HttpPost]
-        public UserSignInResponse UserSignIn([FromBody] SignInRequest request)
+        public UserSignInResponse UserSignIn(SignInRequest request)
         {
             try
             {
@@ -110,7 +115,12 @@ namespace TestChatTool.Service.Controllers
 
                 if (query.ex != null)
                 {
-                    throw query.ex;
+                    _logger.Error($"{nameof(UserSignIn)} Get Exception");
+                    return new UserSignInResponse
+                    {
+                        Code = (int)ErrorType.SystemError,
+                        ErrorMsg = query.ex.Message,
+                    };
                 }
 
                 if (query.result == null)
@@ -147,7 +157,12 @@ namespace TestChatTool.Service.Controllers
 
                     if (err.ex != null)
                     {
-                        throw err.ex;
+                        _logger.Error($"{nameof(UserSignIn)} Get Exception");
+                        return new UserSignInResponse
+                        {
+                            Code = (int)ErrorType.SystemError,
+                            ErrorMsg = err.ex.Message,
+                        };
                     }
 
                     _logger.Warn($"{nameof(UserSignIn)} 密碼錯誤 次數:{errCount}");
@@ -164,7 +179,12 @@ namespace TestChatTool.Service.Controllers
 
                 if (signIn.ex != null)
                 {
-                    throw signIn.ex;
+                    _logger.Error($"{nameof(UserSignIn)} Get Exception");
+                    return new UserSignInResponse
+                    {
+                        Code = (int)ErrorType.SystemError,
+                        ErrorMsg = signIn.ex.Message,
+                    };
                 }
 
                 // 進入大廳
@@ -184,7 +204,7 @@ namespace TestChatTool.Service.Controllers
                 _logger.Error($"{nameof(UserSignIn)} Get Exception");
                 return new UserSignInResponse
                 {
-                    Code = (int)ErrorType.Failed,
+                    Code = (int)ErrorType.SystemError,
                     ErrorMsg = ex.Message,
                 };
             }

@@ -32,7 +32,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.Create(Admin.GenerateInstance("admin", "admin".ToMD5()));
 
             Assert.IsNull(result.ex);
-            Console.WriteLine(result.result);
+            Assert.IsTrue(result.isSuccess);
         }
 
         [TestMethod]
@@ -43,6 +43,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.Create(Admin.GenerateInstance("admin", "admin".ToMD5()));
 
             Assert.IsNotNull(result.ex);
+            Assert.IsTrue(result.isAccDuplicate);
             Console.WriteLine(result.ex.Message);
         }
 

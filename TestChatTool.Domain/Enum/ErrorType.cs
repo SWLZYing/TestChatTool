@@ -2,20 +2,22 @@
 {
     public enum ErrorType
     {
-        // 1 傳入資訊
+        // 1 資料檢核
         FieldNull = 1001,
 
-        // 2 資料檢核
-        AccError = 2001,
-        PwdError = 2002,
-        PwdErrorToLock = 2003,
+        AccError = 1021,
+        AccExist = 1022,
 
-        // 3 會員資料
-        AccNotVerify = 3001,
-        AccLock = 3002,
+        PwdError = 1041,
+        PwdErrorToLock = 1042,
+
+        // 2 會員資料
+        AccNotVerify = 2001,
+        AccLock = 2002,
 
         // 9 系統流程
         Failed = 9001,
+        SystemError = 9002,
         Success = 9999,
     }
 }

@@ -15,7 +15,7 @@ namespace TestChatTool.Domain.Model
         /// </summary>
         public int Status { get; set; }
         public int ErrCount { get; set; }
-        public DateTime LastDatetime { get; set; }
+        public DateTime? LastDatetime { get; set; }
         public DateTime CreateDatetime { get; set; }
         public DateTime UpdateDatetime { get; set; }
 
@@ -28,7 +28,6 @@ namespace TestChatTool.Domain.Model
                 NickName = name,
                 Status = 0,
                 ErrCount = 0,
-                LastDatetime = DateTime.MinValue,
                 CreateDatetime = DateTime.Now,
                 UpdateDatetime = DateTime.Now,
             };

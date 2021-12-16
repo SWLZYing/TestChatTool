@@ -16,21 +16,26 @@ namespace TestChatTool.Persistent.MongoRepository
                 .GetCollection<Admin>("Admin");
         }
 
-        public (Exception ex, Admin result) Create(Admin info)
+        public (Exception ex, bool isSuccess, bool isAccDuplicate) Create(Admin info)
         {
             try
             {
                 _collection.InsertOne(info);
 
-                return (null, info);
+                return (null, true, false);
             }
-            catch (MongoDuplicateKeyException mEx)
+            catch (MongoWriteException mEx)
             {
-                return (mEx, null);
+                if (mEx.WriteError.Category == ServerErrorCategory.DuplicateKey)
+                {
+                    return (mEx, false, true);
+                }
+
+                return (mEx, false, false);
             }
             catch (Exception ex)
             {
-                return (ex, null);
+                return (ex, false, false);
             }
         }
 

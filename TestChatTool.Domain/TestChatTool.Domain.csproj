@@ -120,6 +120,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\AdminType.cs" />
     <Compile Include="Enum\ErrorType.cs" />
     <Compile Include="Extension\StringEncryptExtensions.cs" />
     <Compile Include="Extension\StringExtensions.cs" />

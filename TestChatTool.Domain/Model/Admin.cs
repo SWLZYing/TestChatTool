@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System;
+using TestChatTool.Domain.Enum;
 
 namespace TestChatTool.Domain.Model
 {
@@ -9,8 +10,10 @@ namespace TestChatTool.Domain.Model
         [BsonId()]
         public string Account { get; set; }
         public string Password { get; set; }
-        public int AccountType { get; set; }
-        public DateTime LastDatetime { get; set; }
+        /// <summary>
+        /// 使用者類型 1-Admin 2-Normal
+        /// </summary>
+        public AdminType AccountType { get; set; }
         public DateTime CreateDatetime { get; set; }
         public DateTime UpdateDatetime { get; set; }
 
@@ -20,8 +23,7 @@ namespace TestChatTool.Domain.Model
             {
                 Account = acc,
                 Password = pwd,
-                AccountType = 1,
-                LastDatetime = DateTime.MinValue,
+                AccountType = AdminType.Admin,
                 CreateDatetime = DateTime.Now,
                 UpdateDatetime = DateTime.Now,
             };
