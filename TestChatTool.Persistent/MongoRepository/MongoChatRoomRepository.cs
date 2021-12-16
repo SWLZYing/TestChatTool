@@ -16,21 +16,30 @@ namespace TestChatTool.Persistent.MongoRepository
                 .GetCollection<ChatRoom>("ChatRoom");
         }
 
-        public (Exception ex, ChatRoom result) Create(ChatRoom info)
+        public (Exception ex, bool isSuccess, bool isAccDuplicate) Create(ChatRoom info)
         {
             try
             {
+                var now = DateTime.Now;
+                info.CreateDatetime = now;
+                info.UpdateDatetime = now;
+
                 _collection.InsertOne(info);
 
-                return (null, info);
+                return (null, true, false);
             }
-            catch (MongoDuplicateKeyException mEx)
+            catch (MongoWriteException mEx)
             {
-                return (mEx, null);
+                if (mEx.WriteError.Category == ServerErrorCategory.DuplicateKey)
+                {
+                    return (mEx, false, true);
+                }
+
+                return (mEx, false, false);
             }
             catch (Exception ex)
             {
-                return (ex, null);
+                return (ex, false, false);
             }
         }
 

@@ -9,60 +9,54 @@ using TestChatTool.Service.Models;
 
 namespace TestChatTool.Service.Controllers
 {
-    [Route("api/Admin/{Action}")]
-
-    public class AdminController : ApiController
+    [Route("api/ChatRoom/{Action}")]
+    public class ChatRoomController : ApiController
     {
-        private readonly IAdminRepository _adminRepository;
+        private readonly IChatRoomRepository _chatRoomRepository;
         private readonly ILogger _logger;
 
-        public AdminController(IAdminRepository adminRepository)
+        public ChatRoomController(IChatRoomRepository chatRoomRepository)
         {
-            _adminRepository = adminRepository;
-            _logger = LogManager.GetLogger(nameof(AdminController));
+            _chatRoomRepository = chatRoomRepository;
+            _logger = LogManager.GetLogger(nameof(ChatRoomController));
         }
 
         [HttpPost]
-        public AdminCreateResponse Create(AdminCreateRequest request)
+        public ChatRoomCreateResponse Create(ChatRoomCreateRequest request)
         {
             try
             {
-                if (request.Account.IsNullOrWhiteSpace() || request.Password.IsNullOrWhiteSpace())
+                if (request.Code.IsNullOrWhiteSpace())
                 {
-                    _logger.Warn($"{nameof(AdminController)}.{nameof(Create)} 未輸入帳號/密碼");
-                    return new AdminCreateResponse
+                    _logger.Warn($"{nameof(ChatRoomController)}.{nameof(Create)} 房間代碼為必填");
+                    return new ChatRoomCreateResponse
                     {
                         Code = (int)ErrorType.FieldNull,
                         IsSuccess = false,
-                        ErrorMsg = "帳號/密碼必填",
+                        ErrorMsg = "房間代碼為必填",
                     };
                 }
 
-                var now = DateTime.Now;
-
-                var result = _adminRepository.Create(new Admin
+                var result = _chatRoomRepository.Create(new ChatRoom
                 {
-                    Account = request.Account,
-                    Password = request.Password,
-                    AccountType = request.AccountType,
-                    CreateDatetime = now,
-                    UpdateDatetime = now,
+                    Code = request.Code,
+                    Name = request.Name.IsNullOrWhiteSpace() ? request.Code : request.Name,
                 });
 
                 if (result.ex != null)
                 {
                     if (!result.isSuccess && result.isAccDuplicate)
                     {
-                        return new AdminCreateResponse
+                        return new ChatRoomCreateResponse
                         {
                             Code = (int)ErrorType.AccExist,
                             IsSuccess = result.isSuccess,
-                            ErrorMsg = "帳號已存在",
+                            ErrorMsg = "聊天室已存在",
                         };
                     }
 
-                    _logger.Error($"{nameof(AdminController)}.{nameof(Create)} Get Exception");
-                    return new AdminCreateResponse
+                    _logger.Error($"{nameof(ChatRoomController)}.{nameof(Create)} Get Exception");
+                    return new ChatRoomCreateResponse
                     {
                         Code = (int)ErrorType.SystemError,
                         IsSuccess = result.isSuccess,
@@ -70,7 +64,7 @@ namespace TestChatTool.Service.Controllers
                     };
                 }
 
-                return new AdminCreateResponse
+                return new ChatRoomCreateResponse
                 {
                     Code = (int)ErrorType.Success,
                     IsSuccess = result.isSuccess,
@@ -78,8 +72,8 @@ namespace TestChatTool.Service.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error($"{nameof(AdminController)}.{nameof(Create)} Get Exception");
-                return new AdminCreateResponse
+                _logger.Error($"{nameof(ChatRoomController)}.{nameof(Create)} Get Exception");
+                return new ChatRoomCreateResponse
                 {
                     Code = (int)ErrorType.SystemError,
                     IsSuccess = false,
@@ -89,27 +83,26 @@ namespace TestChatTool.Service.Controllers
         }
 
         [HttpGet]
-        public AdminQueryResponse Query(string account)
+        public ChatRoomQueryResponse Query(string code)
         {
             try
             {
-                if (account.IsNullOrWhiteSpace())
+                if (code.IsNullOrWhiteSpace())
                 {
-                    _logger.Warn($"{nameof(AdminController)}.{nameof(Query)} 未輸入查詢帳號");
-
-                    return new AdminQueryResponse
+                    _logger.Warn($"{nameof(ChatRoomController)}.{nameof(Query)} 未輸入查詢房間代碼");
+                    return new ChatRoomQueryResponse
                     {
                         Code = (int)ErrorType.FieldNull,
-                        ErrorMsg = "未輸入查詢帳號",
+                        ErrorMsg = "未輸入查詢房間代碼",
                     };
                 }
 
-                var result = _adminRepository.Query(account);
+                var result = _chatRoomRepository.Query(code);
 
                 if (result.ex != null)
                 {
-                    _logger.Error($"{nameof(AdminController)}.{nameof(Query)} Get Exception");
-                    return new AdminQueryResponse
+                    _logger.Error($"{nameof(ChatRoomController)}.{nameof(Query)} Get Exception");
+                    return new ChatRoomQueryResponse
                     {
                         Code = (int)ErrorType.SystemError,
                         ErrorMsg = result.ex.Message,
@@ -118,14 +111,14 @@ namespace TestChatTool.Service.Controllers
 
                 if (result.result == null)
                 {
-                    return new AdminQueryResponse
+                    return new ChatRoomQueryResponse
                     {
                         Code = (int)ErrorType.AccError,
-                        ErrorMsg = "查無此帳號",
+                        ErrorMsg = "聊天室不存在",
                     };
                 }
 
-                return new AdminQueryResponse
+                return new ChatRoomQueryResponse
                 {
                     Code = (int)ErrorType.Success,
                     Data = result.result
@@ -133,8 +126,8 @@ namespace TestChatTool.Service.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error($"{nameof(AdminController)}.{nameof(Query)} Get Exception");
-                return new AdminQueryResponse
+                _logger.Error($"{nameof(ChatRoomController)}.{nameof(Query)} Get Exception");
+                return new ChatRoomQueryResponse
                 {
                     Code = (int)ErrorType.SystemError,
                     ErrorMsg = ex.Message,

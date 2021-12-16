@@ -38,7 +38,6 @@ namespace TestChatTool.Service.Controllers
                 if (request.Account.IsNullOrWhiteSpace() || request.Password.IsNullOrWhiteSpace())
                 {
                     _logger.Warn($"{nameof(AdminSignIn)} 未輸入帳號/密碼");
-
                     return new AdminSignInResponse
                     {
                         Code = (int)ErrorType.FieldNull,
@@ -64,7 +63,6 @@ namespace TestChatTool.Service.Controllers
                     if (result.result == null)
                     {
                         _logger.Warn($"{nameof(AdminSignIn)} 查無此帳號");
-
                         return new AdminSignInResponse
                         {
                             Code = (int)ErrorType.AccError,
@@ -75,7 +73,6 @@ namespace TestChatTool.Service.Controllers
                     if (result.result.Password != request.Password.ToMD5())
                     {
                         _logger.Warn($"{nameof(AdminSignIn)} 密碼錯誤");
-
                         return new AdminSignInResponse
                         {
                             Code = (int)ErrorType.PwdError,
@@ -109,7 +106,6 @@ namespace TestChatTool.Service.Controllers
                 if (request.Account.IsNullOrWhiteSpace() || request.Password.IsNullOrWhiteSpace())
                 {
                     _logger.Warn($"{nameof(UserSignIn)} 未輸入帳號/密碼");
-
                     return new UserSignInResponse
                     {
                         Code = (int)ErrorType.FieldNull,
@@ -135,7 +131,6 @@ namespace TestChatTool.Service.Controllers
                     if (query.result == null)
                     {
                         _logger.Warn($"{nameof(UserSignIn)} 查無此帳號");
-
                         return new UserSignInResponse
                         {
                             Code = (int)ErrorType.AccError,
@@ -175,7 +170,6 @@ namespace TestChatTool.Service.Controllers
                         }
 
                         _logger.Warn($"{nameof(UserSignIn)} 密碼錯誤 次數:{errCount}");
-
                         return new UserSignInResponse
                         {
                             Code = errCount < 3 ? (int)ErrorType.PwdError : (int)ErrorType.PwdErrorToLock,

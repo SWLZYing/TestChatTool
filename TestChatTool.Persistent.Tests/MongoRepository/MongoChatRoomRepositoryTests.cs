@@ -31,7 +31,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.Create(ChatRoom.GenerateInstance("DC_CAT", "Cat Room"));
 
             Assert.IsNull(result.ex);
-            Console.WriteLine(result.result);
+            Assert.IsTrue(result.isSuccess);
         }
 
         [TestMethod]
@@ -41,7 +41,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.Create(ChatRoom.GenerateInstance("DC_CAT", string.Empty));
 
             Assert.IsNotNull(result.ex);
-            Console.WriteLine(result.ex.Message);
+            Assert.IsTrue(result.isAccDuplicate);
         }
 
         [TestMethod]

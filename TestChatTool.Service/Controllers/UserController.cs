@@ -29,7 +29,6 @@ namespace TestChatTool.Service.Controllers
                 if (request.Account.IsNullOrWhiteSpace() || request.Password.IsNullOrWhiteSpace())
                 {
                     _logger.Warn($"{nameof(UserController)}.{nameof(Create)} 未輸入帳號/密碼");
-
                     return new UserCreateResponse
                     {
                         Code = (int)ErrorType.FieldNull,
@@ -96,7 +95,6 @@ namespace TestChatTool.Service.Controllers
                 if (account.IsNullOrWhiteSpace())
                 {
                     _logger.Warn($"{nameof(UserController)}.{nameof(Query)} 未輸入查詢帳號");
-
                     return new UserQueryResponse
                     {
                         Code = (int)ErrorType.FieldNull,
@@ -150,7 +148,6 @@ namespace TestChatTool.Service.Controllers
                 if (request.Account.IsNullOrWhiteSpace())
                 {
                     _logger.Warn($"{nameof(UserController)}.{nameof(Update)} 未輸入帳號");
-
                     return new UserUpdateResponse
                     {
                         Code = (int)ErrorType.FieldNull,
@@ -208,7 +205,6 @@ namespace TestChatTool.Service.Controllers
                 if (request.Account.IsNullOrWhiteSpace() || request.OldPassWord.IsNullOrWhiteSpace() || request.NewPassWord.IsNullOrWhiteSpace())
                 {
                     _logger.Warn($"{nameof(UserController)}.{nameof(ResetPwd)} 未輸入帳號/密碼");
-
                     return new UserResetPwdResponse
                     {
                         Code = (int)ErrorType.FieldNull,
