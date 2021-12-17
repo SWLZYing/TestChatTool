@@ -222,6 +222,8 @@
     <Compile Include="Models\ChatRoomCreateRequest.cs" />
     <Compile Include="Models\ChatRoomCreateResponse.cs" />
     <Compile Include="Models\ChatRoomQueryResponse.cs" />
+    <Compile Include="Models\ChatRoomUpdateRequest.cs" />
+    <Compile Include="Models\ChatRoomUpdateResponse.cs" />
     <Compile Include="Models\SignInRequest.cs" />
     <Compile Include="Models\UserCreateRequest.cs" />
     <Compile Include="Models\UserCreateResponse.cs" />

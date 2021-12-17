@@ -134,5 +134,58 @@ namespace TestChatTool.Service.Controllers
                 };
             }
         }
+
+        [HttpPut]
+        public ChatRoomUpdateResponse Update(ChatRoomUpdateRequest request)
+        {
+            try
+            {
+                if (request.Code.IsNullOrWhiteSpace() || request.Name.IsNullOrWhiteSpace())
+                {
+                    _logger.Warn($"{nameof(ChatRoomController)}.{nameof(Update)} 房間代碼/名稱必填");
+                    return new ChatRoomUpdateResponse
+                    {
+                        Code = (int)ErrorType.FieldNull,
+                        ErrorMsg = "房間代碼/名稱必填",
+                    };
+                }
+
+                var result = _chatRoomRepository.Update(request.Code, request.Name);
+
+                if (result.ex != null)
+                {
+                    _logger.Error($"{nameof(ChatRoomController)}.{nameof(Update)} Get Exception");
+                    return new ChatRoomUpdateResponse
+                    {
+                        Code = (int)ErrorType.SystemError,
+                        ErrorMsg = result.ex.Message,
+                    };
+                }
+
+                if (result.result == null)
+                {
+                    return new ChatRoomUpdateResponse
+                    {
+                        Code = (int)ErrorType.AccError,
+                        ErrorMsg = "指定聊天室不存在",
+                    };
+                }
+
+                return new ChatRoomUpdateResponse
+                {
+                    Code = (int)ErrorType.Success,
+                    Data = result.result
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"{nameof(ChatRoomController)}.{nameof(Update)} Get Exception");
+                return new ChatRoomUpdateResponse
+                {
+                    Code = (int)ErrorType.SystemError,
+                    ErrorMsg = ex.Message,
+                };
+            }
+        }
     }
 }

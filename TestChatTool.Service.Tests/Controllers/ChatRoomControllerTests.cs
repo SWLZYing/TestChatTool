@@ -49,7 +49,7 @@ namespace TestChatTool.Service.Tests.Controllers
         }
 
         [TestMethod]
-        public void query_account()
+        public void query_room()
         {
             _repo.Setup(s => s.Query(It.IsAny<string>()))
                 .Returns((null, new ChatRoom { Code = "room" }));
@@ -63,7 +63,7 @@ namespace TestChatTool.Service.Tests.Controllers
         }
 
         [TestMethod]
-        public void query_account_not_exist()
+        public void query_room_not_exist()
         {
             _repo.Setup(s => s.Query(It.IsAny<string>()))
                 .Returns((null, null));
@@ -76,13 +76,64 @@ namespace TestChatTool.Service.Tests.Controllers
         }
 
         [TestMethod]
-        public void query_account_not_init()
+        public void query_room_not_init()
         {
             var controller = new ChatRoomController(_repo.Object);
 
             var result = controller.Query(string.Empty);
 
             Assert.AreEqual((int)ErrorType.FieldNull, result.Code);
+        }
+
+        [TestMethod]
+        public void update_room()
+        {
+            _repo.Setup(s => s.Update(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((null, new ChatRoom { Code = "ROOM01" }));
+
+            var controller = new ChatRoomController(_repo.Object);
+
+            var result = controller.Update(new ChatRoomUpdateRequest
+            {
+                Code = "ROOM01",
+                Name = "new",
+            });
+
+            Assert.AreEqual((int)ErrorType.Success, result.Code);
+            Assert.IsNotNull(result.Data);
+        }
+
+        [TestMethod]
+        public void update_not_into_room_code()
+        {
+            var controller = new ChatRoomController(_repo.Object);
+
+            var result = controller.Update(new ChatRoomUpdateRequest
+            {
+                Code = "",
+                Name = "new",
+            });
+
+            Assert.AreEqual((int)ErrorType.FieldNull, result.Code);
+            Assert.IsNull(result.Data);
+        }
+
+        [TestMethod]
+        public void update_room_not_exist()
+        {
+            _repo.Setup(s => s.Update(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((null, null));
+
+            var controller = new ChatRoomController(_repo.Object);
+
+            var result = controller.Update(new ChatRoomUpdateRequest
+            {
+                Code = "new",
+                Name = "new",
+            });
+
+            Assert.AreEqual((int)ErrorType.AccError, result.Code);
+            Assert.IsNull(result.Data);
         }
     }
 }

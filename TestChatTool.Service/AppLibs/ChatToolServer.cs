@@ -73,9 +73,9 @@ namespace TestChatTool.Service.AppLibs
 
                 if (roomQ.result == null)
                 {
-                    var admin = ChatRoom.GenerateInstance("HALL", "大廳");
+                    var hall = ChatRoom.GenerateInstance("HALL", "大廳");
 
-                    var roomC = roomRepo.Create(admin);
+                    var roomC = roomRepo.Create(hall);
 
                     if (roomC.ex != null)
                     {
