@@ -212,6 +212,7 @@
     <Compile Include="AppLibs\MemoryCacheHackExtensions.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ChatRoomController.cs" />
+    <Compile Include="Controllers\OnLineUserController.cs" />
     <Compile Include="Controllers\SignController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Models\AdminCreateRequest.cs" />
@@ -224,6 +225,10 @@
     <Compile Include="Models\ChatRoomQueryResponse.cs" />
     <Compile Include="Models\ChatRoomUpdateRequest.cs" />
     <Compile Include="Models\ChatRoomUpdateResponse.cs" />
+    <Compile Include="Models\OnLineUserFindAllUserCountByRoomResponse.cs" />
+    <Compile Include="Models\OnLineUserFindRoomUserResponse.cs" />
+    <Compile Include="Models\OnLineUserUpsertRequest.cs" />
+    <Compile Include="Models\OnLineUserUpsertResponse.cs" />
     <Compile Include="Models\SignInRequest.cs" />
     <Compile Include="Models\UserCreateRequest.cs" />
     <Compile Include="Models\UserCreateResponse.cs" />
