@@ -1,8 +1,8 @@
 ﻿using TestChatTool.Domain.Model;
 
-namespace TestChatTool.Service.Models
+namespace TestChatTool.Domain.Response
 {
-    public class AdminQueryResponse : BasicResponse
+    public class AdminSignInResponse : BasicResponse
     {
         public Admin Data { get; set; }
     }

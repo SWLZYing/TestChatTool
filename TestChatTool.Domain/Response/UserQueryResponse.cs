@@ -1,8 +1,8 @@
 ﻿using TestChatTool.Domain.Model;
 
-namespace TestChatTool.Service.Models
+namespace TestChatTool.Domain.Response
 {
-    public class UserUpdateResponse : BasicResponse
+    public class UserQueryResponse : BasicResponse
     {
         public User Data { get; set; }
     }

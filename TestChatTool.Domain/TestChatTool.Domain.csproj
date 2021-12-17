@@ -134,6 +134,22 @@
     <Compile Include="Repository\IChatRoomRepository.cs" />
     <Compile Include="Repository\IOnLineUserRepository.cs" />
     <Compile Include="Repository\IUserRepository.cs" />
+    <Compile Include="Response\AdminCreateResponse.cs" />
+    <Compile Include="Response\AdminQueryResponse.cs" />
+    <Compile Include="Response\AdminSignInResponse.cs" />
+    <Compile Include="Response\BasicResponse.cs" />
+    <Compile Include="Response\ChatRoomCreateResponse.cs" />
+    <Compile Include="Response\ChatRoomQueryResponse.cs" />
+    <Compile Include="Response\ChatRoomUpdateResponse.cs" />
+    <Compile Include="Response\OnLineUserFindAllUserCountByRoomResponse.cs" />
+    <Compile Include="Response\OnLineUserFindRoomUserResponse.cs" />
+    <Compile Include="Response\OnLineUserUpsertResponse.cs" />
+    <Compile Include="Response\UserCreateResponse.cs" />
+    <Compile Include="Response\UserQueryResponse.cs" />
+    <Compile Include="Response\UserResetPwdResponse.cs" />
+    <Compile Include="Response\UserSetErrCountAndStatusResponse.cs" />
+    <Compile Include="Response\UserSignInResponse.cs" />
+    <Compile Include="Response\UserUpdateResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

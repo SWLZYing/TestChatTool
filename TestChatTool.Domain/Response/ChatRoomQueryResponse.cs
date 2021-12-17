@@ -1,8 +1,8 @@
 ﻿using TestChatTool.Domain.Model;
 
-namespace TestChatTool.Service.Models
+namespace TestChatTool.Domain.Response
 {
-    public class ChatRoomUpdateResponse : BasicResponse
+    public class ChatRoomQueryResponse : BasicResponse
     {
         public ChatRoom Data { get; set; }
     }

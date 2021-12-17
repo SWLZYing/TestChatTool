@@ -5,6 +5,7 @@ using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
+using TestChatTool.Domain.Response;
 using TestChatTool.Service.Models;
 
 namespace TestChatTool.Service.Controllers

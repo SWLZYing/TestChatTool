@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace TestChatTool.Service.Models
+﻿namespace TestChatTool.Domain.Response
 {
     public class BasicResponse
     {

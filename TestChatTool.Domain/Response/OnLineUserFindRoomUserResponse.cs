@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TestChatTool.Domain.Model;
 
-namespace TestChatTool.Service.Models
+namespace TestChatTool.Domain.Response
 {
     public class OnLineUserFindRoomUserResponse : BasicResponse
     {
