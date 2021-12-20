@@ -38,13 +38,14 @@ namespace TestChatTool.UI.Forms
             this.txtPwd = new System.Windows.Forms.TextBox();
             this.btnReg = new System.Windows.Forms.Button();
             this.btnSignIn = new System.Windows.Forms.Button();
+            this.btnChangePwd = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(130, 30);
+            this.label1.Location = new System.Drawing.Point(130, 25);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(116, 48);
             this.label1.TabIndex = 0;
@@ -54,7 +55,7 @@ namespace TestChatTool.UI.Forms
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(50, 110);
+            this.label2.Location = new System.Drawing.Point(55, 90);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(79, 33);
             this.label2.TabIndex = 1;
@@ -64,7 +65,7 @@ namespace TestChatTool.UI.Forms
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(50, 170);
+            this.label3.Location = new System.Drawing.Point(55, 150);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(79, 33);
             this.label3.TabIndex = 2;
@@ -74,7 +75,7 @@ namespace TestChatTool.UI.Forms
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(50, 230);
+            this.label4.Location = new System.Drawing.Point(55, 210);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(79, 33);
             this.label4.TabIndex = 3;
@@ -85,7 +86,7 @@ namespace TestChatTool.UI.Forms
             this.cbbAuth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbAuth.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cbbAuth.FormattingEnabled = true;
-            this.cbbAuth.Location = new System.Drawing.Point(140, 110);
+            this.cbbAuth.Location = new System.Drawing.Point(145, 90);
             this.cbbAuth.Name = "cbbAuth";
             this.cbbAuth.Size = new System.Drawing.Size(190, 35);
             this.cbbAuth.TabIndex = 4;
@@ -93,7 +94,7 @@ namespace TestChatTool.UI.Forms
             // txtAcc
             // 
             this.txtAcc.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtAcc.Location = new System.Drawing.Point(140, 170);
+            this.txtAcc.Location = new System.Drawing.Point(145, 150);
             this.txtAcc.Name = "txtAcc";
             this.txtAcc.Size = new System.Drawing.Size(190, 38);
             this.txtAcc.TabIndex = 5;
@@ -101,7 +102,7 @@ namespace TestChatTool.UI.Forms
             // txtPwd
             // 
             this.txtPwd.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtPwd.Location = new System.Drawing.Point(140, 230);
+            this.txtPwd.Location = new System.Drawing.Point(145, 210);
             this.txtPwd.Name = "txtPwd";
             this.txtPwd.Size = new System.Drawing.Size(190, 38);
             this.txtPwd.TabIndex = 6;
@@ -109,7 +110,7 @@ namespace TestChatTool.UI.Forms
             // btnReg
             // 
             this.btnReg.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnReg.Location = new System.Drawing.Point(75, 300);
+            this.btnReg.Location = new System.Drawing.Point(80, 265);
             this.btnReg.Name = "btnReg";
             this.btnReg.Size = new System.Drawing.Size(100, 40);
             this.btnReg.TabIndex = 7;
@@ -120,7 +121,7 @@ namespace TestChatTool.UI.Forms
             // btnSignIn
             // 
             this.btnSignIn.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnSignIn.Location = new System.Drawing.Point(220, 300);
+            this.btnSignIn.Location = new System.Drawing.Point(200, 265);
             this.btnSignIn.Name = "btnSignIn";
             this.btnSignIn.Size = new System.Drawing.Size(100, 40);
             this.btnSignIn.TabIndex = 8;
@@ -128,11 +129,23 @@ namespace TestChatTool.UI.Forms
             this.btnSignIn.UseVisualStyleBackColor = true;
             this.btnSignIn.Click += new System.EventHandler(this.ButtonClick);
             // 
+            // btnChangePwd
+            // 
+            this.btnChangePwd.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnChangePwd.Location = new System.Drawing.Point(80, 315);
+            this.btnChangePwd.Name = "btnChangePwd";
+            this.btnChangePwd.Size = new System.Drawing.Size(220, 40);
+            this.btnChangePwd.TabIndex = 9;
+            this.btnChangePwd.Text = "會員密碼變更";
+            this.btnChangePwd.UseVisualStyleBackColor = true;
+            this.btnChangePwd.Click += new System.EventHandler(this.ButtonClick);
+            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(394, 371);
+            this.Controls.Add(this.btnChangePwd);
             this.Controls.Add(this.btnSignIn);
             this.Controls.Add(this.btnReg);
             this.Controls.Add(this.txtPwd);
@@ -143,7 +156,7 @@ namespace TestChatTool.UI.Forms
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "Home";
-            this.Text = "Home";
+            this.Text = "首頁";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -160,6 +173,7 @@ namespace TestChatTool.UI.Forms
         private System.Windows.Forms.TextBox txtPwd;
         private System.Windows.Forms.Button btnReg;
         private System.Windows.Forms.Button btnSignIn;
+        private System.Windows.Forms.Button btnChangePwd;
     }
 }
 

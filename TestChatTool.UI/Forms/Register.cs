@@ -44,6 +44,7 @@ namespace TestChatTool.UI.Forms
                 txtNickName.IsAccessible = true;
                 cbbAdminType.Hide();
                 cbbAdminType.IsAccessible = false;
+                btnRegister.Text = "註冊";
             }
             else
             {
@@ -53,6 +54,7 @@ namespace TestChatTool.UI.Forms
                 txtNickName.IsAccessible = false;
                 cbbAdminType.Show();
                 cbbAdminType.IsAccessible = true;
+                btnRegister.Text = "創建";
             }
         }
 
@@ -81,59 +83,68 @@ namespace TestChatTool.UI.Forms
                 // 管理員創建
                 if (cbbAdminType.IsAccessible)
                 {
-                    if (cbbAdminType.SelectedIndex == default)
-                    {
-                        MessageBox.Show("請確認管理員層級");
-                        return;
-                    }
-
-                    var admin = _helper.CallApiPost("Admin/Create", new Dictionary<string, object>
-                    {
-                        { "Account", txtAcc.Text },
-                        { "Password", txtPwd.Text },
-                        { "AccountType", (int)cbbAdminType.SelectedItem },
-                    });
-
-                    var adminResponse = JsonConvert.DeserializeObject<AdminCreateResponse>(admin);
-
-                    if (adminResponse.Code == (int)ErrorType.Success)
-                    {
-                        MessageBox.Show("管理員創建成功.");
-                        Close();
-                        return;
-                    }
-                    else
-                    {
-                        MessageBox.Show(adminResponse.ErrorMsg);
-                        return;
-                    }
+                    CreateAdmin();
+                    return;
                 }
 
-                var user = _helper.CallApiPost("User/Create", new Dictionary<string, object>
+                // 會員註冊
+                CreateUser();
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"{GetType().Name} ButtonClick Exception");
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void CreateUser()
+        {
+            var user = _helper.CallApiPost("User/Create", new Dictionary<string, object>
                 {
                     { "Account", txtAcc.Text },
                     { "Password", txtPwd.Text },
                     { "NickName", txtNickName.Text.IsNullOrWhiteSpace() ? txtAcc.Text : txtNickName.Text },
                 });
 
-                var userResponse = JsonConvert.DeserializeObject<UserCreateResponse>(user);
+            var userResponse = JsonConvert.DeserializeObject<UserCreateResponse>(user);
 
-                if (userResponse.Code == (int)ErrorType.Success)
-                {
-                    MessageBox.Show("帳號註冊成功.");
-                    Close();
-                    return;
-                }
-                else
-                {
-                    MessageBox.Show(userResponse.ErrorMsg);
-                    return;
-                }
-            }
-            catch (Exception ex)
+            if (userResponse.Code == (int)ErrorType.Success)
             {
-                _logger.Error(ex, $"{GetType().Name} ButtonClick Exception");
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("帳號註冊成功.");
+                Close();
+            }
+            else
+            {
+                MessageBox.Show(userResponse.ErrorMsg);
+            }
+        }
+
+        private void CreateAdmin()
+        {
+            if (cbbAdminType.SelectedIndex == default)
+            {
+                MessageBox.Show("請確認管理員層級");
+                return;
+            }
+
+            var admin = _helper.CallApiPost("Admin/Create", new Dictionary<string, object>
+                    {
+                        { "Account", txtAcc.Text },
+                        { "Password", txtPwd.Text },
+                        { "AccountType", (int)cbbAdminType.SelectedItem },
+                    });
+
+            var adminResponse = JsonConvert.DeserializeObject<AdminCreateResponse>(admin);
+
+            if (adminResponse.Code == (int)ErrorType.Success)
+            {
+                MessageBox.Show("管理員創建成功.");
+                Close();
+            }
+            else
+            {
+                MessageBox.Show(adminResponse.ErrorMsg);
             }
         }
 

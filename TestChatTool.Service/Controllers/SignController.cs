@@ -3,7 +3,6 @@ using System;
 using System.Web.Http;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
-using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 using TestChatTool.Domain.Response;
 using TestChatTool.Service.Models;
@@ -17,17 +16,14 @@ namespace TestChatTool.Service.Controllers
 
         private readonly IAdminRepository _adminRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IOnLineUserRepository _onLineUserRepository;
         private readonly ILogger _logger;
 
         public SignController(
             IAdminRepository adminRepository,
-            IUserRepository userRepository,
-            IOnLineUserRepository onLineUserRepository)
+            IUserRepository userRepository)
         {
             _adminRepository = adminRepository;
             _userRepository = userRepository;
-            _onLineUserRepository = onLineUserRepository;
             _logger = LogManager.GetLogger(nameof(SignController));
         }
 

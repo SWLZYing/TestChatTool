@@ -45,5 +45,35 @@ namespace TestChatTool.UI.Handlers
                 return ex.Message;
             }
         }
+
+        public string CallApiPut(string action, Dictionary<string, object> parameters)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(_serviceUrl);
+
+                    var request = new HttpRequestMessage(HttpMethod.Put, action)
+                    {
+                        Content = new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json")
+                    };
+
+                    var response = client.SendAsync(request).GetAwaiter().GetResult();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        //取回傳值
+                        return response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    }
+                }
+
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }

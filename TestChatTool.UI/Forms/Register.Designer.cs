@@ -164,7 +164,7 @@ namespace TestChatTool.UI.Forms
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lblTitle);
             this.Name = "Register";
-            this.Text = "Register";
+            this.Text = "帳號創建";
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -60,6 +60,12 @@ namespace TestChatTool.UI.Applibs
             builder.RegisterType<Register>()
                 .SingleInstance();
 
+            builder.RegisterType<ChangePwd>()
+                .SingleInstance();
+
+            builder.RegisterType<Room>()
+                .SingleInstance();
+
             container = builder.Build();
         }
     }
