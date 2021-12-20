@@ -16,14 +16,12 @@ namespace TestChatTool.Service.Tests.Controllers
     {
         private Mock<IAdminRepository> _adminRepo;
         private Mock<IUserRepository> _userRepo;
-        private Mock<IOnLineUserRepository> _onLineRepo;
 
         [TestInitialize]
         public void Init()
         {
             _adminRepo = new Mock<IAdminRepository>();
             _userRepo = new Mock<IUserRepository>();
-            _onLineRepo = new Mock<IOnLineUserRepository>();
         }
 
         [TestMethod]
@@ -32,7 +30,7 @@ namespace TestChatTool.Service.Tests.Controllers
             _adminRepo.Setup(s => s.Query(It.IsAny<string>()))
                 .Returns((null, Admin.GenerateInstance("admin", "pass".ToMD5())));
 
-            var controller = new SignController(_adminRepo.Object, _userRepo.Object, _onLineRepo.Object);
+            var controller = new SignController(_adminRepo.Object, _userRepo.Object);
 
             var response = controller.AdminSignIn(new SignInRequest { Account = "admin", Password = "pass" });
 
@@ -43,7 +41,7 @@ namespace TestChatTool.Service.Tests.Controllers
         [TestMethod]
         public void admin_sign_in_not_acc_or_pass()
         {
-            var controller = new SignController(_adminRepo.Object, _userRepo.Object, _onLineRepo.Object);
+            var controller = new SignController(_adminRepo.Object, _userRepo.Object);
 
             var response = controller.AdminSignIn(new SignInRequest { Account = "", Password = "" });
 
@@ -56,7 +54,7 @@ namespace TestChatTool.Service.Tests.Controllers
             _adminRepo.Setup(s => s.Query(It.IsAny<string>()))
                 .Returns((null, null));
 
-            var controller = new SignController(_adminRepo.Object, _userRepo.Object, _onLineRepo.Object);
+            var controller = new SignController(_adminRepo.Object, _userRepo.Object);
 
             var response = controller.AdminSignIn(new SignInRequest { Account = "admin", Password = "pass" });
 
@@ -69,7 +67,7 @@ namespace TestChatTool.Service.Tests.Controllers
             _adminRepo.Setup(s => s.Query(It.IsAny<string>()))
                 .Returns((null, Admin.GenerateInstance("admin", "pass".ToMD5())));
 
-            var controller = new SignController(_adminRepo.Object, _userRepo.Object, _onLineRepo.Object);
+            var controller = new SignController(_adminRepo.Object, _userRepo.Object);
 
             var response = controller.AdminSignIn(new SignInRequest { Account = "admin", Password = "error" });
 
@@ -87,7 +85,7 @@ namespace TestChatTool.Service.Tests.Controllers
             _userRepo.Setup(s => s.SignInRefresh(It.IsAny<string>()))
                 .Returns((null, into));
 
-            var controller = new SignController(_adminRepo.Object, _userRepo.Object, _onLineRepo.Object);
+            var controller = new SignController(_adminRepo.Object, _userRepo.Object);
 
             var response = controller.UserSignIn(new SignInRequest { Account = "user", Password = "pass" });
 
@@ -101,7 +99,7 @@ namespace TestChatTool.Service.Tests.Controllers
             _userRepo.Setup(s => s.Query(It.IsAny<string>()))
                 .Returns((null, User.GenerateInstance("user", "pass".ToMD5(), "u")));
 
-            var controller = new SignController(_adminRepo.Object, _userRepo.Object, _onLineRepo.Object);
+            var controller = new SignController(_adminRepo.Object, _userRepo.Object);
 
             var response = controller.UserSignIn(new SignInRequest { Account = "user", Password = "pass" });
 
@@ -117,7 +115,7 @@ namespace TestChatTool.Service.Tests.Controllers
             _userRepo.Setup(s => s.Query(It.IsAny<string>()))
                 .Returns((null, into));
 
-            var controller = new SignController(_adminRepo.Object, _userRepo.Object, _onLineRepo.Object);
+            var controller = new SignController(_adminRepo.Object, _userRepo.Object);
 
             var response = controller.UserSignIn(new SignInRequest { Account = "user", Password = "pass" });
 
@@ -135,7 +133,7 @@ namespace TestChatTool.Service.Tests.Controllers
             _userRepo.Setup(s => s.SetErrCountAndStatus(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<UserStatusType>()))
                 .Returns((null, true));
 
-            var controller = new SignController(_adminRepo.Object, _userRepo.Object, _onLineRepo.Object);
+            var controller = new SignController(_adminRepo.Object, _userRepo.Object);
 
             var response = controller.UserSignIn(new SignInRequest { Account = "user", Password = "error" });
 
@@ -154,7 +152,7 @@ namespace TestChatTool.Service.Tests.Controllers
             _userRepo.Setup(s => s.SetErrCountAndStatus(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<UserStatusType>()))
                 .Returns((null, true));
 
-            var controller = new SignController(_adminRepo.Object, _userRepo.Object, _onLineRepo.Object);
+            var controller = new SignController(_adminRepo.Object, _userRepo.Object);
 
             var response = controller.UserSignIn(new SignInRequest { Account = "user", Password = "error" });
 

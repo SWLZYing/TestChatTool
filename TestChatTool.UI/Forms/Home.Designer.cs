@@ -104,6 +104,7 @@ namespace TestChatTool.UI.Forms
             this.txtPwd.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.txtPwd.Location = new System.Drawing.Point(145, 210);
             this.txtPwd.Name = "txtPwd";
+            this.txtPwd.PasswordChar = '*';
             this.txtPwd.Size = new System.Drawing.Size(190, 38);
             this.txtPwd.TabIndex = 6;
             // 

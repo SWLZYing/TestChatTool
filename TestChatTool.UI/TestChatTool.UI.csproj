@@ -84,6 +84,12 @@
   <ItemGroup>
     <Compile Include="Applibs\AutofacConfig.cs" />
     <Compile Include="Applibs\ConfigHelper.cs" />
+    <Compile Include="Forms\Backstage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Backstage.Designer.cs">
+      <DependentUpon>Backstage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ChangePwd.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,6 +118,9 @@
     <Compile Include="Handlers\Interface\IHttpHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\Backstage.resx">
+      <DependentUpon>Backstage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ChangePwd.resx">
       <DependentUpon>ChangePwd.cs</DependentUpon>
     </EmbeddedResource>
