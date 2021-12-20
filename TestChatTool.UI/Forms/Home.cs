@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using NLog;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace TestChatTool.UI.Forms
@@ -16,6 +17,7 @@ namespace TestChatTool.UI.Forms
             MaximizeBox = false;
 
             _logger = LogManager.GetLogger("UIHome");
+            SetAuth();
         }
 
         public ILifetimeScope Scope
@@ -56,13 +58,23 @@ namespace TestChatTool.UI.Forms
         {
             var register = _scope.Resolve<Register>();
 
-            register.RefreshView();
+            register.RefreshView(true);
             register.ShowDialog();
         }
 
         private void SignIn()
         {
             MessageBox.Show("SignIn");
+        }
+
+        private void SetAuth()
+        {
+            cbbAuth.Items.Clear();
+
+            cbbAuth.Items.Add("管理員");
+            cbbAuth.Items.Add("會員");
+
+            cbbAuth.SelectedIndex = 1;
         }
     }
 }
