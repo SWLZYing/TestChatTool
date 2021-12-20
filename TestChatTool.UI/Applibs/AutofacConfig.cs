@@ -63,6 +63,12 @@ namespace TestChatTool.UI.Applibs
             builder.RegisterType<ChangePwd>()
                 .SingleInstance();
 
+            builder.RegisterType<Backstage>()
+                .SingleInstance();
+
+            builder.RegisterType<UserMaintain>()
+                .SingleInstance();
+
             builder.RegisterType<Room>()
                 .SingleInstance();
 

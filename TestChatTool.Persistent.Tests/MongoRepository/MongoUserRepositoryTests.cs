@@ -113,5 +113,32 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
         }
+
+        [TestMethod]
+        public void query_all_for_verify()
+        {
+            _repository.Create(User.GenerateInstance("user1", "pass", "u1"));
+            _repository.Create(User.GenerateInstance("user2", "pass", "u2"));
+
+            var result = _repository.GetAllForVerify();
+
+            Assert.IsNull(result.ex);
+            Assert.AreEqual(2, result.accs.Count);
+        }
+
+        [TestMethod]
+        public void query_all_for_unlock()
+        {
+            _repository.Create(User.GenerateInstance("user1", "pass", "u1"));
+            _repository.Create(User.GenerateInstance("user2", "pass", "u2"));
+            _repository.Create(User.GenerateInstance("user3", "pass", "u3"));
+
+            _repository.SetErrCountAndStatus("user2", 3, UserStatusType.Lock);
+
+            var result = _repository.GetAllForUnlock();
+
+            Assert.IsNull(result.ex);
+            Assert.AreEqual(1, result.accs.Count);
+        }
     }
 }

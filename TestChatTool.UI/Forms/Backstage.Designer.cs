@@ -49,6 +49,7 @@ namespace TestChatTool.UI.Forms
             this.btnCreate.TabIndex = 10;
             this.btnCreate.Text = "新增管理員";
             this.btnCreate.UseVisualStyleBackColor = true;
+            this.btnCreate.Click += new System.EventHandler(this.ButtonClick);
             // 
             // btnVerify
             // 
@@ -59,6 +60,7 @@ namespace TestChatTool.UI.Forms
             this.btnVerify.TabIndex = 11;
             this.btnVerify.Text = "帳號審核";
             this.btnVerify.UseVisualStyleBackColor = true;
+            this.btnVerify.Click += new System.EventHandler(this.ButtonClick);
             // 
             // btnAddRoom
             // 
@@ -69,6 +71,7 @@ namespace TestChatTool.UI.Forms
             this.btnAddRoom.TabIndex = 12;
             this.btnAddRoom.Text = "新增聊天室";
             this.btnAddRoom.UseVisualStyleBackColor = true;
+            this.btnAddRoom.Click += new System.EventHandler(this.ButtonClick);
             // 
             // btnUnlock
             // 
@@ -79,6 +82,7 @@ namespace TestChatTool.UI.Forms
             this.btnUnlock.TabIndex = 13;
             this.btnUnlock.Text = "帳號解鎖";
             this.btnUnlock.UseVisualStyleBackColor = true;
+            this.btnUnlock.Click += new System.EventHandler(this.ButtonClick);
             // 
             // cbbRoom
             // 
@@ -107,8 +111,9 @@ namespace TestChatTool.UI.Forms
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(80, 40);
             this.btnSend.TabIndex = 24;
-            this.btnSend.Text = "送出";
+            this.btnSend.Text = "發送";
             this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click += new System.EventHandler(this.ButtonClick);
             // 
             // txtTalk
             // 

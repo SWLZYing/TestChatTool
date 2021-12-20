@@ -294,5 +294,73 @@ namespace TestChatTool.Service.Controllers
                 };
             }
         }
+
+        [HttpGet]
+        public UserQueryAllForVerifyResponse QueryAllForVerify()
+        {
+            try
+            {
+                var result = _userRepository.GetAllForVerify();
+
+                if (result.ex != null)
+                {
+                    _logger.Error($"{nameof(UserController)}.{nameof(QueryAllForVerify)} Get Exception");
+                    return new UserQueryAllForVerifyResponse
+                    {
+                        Code = (int)ErrorType.SystemError,
+                        ErrorMsg = result.ex.Message,
+                    };
+                }
+
+                return new UserQueryAllForVerifyResponse
+                {
+                    Code = (int)ErrorType.Success,
+                    Data = result.accs
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"{nameof(UserController)}.{nameof(QueryAllForVerify)} Get Exception");
+                return new UserQueryAllForVerifyResponse
+                {
+                    Code = (int)ErrorType.SystemError,
+                    ErrorMsg = ex.Message,
+                };
+            }
+        }
+
+        [HttpGet]
+        public UserQueryAllForUnlockResponse QueryAllForUnlock()
+        {
+            try
+            {
+                var result = _userRepository.GetAllForUnlock();
+
+                if (result.ex != null)
+                {
+                    _logger.Error($"{nameof(UserController)}.{nameof(QueryAllForUnlock)} Get Exception");
+                    return new UserQueryAllForUnlockResponse
+                    {
+                        Code = (int)ErrorType.SystemError,
+                        ErrorMsg = result.ex.Message,
+                    };
+                }
+
+                return new UserQueryAllForUnlockResponse
+                {
+                    Code = (int)ErrorType.Success,
+                    Data = result.accs
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"{nameof(UserController)}.{nameof(QueryAllForUnlock)} Get Exception");
+                return new UserQueryAllForUnlockResponse
+                {
+                    Code = (int)ErrorType.SystemError,
+                    ErrorMsg = ex.Message,
+                };
+            }
+        }
     }
 }

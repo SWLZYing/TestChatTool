@@ -117,17 +117,16 @@ namespace TestChatTool.UI.Forms
         private void UserSignIn()
         {
             var user = _helper.CallApiPost("Sign/UserSignIn", new Dictionary<string, object>
-                {
-                    { "Account", txtAcc.Text },
-                    { "Password", txtPwd.Text },
-                });
+            {
+                { "Account", txtAcc.Text },
+                { "Password", txtPwd.Text },
+            });
 
             var userResponse = JsonConvert.DeserializeObject<UserSignInResponse>(user);
 
             if (userResponse.Code == (int)ErrorType.Success)
             {
                 // 登入成功 切換User視窗
-
                 Close();
             }
             else
@@ -139,18 +138,22 @@ namespace TestChatTool.UI.Forms
         private void AdminSignIn()
         {
             var admin = _helper.CallApiPost("Sign/AdminSignIn", new Dictionary<string, object>
-                    {
-                        { "Account", txtAcc.Text },
-                        { "Password", txtPwd.Text },
-                    });
+            {
+                { "Account", txtAcc.Text },
+                { "Password", txtPwd.Text },
+            });
 
             var adminResponse = JsonConvert.DeserializeObject<AdminSignInResponse>(admin);
 
             if (adminResponse.Code == (int)ErrorType.Success)
             {
-                // 登入成功 切換Admin視窗
-
+                // 關閉登入頁
                 Close();
+
+                var register = _scope.Resolve<Backstage>();
+
+                register.Scope = _scope;
+                register.ShowDialog();
             }
             else
             {

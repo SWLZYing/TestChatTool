@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Collections.Generic;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
@@ -206,6 +207,34 @@ namespace TestChatTool.Service.Tests.Controllers
 
             Assert.AreEqual((int)ErrorType.Failed, result.Code);
             Assert.IsFalse(result.IsSuccess);
+        }
+
+        [TestMethod]
+        public void query_all_account_for_verify()
+        {
+            _repo.Setup(s => s.GetAllForVerify())
+                .Returns((null, new List<string> { "user1", "user2" }));
+
+            var controller = new UserController(_repo.Object);
+
+            var result = controller.QueryAllForVerify();
+
+            Assert.AreEqual((int)ErrorType.Success, result.Code);
+            Assert.AreEqual(2, result.Data.Count);
+        }
+
+        [TestMethod]
+        public void query_all_account_for_unlock()
+        {
+            _repo.Setup(s => s.GetAllForUnlock())
+                .Returns((null, new List<string> { "user1", "user2", "user3" }));
+
+            var controller = new UserController(_repo.Object);
+
+            var result = controller.QueryAllForUnlock();
+
+            Assert.AreEqual((int)ErrorType.Success, result.Code);
+            Assert.AreEqual(3, result.Data.Count);
         }
     }
 }

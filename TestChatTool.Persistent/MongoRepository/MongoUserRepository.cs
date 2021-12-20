@@ -1,5 +1,7 @@
 ﻿using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
@@ -148,6 +150,38 @@ namespace TestChatTool.Persistent.MongoRepository
                     new FindOneAndUpdateOptions<User, User>() { IsUpsert = false, ReturnDocument = ReturnDocument.After });
 
                 return (null, result);
+            }
+            catch (Exception ex)
+            {
+                return (ex, null);
+            }
+        }
+
+        public (Exception ex, List<string> accs) GetAllForVerify()
+        {
+            try
+            {
+                var result = _collection.Find(f => f.Status == UserStatusType.Disabled).ToList();
+
+                var accs = result.Select(s => s.Account).ToList();
+
+                return (null, accs);
+            }
+            catch (Exception ex)
+            {
+                return (ex, null);
+            }
+        }
+
+        public (Exception ex, List<string> accs) GetAllForUnlock()
+        {
+            try
+            {
+                var result = _collection.Find(f => f.Status == UserStatusType.Lock).ToList();
+
+                var accs = result.Select(s => s.Account).ToList();
+
+                return (null, accs);
             }
             catch (Exception ex)
             {

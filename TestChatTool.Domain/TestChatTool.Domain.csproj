@@ -145,6 +145,8 @@
     <Compile Include="Response\OnLineUserFindRoomUserResponse.cs" />
     <Compile Include="Response\OnLineUserUpsertResponse.cs" />
     <Compile Include="Response\UserCreateResponse.cs" />
+    <Compile Include="Response\UserQueryAllForUnlockResponse.cs" />
+    <Compile Include="Response\UserQueryAllForVerifyResponse.cs" />
     <Compile Include="Response\UserQueryResponse.cs" />
     <Compile Include="Response\UserResetPwdResponse.cs" />
     <Compile Include="Response\UserSetErrCountAndStatusResponse.cs" />

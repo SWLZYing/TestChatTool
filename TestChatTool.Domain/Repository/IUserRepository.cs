@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Model;
 
@@ -13,5 +14,7 @@ namespace TestChatTool.Domain.Repository
         (Exception ex, bool isSuccess) ResetPwd(string acc, string oldPwd, string newPwd);
         (Exception ex, bool isSuccess) SetErrCountAndStatus(string acc, int errCount, UserStatusType status = UserStatusType.Disabled);
         (Exception ex, User result) SignInRefresh(string acc);
+        (Exception ex, List<string> accs) GetAllForVerify();
+        (Exception ex, List<string> accs) GetAllForUnlock();
     }
 }

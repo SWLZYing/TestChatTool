@@ -102,6 +102,12 @@
     <Compile Include="Forms\Room.Designer.cs">
       <DependentUpon>Room.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\UserMaintain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserMaintain.Designer.cs">
+      <DependentUpon>UserMaintain.cs</DependentUpon>
+    </Compile>
     <Compile Include="Handlers\HttpHandler.cs" />
     <Compile Include="Forms\Home.cs">
       <SubType>Form</SubType>
@@ -132,6 +138,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Room.resx">
       <DependentUpon>Room.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserMaintain.resx">
+      <DependentUpon>UserMaintain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
