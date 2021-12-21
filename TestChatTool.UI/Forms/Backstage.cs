@@ -132,7 +132,7 @@ namespace TestChatTool.UI.Forms
 
             userMaintain.Accs = response.Data;
             userMaintain.SetAccs();
-            userMaintain.SetUI(false);
+            userMaintain.SetUpUI(false);
             userMaintain.ShowDialog();
         }
 
@@ -153,7 +153,7 @@ namespace TestChatTool.UI.Forms
 
             userMaintain.Accs = response.Data;
             userMaintain.SetAccs();
-            userMaintain.SetUI(true);
+            userMaintain.SetUpUI(true);
             userMaintain.ShowDialog();
         }
 
@@ -176,12 +176,11 @@ namespace TestChatTool.UI.Forms
                 if (response.Data.Any())
                 {
                     // 將聊天室資訊帶入cbb
-                    foreach (var room in response.Data)
-                    {
-                        cbbRoom.Items.Add(new RoomInfo { Name = room.Item2, Code = room.Item1 });
-                    }
+                    var items = response.Data.Select(s => new RoomInfo { Code = s.Code, Name = s.Name }).ToArray();
 
-                    cbbRoom.SelectedItem = null;
+                    cbbRoom.Items.AddRange(items);
+
+                    cbbRoom.SelectedItem = items.FirstOrDefault(f => f.Code == "HALL");
                 }
             }
             catch (Exception ex)
@@ -193,8 +192,8 @@ namespace TestChatTool.UI.Forms
 
         private class RoomInfo
         {
-            public string Name { get; set; }
             public string Code { get; set; }
+            public string Name { get; set; }
 
             public override string ToString()
             {

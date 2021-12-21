@@ -51,7 +51,7 @@ namespace TestChatTool.UI.Forms
             }
         }
 
-        public void SetUI(bool isVerify)
+        public void SetUpUI(bool isVerify)
         {
             btnOk.Text = isVerify ? "開通" : "解鎖";
         }
@@ -95,7 +95,7 @@ namespace TestChatTool.UI.Forms
 
             if (userResponse.Code == (int)ErrorType.Success)
             {
-                MessageBox.Show("帳號開通成功.");
+                MessageBox.Show("已開通.");
                 Close();
             }
             else
@@ -118,7 +118,7 @@ namespace TestChatTool.UI.Forms
 
             if (userResponse.Code == (int)ErrorType.Success)
             {
-                MessageBox.Show("帳號開通成功.");
+                MessageBox.Show("已解鎖.");
                 Close();
             }
             else

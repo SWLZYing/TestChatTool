@@ -126,8 +126,38 @@ namespace TestChatTool.UI.Forms
 
             if (response.Code == (int)ErrorType.Success)
             {
+                // 解鎖後 需變更密碼重啟
+                if (response.Data.Status == UserStatusType.Unlock)
+                {
+                    var changePwd = _scope.Resolve<ChangePwd>();
+
+                    changePwd.RefreshView();
+                    changePwd.ShowDialog();
+
+                    var change = _helper.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
+                    {
+                        { "Account", response.Data.Account },
+                        { "ErrorCount", 0 },
+                        { "Status", (int)UserStatusType.Enable },
+                    });
+
+                    var changeResponse = JsonConvert.DeserializeObject<UserSetErrCountAndStatusResponse>(change);
+
+                    if (changeResponse.Code != (int)ErrorType.Success)
+                    {
+                        MessageBox.Show(changeResponse.ErrorMsg);
+                    }
+
+                    return;
+                }
+
                 // 登入成功 切換User視窗
                 Close();
+
+                var room = _scope.Resolve<Room>();
+
+                room.SetUpUI(response.Data);
+                room.ShowDialog();
             }
             else
             {

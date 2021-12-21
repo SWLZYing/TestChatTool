@@ -81,11 +81,12 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, List<(string, string)> rooms) GetAll()
+        public (Exception ex, List<(string code, string name)> rooms) GetAll()
         {
             try
             {
-                var result = _collection.Find(s => s.Code != string.Empty).ToList();
+                var fiter = Builders<ChatRoom>.Filter.Empty;
+                var result = _collection.Find(fiter).ToList();
 
                 var rooms = result.Select(s => (s.Code, s.Name)).ToList();
 

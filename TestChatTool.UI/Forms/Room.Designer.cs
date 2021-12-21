@@ -38,7 +38,7 @@ namespace TestChatTool.UI.Forms
             this.btnSend = new System.Windows.Forms.Button();
             this.txtTalk = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnSugnOut = new System.Windows.Forms.Button();
+            this.btnSignOut = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cbbRoom
@@ -88,6 +88,7 @@ namespace TestChatTool.UI.Forms
             this.btnChange.TabIndex = 17;
             this.btnChange.Text = "變更";
             this.btnChange.UseVisualStyleBackColor = true;
+            this.btnChange.Click += new System.EventHandler(this.ButtonClick);
             // 
             // txtMessage
             // 
@@ -107,6 +108,7 @@ namespace TestChatTool.UI.Forms
             this.btnSend.TabIndex = 20;
             this.btnSend.Text = "發送";
             this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click += new System.EventHandler(this.ButtonClick);
             // 
             // txtTalk
             // 
@@ -126,22 +128,23 @@ namespace TestChatTool.UI.Forms
             this.label3.TabIndex = 21;
             this.label3.Text = "發言";
             // 
-            // btnSugnOut
+            // btnSignOut
             // 
-            this.btnSugnOut.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnSugnOut.Location = new System.Drawing.Point(590, 415);
-            this.btnSugnOut.Name = "btnSugnOut";
-            this.btnSugnOut.Size = new System.Drawing.Size(80, 40);
-            this.btnSugnOut.TabIndex = 22;
-            this.btnSugnOut.Text = "登出";
-            this.btnSugnOut.UseVisualStyleBackColor = true;
+            this.btnSignOut.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnSignOut.Location = new System.Drawing.Point(590, 415);
+            this.btnSignOut.Name = "btnSignOut";
+            this.btnSignOut.Size = new System.Drawing.Size(80, 40);
+            this.btnSignOut.TabIndex = 22;
+            this.btnSignOut.Text = "登出";
+            this.btnSignOut.UseVisualStyleBackColor = true;
+            this.btnSignOut.Click += new System.EventHandler(this.ButtonClick);
             // 
             // Room
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 461);
-            this.Controls.Add(this.btnSugnOut);
+            this.Controls.Add(this.btnSignOut);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtTalk);
@@ -169,6 +172,6 @@ namespace TestChatTool.UI.Forms
         private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.TextBox txtTalk;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button btnSugnOut;
+        private System.Windows.Forms.Button btnSignOut;
     }
 }
