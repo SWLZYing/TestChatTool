@@ -1,5 +1,7 @@
 ﻿using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 
@@ -72,6 +74,22 @@ namespace TestChatTool.Persistent.MongoRepository
                     new FindOneAndUpdateOptions<ChatRoom, ChatRoom>() { IsUpsert = false, ReturnDocument = ReturnDocument.After });
 
                 return (null, result);
+            }
+            catch (Exception ex)
+            {
+                return (ex, null);
+            }
+        }
+
+        public (Exception ex, List<(string, string)> rooms) GetAll()
+        {
+            try
+            {
+                var result = _collection.Find(s => s.Code != string.Empty).ToList();
+
+                var rooms = result.Select(s => (s.Code, s.Name)).ToList();
+
+                return (null, rooms);
             }
             catch (Exception ex)
             {

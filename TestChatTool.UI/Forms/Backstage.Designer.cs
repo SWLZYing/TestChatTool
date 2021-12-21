@@ -31,7 +31,7 @@ namespace TestChatTool.UI.Forms
         {
             this.btnCreate = new System.Windows.Forms.Button();
             this.btnVerify = new System.Windows.Forms.Button();
-            this.btnAddRoom = new System.Windows.Forms.Button();
+            this.btnRoomMaintain = new System.Windows.Forms.Button();
             this.btnUnlock = new System.Windows.Forms.Button();
             this.cbbRoom = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -62,16 +62,16 @@ namespace TestChatTool.UI.Forms
             this.btnVerify.UseVisualStyleBackColor = true;
             this.btnVerify.Click += new System.EventHandler(this.ButtonClick);
             // 
-            // btnAddRoom
+            // btnRoomMaintain
             // 
-            this.btnAddRoom.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnAddRoom.Location = new System.Drawing.Point(340, 10);
-            this.btnAddRoom.Name = "btnAddRoom";
-            this.btnAddRoom.Size = new System.Drawing.Size(160, 40);
-            this.btnAddRoom.TabIndex = 12;
-            this.btnAddRoom.Text = "新增聊天室";
-            this.btnAddRoom.UseVisualStyleBackColor = true;
-            this.btnAddRoom.Click += new System.EventHandler(this.ButtonClick);
+            this.btnRoomMaintain.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnRoomMaintain.Location = new System.Drawing.Point(340, 10);
+            this.btnRoomMaintain.Name = "btnRoomMaintain";
+            this.btnRoomMaintain.Size = new System.Drawing.Size(160, 40);
+            this.btnRoomMaintain.TabIndex = 12;
+            this.btnRoomMaintain.Text = "聊天室管理";
+            this.btnRoomMaintain.UseVisualStyleBackColor = true;
+            this.btnRoomMaintain.Click += new System.EventHandler(this.ButtonClick);
             // 
             // btnUnlock
             // 
@@ -143,7 +143,7 @@ namespace TestChatTool.UI.Forms
             this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.cbbRoom);
             this.Controls.Add(this.btnUnlock);
-            this.Controls.Add(this.btnAddRoom);
+            this.Controls.Add(this.btnRoomMaintain);
             this.Controls.Add(this.btnVerify);
             this.Controls.Add(this.btnCreate);
             this.Name = "Backstage";
@@ -157,7 +157,7 @@ namespace TestChatTool.UI.Forms
 
         private System.Windows.Forms.Button btnCreate;
         private System.Windows.Forms.Button btnVerify;
-        private System.Windows.Forms.Button btnAddRoom;
+        private System.Windows.Forms.Button btnRoomMaintain;
         private System.Windows.Forms.Button btnUnlock;
         private System.Windows.Forms.ComboBox cbbRoom;
         private System.Windows.Forms.Label label3;

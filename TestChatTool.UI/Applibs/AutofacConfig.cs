@@ -66,7 +66,10 @@ namespace TestChatTool.UI.Applibs
             builder.RegisterType<Backstage>()
                 .SingleInstance();
 
-            builder.RegisterType<UserMaintain>()
+            builder.RegisterType<UserStatusMaintain>()
+                .SingleInstance();
+
+            builder.RegisterType<RoomMaintain>()
                 .SingleInstance();
 
             builder.RegisterType<Room>()

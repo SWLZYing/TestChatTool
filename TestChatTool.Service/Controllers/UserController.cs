@@ -1,5 +1,6 @@
 ﻿using NLog;
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
@@ -312,6 +313,15 @@ namespace TestChatTool.Service.Controllers
                     };
                 }
 
+                if (result.accs == null)
+                {
+                    return new UserQueryAllForVerifyResponse
+                    {
+                        Code = (int)ErrorType.Success,
+                        Data = new List<string>(),
+                    };
+                }
+
                 return new UserQueryAllForVerifyResponse
                 {
                     Code = (int)ErrorType.Success,
@@ -343,6 +353,15 @@ namespace TestChatTool.Service.Controllers
                     {
                         Code = (int)ErrorType.SystemError,
                         ErrorMsg = result.ex.Message,
+                    };
+                }
+
+                if (result.accs == null)
+                {
+                    return new UserQueryAllForUnlockResponse
+                    {
+                        Code = (int)ErrorType.Success,
+                        Data = new List<string>(),
                     };
                 }
 

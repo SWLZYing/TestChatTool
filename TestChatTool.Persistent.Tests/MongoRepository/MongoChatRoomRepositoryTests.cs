@@ -64,5 +64,17 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
         }
+
+        [TestMethod]
+        public void get_all_room()
+        {
+            _repository.Create(ChatRoom.GenerateInstance("DC_CAT", "Cat Room"));
+            _repository.Create(ChatRoom.GenerateInstance("DC_DOG", "Dog Room"));
+            _repository.Create(ChatRoom.GenerateInstance("DC_BIRD", "Bird Room"));
+            var result = _repository.GetAll();
+
+            Assert.IsNull(result.ex);
+            Assert.AreEqual(3, result.rooms.Count);
+        }
     }
 }

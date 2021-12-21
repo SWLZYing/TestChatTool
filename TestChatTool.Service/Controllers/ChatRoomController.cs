@@ -1,5 +1,6 @@
 ﻿using NLog;
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
@@ -182,6 +183,49 @@ namespace TestChatTool.Service.Controllers
             {
                 _logger.Error($"{nameof(ChatRoomController)}.{nameof(Update)} Get Exception");
                 return new ChatRoomUpdateResponse
+                {
+                    Code = (int)ErrorType.SystemError,
+                    ErrorMsg = ex.Message,
+                };
+            }
+        }
+
+        [HttpGet]
+        public ChatRoomGetAllResponse GetAll()
+        {
+            try
+            {
+                var result = _chatRoomRepository.GetAll();
+
+                if (result.ex != null)
+                {
+                    _logger.Error($"{nameof(ChatRoomController)}.{nameof(GetAll)} Get Exception");
+                    return new ChatRoomGetAllResponse
+                    {
+                        Code = (int)ErrorType.SystemError,
+                        ErrorMsg = result.ex.Message,
+                    };
+                }
+
+                if (result.rooms == null)
+                {
+                    return new ChatRoomGetAllResponse
+                    {
+                        Code = (int)ErrorType.Success,
+                        Data = new List<(string, string)>(),
+                    };
+                }
+
+                return new ChatRoomGetAllResponse
+                {
+                    Code = (int)ErrorType.Success,
+                    Data = result.rooms,
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"{nameof(ChatRoomController)}.{nameof(GetAll)} Get Exception");
+                return new ChatRoomGetAllResponse
                 {
                     Code = (int)ErrorType.SystemError,
                     ErrorMsg = ex.Message,

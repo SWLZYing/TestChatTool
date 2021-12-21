@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Collections.Generic;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
@@ -134,6 +135,19 @@ namespace TestChatTool.Service.Tests.Controllers
 
             Assert.AreEqual((int)ErrorType.AccError, result.Code);
             Assert.IsNull(result.Data);
+        }
+
+        [TestMethod]
+        public void get_all_room()
+        {
+            _repo.Setup(s => s.GetAll())
+                .Returns((null, new List<(string, string)>()));
+
+            var controller = new ChatRoomController(_repo.Object);
+
+            var result = controller.GetAll();
+
+            Assert.AreEqual((int)ErrorType.Success, result.Code);
         }
     }
 }

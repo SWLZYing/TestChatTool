@@ -139,6 +139,7 @@
     <Compile Include="Response\AdminSignInResponse.cs" />
     <Compile Include="Response\BasicResponse.cs" />
     <Compile Include="Response\ChatRoomCreateResponse.cs" />
+    <Compile Include="Response\ChatRoomGetAllResponse.cs" />
     <Compile Include="Response\ChatRoomQueryResponse.cs" />
     <Compile Include="Response\ChatRoomUpdateResponse.cs" />
     <Compile Include="Response\OnLineUserFindAllUserCountByRoomResponse.cs" />

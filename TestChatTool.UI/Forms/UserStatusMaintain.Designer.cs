@@ -1,7 +1,7 @@
 ﻿
 namespace TestChatTool.UI.Forms
 {
-    partial class UserMaintain
+    partial class UserStatusMaintain
     {
         /// <summary>
         /// Required designer variable.

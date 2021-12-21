@@ -2,6 +2,7 @@
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Response;
@@ -9,19 +10,19 @@ using TestChatTool.UI.Handlers.Interface;
 
 namespace TestChatTool.UI.Forms
 {
-    public partial class UserMaintain : Form
+    public partial class UserStatusMaintain : Form
     {
         private readonly IHttpHandler _helper;
         private readonly ILogger _logger;
         private List<string> _accs;
 
-        public UserMaintain(IHttpHandler helper)
+        public UserStatusMaintain(IHttpHandler helper)
         {
             InitializeComponent();
             MaximizeBox = false;
 
             _helper = helper;
-            _logger = LogManager.GetLogger("UIUserMaintain");
+            _logger = LogManager.GetLogger("UIUserStatusMaintain");
         }
 
         public List<string> Accs
@@ -36,19 +37,18 @@ namespace TestChatTool.UI.Forms
         {
             cbbAcc.Items.Clear();
 
-            if (_accs.Count <= 0)
-            {
-                btnOk.Enabled = false;
-                return;
-            }
+            btnOk.Enabled = false;
 
-            foreach (var acc in _accs)
+            if (_accs.Any())
             {
-                cbbAcc.Items.Add(acc);
-            }
+                foreach (var acc in _accs)
+                {
+                    cbbAcc.Items.Add(acc);
+                }
 
-            cbbAcc.SelectedIndex = 0;
-            btnOk.Enabled = true;
+                cbbAcc.SelectedIndex = 0;
+                btnOk.Enabled = true;
+            }
         }
 
         public void SetUI(bool isVerify)

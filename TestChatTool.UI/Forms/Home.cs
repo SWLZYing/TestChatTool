@@ -109,7 +109,7 @@ namespace TestChatTool.UI.Forms
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"{GetType().Name} ButtonClick Exception");
+                _logger.Error(ex, $"{GetType().Name} SignIn Exception");
                 MessageBox.Show(ex.Message);
             }
         }
@@ -153,7 +153,7 @@ namespace TestChatTool.UI.Forms
                 var register = _scope.Resolve<Backstage>();
 
                 register.Scope = _scope;
-                register.SetUI(response.Data.AccountType == AdminType.Normal); // 層級為Normal 不顯示創建按鍵
+                register.SetUpUI(response.Data.AccountType == AdminType.Normal); // 層級為Normal 不顯示創建按鍵
                 register.ShowDialog();
             }
             else

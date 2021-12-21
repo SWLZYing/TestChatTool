@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using NLog;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Response;
@@ -33,7 +34,7 @@ namespace TestChatTool.UI.Forms
             }
         }
 
-        public void SetUI(bool isNormal)
+        public void SetUpUI(bool isNormal)
         {
             if (isNormal)
             {
@@ -43,6 +44,8 @@ namespace TestChatTool.UI.Forms
             {
                 btnCreate.Show();
             }
+
+            GetAllRoom();
         }
 
         private void ButtonClick(object sender, EventArgs e)
@@ -63,9 +66,10 @@ namespace TestChatTool.UI.Forms
                         Unlock();
                         break;
 
-                    // 建立聊天室
-                    case "btnAddRoom":
-                        AddRoom();
+                    // 聊天室設定
+                    case "btnRoomMaintain":
+                        RoomMaintain();
+                        GetAllRoom();
                         break;
 
                     // 管理員發話
@@ -103,47 +107,63 @@ namespace TestChatTool.UI.Forms
             throw new NotImplementedException();
         }
 
-        private void AddRoom()
+        private void RoomMaintain()
         {
-            throw new NotImplementedException();
+            var changePwd = _scope.Resolve<RoomMaintain>();
+
+            changePwd.RefreshView();
+            changePwd.ShowDialog();
         }
 
         private void Unlock()
         {
-            try
+            var users = _helper.CallApiGet("User/QueryAllForUnlock", null);
+
+            var response = JsonConvert.DeserializeObject<UserQueryAllForUnlockResponse>(users);
+
+            if (response.Code != (int)ErrorType.Success)
             {
-                var user = _helper.CallApiGet("User/QueryAllForUnlock", null);
-
-                var response = JsonConvert.DeserializeObject<UserQueryAllForUnlockResponse>(user);
-
-                if (response.Code != (int)ErrorType.Success)
-                {
-                    MessageBox.Show(response.ErrorMsg);
-                    return;
-                }
-
-                // 將需審核帳號帶入
-                var userMaintain = _scope.Resolve<UserMaintain>();
-
-                userMaintain.Accs = response.Data;
-                userMaintain.SetAccs();
-                userMaintain.SetUI(false);
-                userMaintain.ShowDialog();
+                MessageBox.Show(response.ErrorMsg);
+                return;
             }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, $"{GetType().Name} ButtonClick Exception");
-                MessageBox.Show(ex.Message);
-            }
+
+            // 將需審核帳號帶入
+            var userMaintain = _scope.Resolve<UserStatusMaintain>();
+
+            userMaintain.Accs = response.Data;
+            userMaintain.SetAccs();
+            userMaintain.SetUI(false);
+            userMaintain.ShowDialog();
         }
 
         private void Verify()
         {
+            var users = _helper.CallApiGet("User/QueryAllForVerify", null);
+
+            var response = JsonConvert.DeserializeObject<UserQueryAllForVerifyResponse>(users);
+
+            if (response.Code != (int)ErrorType.Success)
+            {
+                MessageBox.Show(response.ErrorMsg);
+                return;
+            }
+
+            // 將需審核帳號帶入
+            var userMaintain = _scope.Resolve<UserStatusMaintain>();
+
+            userMaintain.Accs = response.Data;
+            userMaintain.SetAccs();
+            userMaintain.SetUI(true);
+            userMaintain.ShowDialog();
+        }
+
+        private void GetAllRoom()
+        {
             try
             {
-                var user = _helper.CallApiGet("User/QueryAllForVerify", null);
+                var rooms = _helper.CallApiGet("ChatRoom/GetAll", null);
 
-                var response = JsonConvert.DeserializeObject<UserQueryAllForVerifyResponse>(user);
+                var response = JsonConvert.DeserializeObject<ChatRoomGetAllResponse>(rooms);
 
                 if (response.Code != (int)ErrorType.Success)
                 {
@@ -151,18 +171,34 @@ namespace TestChatTool.UI.Forms
                     return;
                 }
 
-                // 將需審核帳號帶入
-                var userMaintain = _scope.Resolve<UserMaintain>();
+                cbbRoom.Items.Clear();
 
-                userMaintain.Accs = response.Data;
-                userMaintain.SetAccs();
-                userMaintain.SetUI(true);
-                userMaintain.ShowDialog();
+                if (response.Data.Any())
+                {
+                    // 將聊天室資訊帶入cbb
+                    foreach (var room in response.Data)
+                    {
+                        cbbRoom.Items.Add(new RoomInfo { Name = room.Item2, Code = room.Item1 });
+                    }
+
+                    cbbRoom.SelectedItem = null;
+                }
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"{GetType().Name} ButtonClick Exception");
+                _logger.Error(ex, $"{GetType().Name} GetAllRoom Exception");
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private class RoomInfo
+        {
+            public string Name { get; set; }
+            public string Code { get; set; }
+
+            public override string ToString()
+            {
+                return Name;
             }
         }
     }
