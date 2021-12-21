@@ -24,19 +24,19 @@ namespace TestChatTool.UI.Forms
             _logger = LogManager.GetLogger("UIUserMaintain");
         }
 
-        public List<string> Accs 
-        { 
-            set 
+        public List<string> Accs
+        {
+            set
             {
                 _accs = value;
-            } 
+            }
         }
 
         public void SetAccs()
         {
             cbbAcc.Items.Clear();
 
-            if(_accs.Count <= 0)
+            if (_accs.Count <= 0)
             {
                 btnOk.Enabled = false;
                 return;
@@ -51,34 +51,80 @@ namespace TestChatTool.UI.Forms
             btnOk.Enabled = true;
         }
 
+        public void SetUI(bool isVerify)
+        {
+            btnOk.Text = isVerify ? "開通" : "解鎖";
+        }
+
         private void ButtonClick(object sender, EventArgs e)
         {
             try
             {
-                var user = _helper.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
-                {
-                    { "Account", cbbAcc.SelectedItem.ToString() },
-                    { "ErrorCount", 0 },
-                    { "Status", UserStatusType.Enable },
-                });
+                var btn = (Button)sender;
 
-                var userResponse = JsonConvert.DeserializeObject<UserSetErrCountAndStatusResponse>(user);
-
-                if (userResponse.Code == (int)ErrorType.Success)
+                switch (btn.Text)
                 {
-                    MessageBox.Show("帳號開通成功.");
-                    Close();
-                }
-                else
-                {
-                    MessageBox.Show(userResponse.ErrorMsg);
-                    return;
+                    case "開通":
+                        Verify();
+                        break;
+                    case "解鎖":
+                        Unlock();
+                        break;
+                    default:
+                        MessageBox.Show("無效的選項");
+                        break;
                 }
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, $"{GetType().Name} ButtonClick Exception");
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void Verify()
+        {
+            var user = _helper.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
+            {
+                { "Account", cbbAcc.SelectedItem.ToString() },
+                { "ErrorCount", 0 },
+                { "Status", UserStatusType.Enable },
+            });
+
+            var userResponse = JsonConvert.DeserializeObject<UserSetErrCountAndStatusResponse>(user);
+
+            if (userResponse.Code == (int)ErrorType.Success)
+            {
+                MessageBox.Show("帳號開通成功.");
+                Close();
+            }
+            else
+            {
+                MessageBox.Show(userResponse.ErrorMsg);
+                return;
+            }
+        }
+
+        private void Unlock()
+        {
+            var user = _helper.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
+            {
+                { "Account", cbbAcc.SelectedItem.ToString() },
+                { "ErrorCount", 0 },
+                { "Status", UserStatusType.Unlock },
+            });
+
+            var userResponse = JsonConvert.DeserializeObject<UserSetErrCountAndStatusResponse>(user);
+
+            if (userResponse.Code == (int)ErrorType.Success)
+            {
+                MessageBox.Show("帳號開通成功.");
+                Close();
+            }
+            else
+            {
+                MessageBox.Show(userResponse.ErrorMsg);
+                return;
             }
         }
     }

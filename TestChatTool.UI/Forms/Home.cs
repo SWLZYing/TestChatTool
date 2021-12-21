@@ -122,16 +122,16 @@ namespace TestChatTool.UI.Forms
                 { "Password", txtPwd.Text },
             });
 
-            var userResponse = JsonConvert.DeserializeObject<UserSignInResponse>(user);
+            var response = JsonConvert.DeserializeObject<UserSignInResponse>(user);
 
-            if (userResponse.Code == (int)ErrorType.Success)
+            if (response.Code == (int)ErrorType.Success)
             {
                 // 登入成功 切換User視窗
                 Close();
             }
             else
             {
-                MessageBox.Show(userResponse.ErrorMsg);
+                MessageBox.Show(response.ErrorMsg);
             }
         }
 
@@ -143,9 +143,9 @@ namespace TestChatTool.UI.Forms
                 { "Password", txtPwd.Text },
             });
 
-            var adminResponse = JsonConvert.DeserializeObject<AdminSignInResponse>(admin);
+            var response = JsonConvert.DeserializeObject<AdminSignInResponse>(admin);
 
-            if (adminResponse.Code == (int)ErrorType.Success)
+            if (response.Code == (int)ErrorType.Success)
             {
                 // 關閉登入頁
                 Close();
@@ -153,11 +153,12 @@ namespace TestChatTool.UI.Forms
                 var register = _scope.Resolve<Backstage>();
 
                 register.Scope = _scope;
+                register.SetUI(response.Data.AccountType == AdminType.Normal); // 層級為Normal 不顯示創建按鍵
                 register.ShowDialog();
             }
             else
             {
-                MessageBox.Show(adminResponse.ErrorMsg);
+                MessageBox.Show(response.ErrorMsg);
             }
         }
 

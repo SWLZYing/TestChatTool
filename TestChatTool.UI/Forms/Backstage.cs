@@ -33,6 +33,18 @@ namespace TestChatTool.UI.Forms
             }
         }
 
+        public void SetUI(bool isNormal)
+        {
+            if (isNormal)
+            {
+                btnCreate.Hide();
+            }
+            else
+            {
+                btnCreate.Show();
+            }
+        }
+
         private void ButtonClick(object sender, EventArgs e)
         {
             try
@@ -80,7 +92,10 @@ namespace TestChatTool.UI.Forms
 
         private void CreateAdmin()
         {
-            throw new NotImplementedException();
+            var register = _scope.Resolve<Register>();
+
+            register.RefreshView(false);
+            register.ShowDialog();
         }
 
         private void Send()
@@ -95,7 +110,31 @@ namespace TestChatTool.UI.Forms
 
         private void Unlock()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = _helper.CallApiGet("User/QueryAllForUnlock", null);
+
+                var response = JsonConvert.DeserializeObject<UserQueryAllForUnlockResponse>(user);
+
+                if (response.Code != (int)ErrorType.Success)
+                {
+                    MessageBox.Show(response.ErrorMsg);
+                    return;
+                }
+
+                // 將需審核帳號帶入
+                var userMaintain = _scope.Resolve<UserMaintain>();
+
+                userMaintain.Accs = response.Data;
+                userMaintain.SetAccs();
+                userMaintain.SetUI(false);
+                userMaintain.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"{GetType().Name} ButtonClick Exception");
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void Verify()
@@ -117,6 +156,7 @@ namespace TestChatTool.UI.Forms
 
                 userMaintain.Accs = response.Data;
                 userMaintain.SetAccs();
+                userMaintain.SetUI(true);
                 userMaintain.ShowDialog();
             }
             catch (Exception ex)
