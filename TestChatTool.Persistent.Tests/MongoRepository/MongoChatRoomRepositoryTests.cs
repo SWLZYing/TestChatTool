@@ -28,7 +28,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void create_room()
         {
-            var result = _repository.Create(ChatRoom.GenerateInstance("DC_CAT", "Cat Room"));
+            var result = _repository.Create(ChatRoom.GenerateInstance("DCCAT", "Cat Room"));
 
             Assert.IsNull(result.ex);
             Assert.IsTrue(result.isSuccess);
@@ -37,8 +37,8 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void create_room_exist()
         {
-            _repository.Create(ChatRoom.GenerateInstance("DC_CAT", "Cat Room"));
-            var result = _repository.Create(ChatRoom.GenerateInstance("DC_CAT", string.Empty));
+            _repository.Create(ChatRoom.GenerateInstance("DCCAT", "Cat Room"));
+            var result = _repository.Create(ChatRoom.GenerateInstance("DCCAT", string.Empty));
 
             Assert.IsNotNull(result.ex);
             Assert.IsTrue(result.isAccDuplicate);
@@ -47,8 +47,8 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void query_room()
         {
-            _repository.Create(ChatRoom.GenerateInstance("DC_CAT", "Cat Room"));
-            var result = _repository.Query("DC_CAT");
+            _repository.Create(ChatRoom.GenerateInstance("DCCAT", "Cat Room"));
+            var result = _repository.Query("DCCAT");
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
@@ -57,9 +57,9 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void update_room_name()
         {
-            Console.WriteLine(_repository.Create(ChatRoom.GenerateInstance("DC_CAT", "Cat Room")));
+            Console.WriteLine(_repository.Create(ChatRoom.GenerateInstance("DCCAT", "Cat Room")));
 
-            var result = _repository.Update("DC_CAT", "New Cat Room");
+            var result = _repository.Update("DCCAT", "New Cat Room");
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
@@ -68,9 +68,9 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void get_all_room()
         {
-            _repository.Create(ChatRoom.GenerateInstance("DC_CAT", "Cat Room"));
-            _repository.Create(ChatRoom.GenerateInstance("DC_DOG", "Dog Room"));
-            _repository.Create(ChatRoom.GenerateInstance("DC_BIRD", "Bird Room"));
+            _repository.Create(ChatRoom.GenerateInstance("DCCAT", "Cat Room"));
+            _repository.Create(ChatRoom.GenerateInstance("DCDOG", "Dog Room"));
+            _repository.Create(ChatRoom.GenerateInstance("DCBIRD", "Bird Room"));
             var result = _repository.GetAll();
 
             Assert.IsNull(result.ex);

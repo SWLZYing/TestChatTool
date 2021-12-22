@@ -29,7 +29,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void insert_online_user()
         {
-            var result = _repository.Upsert(OnLineUser.GenerateInstance("USER001", "u1", "DC_CAT"));
+            var result = _repository.Upsert(OnLineUser.GenerateInstance("USER001", "u1", "DCCAT"));
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
@@ -39,9 +39,9 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         public void update_online_user()
         {
             // 進入聊天室
-            Console.WriteLine(_repository.Upsert(OnLineUser.GenerateInstance("USER001", "u1", "DC_CAT")));
+            Console.WriteLine(_repository.Upsert(OnLineUser.GenerateInstance("USER001", "u1", "DCCAT")));
             // 變換聊天室
-            var result = _repository.Upsert(OnLineUser.GenerateInstance("USER001", string.Empty, "DC_GOG"));
+            var result = _repository.Upsert(OnLineUser.GenerateInstance("USER001", string.Empty, "DCGOG"));
 
             Assert.IsNull(result.ex);
             Console.WriteLine(result.result);
@@ -50,11 +50,11 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void query_room_users()
         {
-            _repository.Upsert(OnLineUser.GenerateInstance("USER001", "u1", "DC_CAT"));
-            _repository.Upsert(OnLineUser.GenerateInstance("USER002", "u2", "DC_GOG"));
-            _repository.Upsert(OnLineUser.GenerateInstance("USER003", "u3", "DC_GOG"));
+            _repository.Upsert(OnLineUser.GenerateInstance("USER001", "u1", "DCCAT"));
+            _repository.Upsert(OnLineUser.GenerateInstance("USER002", "u2", "DCGOG"));
+            _repository.Upsert(OnLineUser.GenerateInstance("USER003", "u3", "DCGOG"));
 
-            var result = _repository.FindRoomUser("DC_GOG");
+            var result = _repository.FindRoomUser("DCGOG");
 
             Assert.IsNull(result.ex);
             Assert.AreEqual(2, result.result.Count);
@@ -63,10 +63,10 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         [TestMethod]
         public void query_all_room_user_count()
         {
-            _repository.Upsert(OnLineUser.GenerateInstance("USER001", "u1", "DC_CAT"));
-            _repository.Upsert(OnLineUser.GenerateInstance("USER002", "u2", "DC_GOG"));
-            _repository.Upsert(OnLineUser.GenerateInstance("USER003", "u3", "DC_GOG"));
-            _repository.Upsert(OnLineUser.GenerateInstance("USER004", "u4", "DC_BIRD"));
+            _repository.Upsert(OnLineUser.GenerateInstance("USER001", "u1", "DCCAT"));
+            _repository.Upsert(OnLineUser.GenerateInstance("USER002", "u2", "DCGOG"));
+            _repository.Upsert(OnLineUser.GenerateInstance("USER003", "u3", "DCGOG"));
+            _repository.Upsert(OnLineUser.GenerateInstance("USER004", "u4", "DCBIRD"));
 
             var result = _repository.FindAllUserCountByRoom();
 

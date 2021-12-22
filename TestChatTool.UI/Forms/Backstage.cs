@@ -64,6 +64,7 @@ namespace TestChatTool.UI.Forms
             }
 
             GetAllRoom();
+            _timer.Start();
         }
 
         public void ChatMessageAppend(string roomCode, BroadCastChatMessageAction message)
@@ -76,23 +77,6 @@ namespace TestChatTool.UI.Forms
                 }
 
                 UpdateMessage($"{message.NickName}-{message.CreateDateTime.ToString("HH:mm:ss")}:{message.Message}");
-            }
-        }
-
-        private void UpdateMessage(string text)
-        {
-            if (txtMessage.InvokeRequired)
-            {
-                txtMessage.Invoke(new SafeCallDelegate(UpdateMessage), text);
-            }
-            else
-            {
-                if (txtMessage.TextLength > 9999)
-                {
-                    txtMessage.Clear();
-                }
-
-                txtMessage.AppendText($"{text}\r\n");
             }
         }
 
@@ -145,8 +129,25 @@ namespace TestChatTool.UI.Forms
         private void SelectedValueChanged(object sender, EventArgs e)
         {
             ChangeStatus();
-            _timer.Start();
             _room = cbbRoom.SelectedItem as RoomInfo;
+            txtMessage.Clear();
+        }
+
+        private void UpdateMessage(string text)
+        {
+            if (txtMessage.InvokeRequired)
+            {
+                txtMessage.Invoke(new SafeCallDelegate(UpdateMessage), text);
+            }
+            else
+            {
+                if (txtMessage.TextLength > 9999)
+                {
+                    txtMessage.Clear();
+                }
+
+                txtMessage.AppendText($"{text}\r\n");
+            }
         }
 
         private void ChangeStatus()

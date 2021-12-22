@@ -50,6 +50,7 @@ namespace TestChatTool.UI.Forms
 
             txtNickName.Text = user.NickName;
             GetAllRoom();
+            _timer.Start();
         }
 
         public void ChatMessageAppend(string roomCode, BroadCastChatMessageAction message)
@@ -97,9 +98,9 @@ namespace TestChatTool.UI.Forms
         private void SelectedValueChanged(object sender, EventArgs e)
         {
             ChangeStatus();
-            _timer.Start();
             _room = cbbRoom.SelectedItem as RoomInfo;
             UserOnLineUpsert(false);
+            txtMessage.Clear();
         }
 
         private void DropDown(object sender, MouseEventArgs e)
@@ -272,6 +273,5 @@ namespace TestChatTool.UI.Forms
                 return Name;
             }
         }
-
     }
 }
