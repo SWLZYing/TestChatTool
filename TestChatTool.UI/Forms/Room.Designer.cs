@@ -51,6 +51,7 @@ namespace TestChatTool.UI.Forms
             this.cbbRoom.Size = new System.Drawing.Size(190, 35);
             this.cbbRoom.TabIndex = 6;
             this.cbbRoom.SelectedValueChanged += new System.EventHandler(this.SelectedValueChanged);
+            this.cbbRoom.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DropDown);
             // 
             // label2
             // 

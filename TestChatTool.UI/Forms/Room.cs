@@ -102,6 +102,11 @@ namespace TestChatTool.UI.Forms
             UserOnLineUpsert(false);
         }
 
+        private void DropDown(object sender, MouseEventArgs e)
+        {
+            GetAllRoom();
+        }
+
         private void UserOnLineUpsert(bool isSignOut)
         {
             try
@@ -267,5 +272,6 @@ namespace TestChatTool.UI.Forms
                 return Name;
             }
         }
+
     }
 }
