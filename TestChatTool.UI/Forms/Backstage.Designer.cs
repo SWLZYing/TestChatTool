@@ -93,6 +93,7 @@ namespace TestChatTool.UI.Forms
             this.cbbRoom.Name = "cbbRoom";
             this.cbbRoom.Size = new System.Drawing.Size(190, 35);
             this.cbbRoom.TabIndex = 14;
+            this.cbbRoom.SelectedValueChanged += new System.EventHandler(this.SelectedValueChanged);
             // 
             // label3
             // 

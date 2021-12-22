@@ -21,7 +21,7 @@ namespace TestChatTool.Persistent.MongoRepository
             {
                 new CreateIndexModel<OnLineUser>(
                     Builders<OnLineUser>.IndexKeys.Descending(p => p.UpdateDatetime),
-                    new CreateIndexOptions(){ ExpireAfter = TimeSpan.FromSeconds(30)})
+                    new CreateIndexOptions(){ ExpireAfter = TimeSpan.FromSeconds(300)})
             });
         }
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Autofac;
+using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -6,21 +7,22 @@ using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Response;
+using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Handlers.Interface;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class Register : Form
     {
-        private readonly IHttpHandler _helper;
+        private readonly IHttpHandler _handler;
         private readonly ILogger _logger;
 
-        public Register(IHttpHandler helper)
+        public Register()
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _helper = helper;
+            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
             _logger = LogManager.GetLogger("UIRegister");
 
             SetAdminType();
@@ -100,7 +102,7 @@ namespace TestChatTool.UI.Forms
 
         private void CreateUser()
         {
-            var user = _helper.CallApiPost("User/Create", new Dictionary<string, object>
+            var user = _handler.CallApiPost("User/Create", new Dictionary<string, object>
                 {
                     { "Account", txtAcc.Text },
                     { "Password", txtPwd.Text },
@@ -128,7 +130,7 @@ namespace TestChatTool.UI.Forms
                 return;
             }
 
-            var admin = _helper.CallApiPost("Admin/Create", new Dictionary<string, object>
+            var admin = _handler.CallApiPost("Admin/Create", new Dictionary<string, object>
                     {
                         { "Account", txtAcc.Text },
                         { "Password", txtPwd.Text },

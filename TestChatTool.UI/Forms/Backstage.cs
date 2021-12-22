@@ -1,29 +1,45 @@
 ﻿using Autofac;
+using Microsoft.AspNet.SignalR.Client;
 using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Linq;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
+using TestChatTool.Domain.Extension;
+using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Response;
+using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Handlers.Interface;
+using TestChatTool.UI.SignalR;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class Backstage : Form
     {
-        private readonly IHttpHandler _helper;
+        private readonly IHttpHandler _handler;
+        private readonly IHubClient _hubClient;
         private readonly ILogger _logger;
         private ILifetimeScope _scope;
+        private Admin _admin;
+        private RoomInfo _room;
+        private Timer _timer;
 
-
-        public Backstage(IHttpHandler helper)
+        public Backstage()
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _helper = helper;
+            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
+            _hubClient = AutofacConfig.Container.Resolve<IHubClient>();
             _logger = LogManager.GetLogger("UIBackstage");
+
+            _timer = new Timer();
+            _timer.Interval = 500;
+            _timer.Tick += (object sender, EventArgs e) =>
+            {
+                ChangeStatus();
+            };
         }
 
         public ILifetimeScope Scope
@@ -34,9 +50,11 @@ namespace TestChatTool.UI.Forms
             }
         }
 
-        public void SetUpUI(bool isNormal)
+        public void SetUpUI(Admin admin)
         {
-            if (isNormal)
+            _admin = admin;
+
+            if (admin.AccountType == AdminType.Normal)
             {
                 btnCreate.Hide();
             }
@@ -46,6 +64,36 @@ namespace TestChatTool.UI.Forms
             }
 
             GetAllRoom();
+        }
+
+        public void ChatMessageAppend(string roomCode, BroadCastChatMessageAction message)
+        {
+            if (_admin != null)
+            {
+                if (roomCode != _room.Code)
+                {
+                    return;
+                }
+
+                UpdateMessage($"{message.NickName}-{message.CreateDateTime.ToString("HH:mm:ss")}:{message.Message}");
+            }
+        }
+
+        private void UpdateMessage(string text)
+        {
+            if (txtMessage.InvokeRequired)
+            {
+                txtMessage.Invoke(new SafeCallDelegate(UpdateMessage), text);
+            }
+            else
+            {
+                if (txtMessage.TextLength > 9999)
+                {
+                    txtMessage.Clear();
+                }
+
+                txtMessage.AppendText($"{text}\r\n");
+            }
         }
 
         private void ButtonClick(object sender, EventArgs e)
@@ -94,6 +142,25 @@ namespace TestChatTool.UI.Forms
             }
         }
 
+        private void SelectedValueChanged(object sender, EventArgs e)
+        {
+            ChangeStatus();
+            _timer.Start();
+            _room = cbbRoom.SelectedItem as RoomInfo;
+        }
+
+        private void ChangeStatus()
+        {
+            if (_hubClient.State == ConnectionState.Connected)
+            {
+                btnSend.Enabled = true;
+            }
+            else
+            {
+                btnSend.Enabled = false;
+            }
+        }
+
         private void CreateAdmin()
         {
             var register = _scope.Resolve<Register>();
@@ -104,7 +171,20 @@ namespace TestChatTool.UI.Forms
 
         private void Send()
         {
-            throw new NotImplementedException();
+            if (txtTalk.Text.IsNullOrWhiteSpace())
+            {
+                MessageBox.Show("請輸入訊息!");
+                return;
+            }
+
+            _hubClient.SendAction(new SendChatMessageAction(_room.Code)
+            {
+                NickName = "Admin",
+                Message = txtTalk.Text,
+                CreateDateTime = DateTime.Now
+            });
+
+            txtTalk.Clear();
         }
 
         private void RoomMaintain()
@@ -117,7 +197,7 @@ namespace TestChatTool.UI.Forms
 
         private void Unlock()
         {
-            var users = _helper.CallApiGet("User/QueryAllForUnlock", null);
+            var users = _handler.CallApiGet("User/QueryAllForUnlock", null);
 
             var response = JsonConvert.DeserializeObject<UserQueryAllForUnlockResponse>(users);
 
@@ -138,7 +218,7 @@ namespace TestChatTool.UI.Forms
 
         private void Verify()
         {
-            var users = _helper.CallApiGet("User/QueryAllForVerify", null);
+            var users = _handler.CallApiGet("User/QueryAllForVerify", null);
 
             var response = JsonConvert.DeserializeObject<UserQueryAllForVerifyResponse>(users);
 
@@ -161,7 +241,7 @@ namespace TestChatTool.UI.Forms
         {
             try
             {
-                var rooms = _helper.CallApiGet("ChatRoom/GetAll", null);
+                var rooms = _handler.CallApiGet("ChatRoom/GetAll", null);
 
                 var response = JsonConvert.DeserializeObject<ChatRoomGetAllResponse>(rooms);
 
@@ -189,6 +269,12 @@ namespace TestChatTool.UI.Forms
                 MessageBox.Show(ex.Message);
             }
         }
+
+        /// <summary>
+        /// 委派傳遞字串
+        /// </summary>
+        /// <param name="text"></param>
+        private delegate void SafeCallDelegate(string text);
 
         private class RoomInfo
         {

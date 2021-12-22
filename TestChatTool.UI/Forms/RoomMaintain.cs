@@ -1,25 +1,27 @@
-﻿using Newtonsoft.Json;
+﻿using Autofac;
+using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Response;
+using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Handlers.Interface;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class RoomMaintain : Form
     {
-        private readonly IHttpHandler _helper;
+        private readonly IHttpHandler _handler;
         private readonly ILogger _logger;
 
-        public RoomMaintain(IHttpHandler helper)
+        public RoomMaintain()
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _helper = helper;
+            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
             _logger = LogManager.GetLogger("UIRoomMaintain");
         }
 
@@ -57,7 +59,7 @@ namespace TestChatTool.UI.Forms
 
         private void UpdateRoom()
         {
-            var user = _helper.CallApiPut("ChatRoom/Update", new Dictionary<string, object>
+            var user = _handler.CallApiPut("ChatRoom/Update", new Dictionary<string, object>
             {
                 { "Code", txtCode.Text },
                 { "Name", txtName.Text },
@@ -79,7 +81,7 @@ namespace TestChatTool.UI.Forms
 
         private void CreateRoom()
         {
-            var user = _helper.CallApiPost("ChatRoom/Create", new Dictionary<string, object>
+            var user = _handler.CallApiPost("ChatRoom/Create", new Dictionary<string, object>
             {
                 { "Code", txtCode.Text },
                 { "Name", txtName.Text },

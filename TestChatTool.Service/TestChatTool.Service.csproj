@@ -206,6 +206,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionHandler\IActionHandler.cs" />
+    <Compile Include="ActionHandler\SendChatMessageActionHandler.cs" />
     <Compile Include="AppLibs\AutofacConfig.cs" />
     <Compile Include="AppLibs\ChatToolServer.cs" />
     <Compile Include="AppLibs\ConfigHelper.cs" />
@@ -215,6 +217,9 @@
     <Compile Include="Controllers\OnLineUserController.cs" />
     <Compile Include="Controllers\SignController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Hubs\ChatToolHub.cs" />
+    <Compile Include="Hubs\HubClient.cs" />
+    <Compile Include="Hubs\IHubClient.cs" />
     <Compile Include="Models\AdminCreateRequest.cs" />
     <Compile Include="Models\ChatRoomCreateRequest.cs" />
     <Compile Include="Models\ChatRoomUpdateRequest.cs" />

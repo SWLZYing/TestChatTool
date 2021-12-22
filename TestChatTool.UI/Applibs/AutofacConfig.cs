@@ -3,6 +3,7 @@ using System.Reflection;
 using TestChatTool.UI.Forms;
 using TestChatTool.UI.Handlers;
 using TestChatTool.UI.Handlers.Interface;
+using TestChatTool.UI.SignalR;
 
 namespace TestChatTool.UI.Applibs
 {
@@ -34,20 +35,20 @@ namespace TestChatTool.UI.Applibs
             var builder = new ContainerBuilder();
             var asm = Assembly.GetExecutingAssembly();
 
-            //// 取出當前執行assembly, 讓繼承IActionHandler且名稱結尾為ActionHandler的對應事件名稱
-            //// ex LoginResultAction對應的是LoginResultActionHandler
-            //builder.RegisterAssemblyTypes(asm)
-            //    .Where(t => t.IsAssignableTo<IActionHandler>())
-            //    .Named<IActionHandler>(t => t.Name.Replace("ActionHandler", string.Empty).ToLower())
-            //    .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
-            //    .SingleInstance();
+            // 取出當前執行assembly, 讓繼承IActionHandler且名稱結尾為ActionHandler的對應事件名稱
+            // ex LoginResultAction對應的是LoginResultActionHandler
+            builder.RegisterAssemblyTypes(asm)
+                .Where(t => t.IsAssignableTo<IActionHandler>())
+                .Named<IActionHandler>(t => t.Name.Replace("ActionHandler", string.Empty).ToLower())
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
+                .SingleInstance();
 
-            //builder.RegisterType<HubClient>()
-            //    .WithParameter("url", ConfigHelper.SignalrUrl)
-            //    .WithParameter("hubName", ConfigHelper.SignalrHubName)
-            //    .As<IHubClient>()
-            //    .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
-            //    .SingleInstance();
+            builder.RegisterType<HubClient>()
+                .WithParameter("url", ConfigHelper.SignalrUrl)
+                .WithParameter("hubName", ConfigHelper.SignalrHubName)
+                .As<IHubClient>()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
+                .SingleInstance();
 
             builder.RegisterType<HttpHandler>()
                 .WithParameter("serviceUrl", ConfigHelper.ServiceUrl)

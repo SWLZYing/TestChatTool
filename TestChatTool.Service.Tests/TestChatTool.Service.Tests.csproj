@@ -107,6 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionHandler\SendChatMessageActionHandlerTests.cs" />
     <Compile Include="Controllers\AdminControllerTests.cs" />
     <Compile Include="Controllers\ChatRoomControllerTests.cs" />
     <Compile Include="Controllers\OnLineUserControllerTests.cs" />

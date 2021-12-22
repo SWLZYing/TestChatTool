@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Autofac;
+using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -6,21 +7,22 @@ using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Response;
+using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Handlers.Interface;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class ChangePwd : Form
     {
-        private readonly IHttpHandler _helper;
+        private readonly IHttpHandler _handler;
         private readonly ILogger _logger;
 
-        public ChangePwd(IHttpHandler helper)
+        public ChangePwd()
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _helper = helper;
+            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
             _logger = LogManager.GetLogger("UIChangePwd");
         }
 
@@ -61,7 +63,7 @@ namespace TestChatTool.UI.Forms
                     return;
                 }
 
-                var user = _helper.CallApiPut("User/ResetPwd", new Dictionary<string, object>
+                var user = _handler.CallApiPut("User/ResetPwd", new Dictionary<string, object>
                 {
                     { "Account", txtAcc.Text },
                     { "OldPassWord", txtOldPwd.Text },

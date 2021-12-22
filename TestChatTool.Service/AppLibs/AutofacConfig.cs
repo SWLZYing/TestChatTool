@@ -4,6 +4,8 @@ using MongoDB.Driver;
 using System.Reflection;
 using TestChatTool.Domain.Repository;
 using TestChatTool.Persistent.MongoRepository;
+using TestChatTool.Service.ActionHandler;
+using TestChatTool.Service.Hubs;
 
 namespace TestChatTool.Service.AppLibs
 {
@@ -39,6 +41,16 @@ namespace TestChatTool.Service.AppLibs
             builder.Register(c => new MongoAdminRepository(client)).As<IAdminRepository>().SingleInstance();
             builder.Register(c => new MongoChatRoomRepository(client)).As<IChatRoomRepository>().SingleInstance();
             builder.Register(c => new MongoOnLineUserRepository(client)).As<IOnLineUserRepository>().SingleInstance();
+
+            // 註冊ActionHandler物件
+            builder.RegisterAssemblyTypes(asm)
+                .Named<IActionHandler>(t => t.Name.Replace("ActionHandler", string.Empty).ToLower())
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
+                .SingleInstance();
+
+            builder.RegisterType<HubClient>()
+                .As<IHubClient>()
+                .SingleInstance();
 
             _container = builder.Build();
         }

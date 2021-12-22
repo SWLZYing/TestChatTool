@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Autofac;
+using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -6,22 +7,23 @@ using System.Linq;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Response;
+using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Handlers.Interface;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class UserStatusMaintain : Form
     {
-        private readonly IHttpHandler _helper;
+        private readonly IHttpHandler _handler;
         private readonly ILogger _logger;
         private List<string> _accs;
 
-        public UserStatusMaintain(IHttpHandler helper)
+        public UserStatusMaintain()
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _helper = helper;
+            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
             _logger = LogManager.GetLogger("UIUserStatusMaintain");
         }
 
@@ -84,7 +86,7 @@ namespace TestChatTool.UI.Forms
 
         private void Verify()
         {
-            var user = _helper.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
+            var user = _handler.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
             {
                 { "Account", cbbAcc.SelectedItem.ToString() },
                 { "ErrorCount", 0 },
@@ -107,7 +109,7 @@ namespace TestChatTool.UI.Forms
 
         private void Unlock()
         {
-            var user = _helper.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
+            var user = _handler.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
             {
                 { "Account", cbbAcc.SelectedItem.ToString() },
                 { "ErrorCount", 0 },

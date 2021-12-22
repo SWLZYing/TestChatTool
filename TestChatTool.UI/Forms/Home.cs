@@ -7,23 +7,25 @@ using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Response;
+using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Handlers.Interface;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class Home : Form
     {
-        private readonly IHttpHandler _helper;
+        private readonly IHttpHandler _handler;
         private readonly ILogger _logger;
         private ILifetimeScope _scope;
 
-        public Home(IHttpHandler helper)
+        public Home()
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _helper = helper;
+            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
             _logger = LogManager.GetLogger("UIHome");
+
             SetAuthType();
         }
 
@@ -116,7 +118,7 @@ namespace TestChatTool.UI.Forms
 
         private void UserSignIn()
         {
-            var user = _helper.CallApiPost("Sign/UserSignIn", new Dictionary<string, object>
+            var user = _handler.CallApiPost("Sign/UserSignIn", new Dictionary<string, object>
             {
                 { "Account", txtAcc.Text },
                 { "Password", txtPwd.Text },
@@ -134,7 +136,7 @@ namespace TestChatTool.UI.Forms
                     changePwd.RefreshView();
                     changePwd.ShowDialog();
 
-                    var change = _helper.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
+                    var change = _handler.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
                     {
                         { "Account", response.Data.Account },
                         { "ErrorCount", 0 },
@@ -167,7 +169,7 @@ namespace TestChatTool.UI.Forms
 
         private void AdminSignIn()
         {
-            var admin = _helper.CallApiPost("Sign/AdminSignIn", new Dictionary<string, object>
+            var admin = _handler.CallApiPost("Sign/AdminSignIn", new Dictionary<string, object>
             {
                 { "Account", txtAcc.Text },
                 { "Password", txtPwd.Text },
@@ -183,7 +185,7 @@ namespace TestChatTool.UI.Forms
                 var register = _scope.Resolve<Backstage>();
 
                 register.Scope = _scope;
-                register.SetUpUI(response.Data.AccountType == AdminType.Normal); // 層級為Normal 不顯示創建按鍵
+                register.SetUpUI(response.Data); // 層級為Normal 不顯示創建按鍵
                 register.ShowDialog();
             }
             else
