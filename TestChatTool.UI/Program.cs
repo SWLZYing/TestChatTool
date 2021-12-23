@@ -29,7 +29,24 @@ namespace TestChatTool.UI
                 var home = scope.Resolve<Home>();
                 home.Scope = scope;
 
-                home.ShowDialog();
+                if (home.ShowDialog() == DialogResult.OK)
+                {
+                    if (home.IsAdmin)
+                    {
+                        var backstage = scope.Resolve<Backstage>();
+
+                        backstage.Scope = scope;
+                        backstage.SetUpUI(home.Admin); // 層級為Normal 不顯示創建按鍵
+                        backstage.ShowDialog();
+                    }
+                    else
+                    {
+                        var room = scope.Resolve<Room>();
+
+                        room.SetUpUI(home.User);
+                        room.ShowDialog();
+                    }
+                }
             }
         }
     }

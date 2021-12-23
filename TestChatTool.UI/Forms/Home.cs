@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
+using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Response;
 using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Handlers.Interface;
@@ -17,6 +18,13 @@ namespace TestChatTool.UI.Forms
         private readonly IHttpHandler _handler;
         private readonly ILogger _logger;
         private ILifetimeScope _scope;
+
+        /// <summary>
+        /// 是否為管理者登入
+        /// </summary>
+        public bool IsAdmin { get; set; }
+        public Admin Admin { get; set; }
+        public User User { get; set; }
 
         public Home()
         {
@@ -102,11 +110,13 @@ namespace TestChatTool.UI.Forms
                 if (cbbAuth.SelectedIndex == default)
                 {
                     AdminSignIn();
+                    IsAdmin = true;
                     return;
                 }
 
                 // 會員登入
                 UserSignIn();
+                IsAdmin = false;
                 return;
             }
             catch (Exception ex)
@@ -153,13 +163,10 @@ namespace TestChatTool.UI.Forms
                     return;
                 }
 
+                User = response.Data;
                 // 登入成功 切換User視窗
+                DialogResult = DialogResult.OK;
                 Close();
-
-                var room = _scope.Resolve<Room>();
-
-                room.SetUpUI(response.Data);
-                room.ShowDialog();
             }
             else
             {
@@ -179,14 +186,10 @@ namespace TestChatTool.UI.Forms
 
             if (response.Code == (int)ErrorType.Success)
             {
+                Admin = response.Data;
                 // 關閉登入頁
+                DialogResult = DialogResult.OK;
                 Close();
-
-                var register = _scope.Resolve<Backstage>();
-
-                register.Scope = _scope;
-                register.SetUpUI(response.Data); // 層級為Normal 不顯示創建按鍵
-                register.ShowDialog();
             }
             else
             {
