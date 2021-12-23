@@ -47,7 +47,10 @@ namespace TestChatTool.UI.Forms
             _timerForGetRoomUsers = new Timer { Interval = 5000 };
             _timerForGetRoomUsers.Tick += (object sender, EventArgs e) =>
             {
-                GetRoomAllUsers();
+                if (_hubClient.State == ConnectionState.Connected)
+                {
+                    GetRoomAllUsers();
+                }
             };
         }
 
@@ -81,6 +84,11 @@ namespace TestChatTool.UI.Forms
             _timerForGetRoomUsers.Start();
         }
 
+        /// <summary>
+        /// 接收聊天訊息
+        /// </summary>
+        /// <param name="roomCode"></param>
+        /// <param name="message"></param>
         public void ChatMessageAppend(string roomCode, BroadCastChatMessageAction message)
         {
             if (_admin != null)
@@ -94,6 +102,10 @@ namespace TestChatTool.UI.Forms
             }
         }
 
+        /// <summary>
+        /// 接收登出訊息
+        /// </summary>
+        /// <param name="message"></param>
         public void BroadCastLogout(BroadCastLogoutAction message)
         {
             if (_admin != null)

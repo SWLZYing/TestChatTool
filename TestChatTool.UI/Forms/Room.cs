@@ -36,14 +36,17 @@ namespace TestChatTool.UI.Forms
             _hubClient = AutofacConfig.Container.Resolve<IHubClient>();
             _logger = LogManager.GetLogger("UIRoom");
 
-            _timer = new Timer();
-            _timer.Interval = 500;
+            _timer = new Timer { Interval = 500 };
             _timer.Tick += (object sender, EventArgs e) =>
             {
                 ChangeStatus();
             };
         }
 
+        /// <summary>
+        /// 畫面開啟前設定
+        /// </summary>
+        /// <param name="user"></param>
         public void SetUpUI(User user)
         {
             _user = user;
