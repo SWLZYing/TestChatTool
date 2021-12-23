@@ -6,7 +6,7 @@
     public class BroadCastLogoutAction : ActionBase
     {
         public override string Action()
-            => "_BroadCastLogout";
+            => "BroadCastLogout";
 
         /// <summary>
         /// 被登出暱稱

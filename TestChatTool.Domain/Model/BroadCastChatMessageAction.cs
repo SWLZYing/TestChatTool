@@ -11,6 +11,11 @@ namespace TestChatTool.Domain.Model
             => "BroadCastChatMessage";
 
         /// <summary>
+        /// 房間代碼
+        /// </summary>
+        public string RoomCode { get; set; }
+
+        /// <summary>
         /// 暱稱
         /// </summary>
         public string NickName { get; set; }

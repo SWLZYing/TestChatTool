@@ -30,10 +30,9 @@ namespace TestChatTool.UI.Handlers
         {
             try
             {
-                var roomCode = actionModule.Action.Split('_')[0];
                 var content = JsonConvert.DeserializeObject<BroadCastChatMessageAction>(actionModule.Content);
-                _room.ChatMessageAppend(roomCode, content);
-                _backstage.ChatMessageAppend(roomCode, content);
+                _room.ChatMessageAppend(content);
+                _backstage.ChatMessageAppend(content);
                 return true;
             }
             catch (Exception ex)

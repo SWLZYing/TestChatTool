@@ -7,15 +7,13 @@ namespace TestChatTool.Domain.Model
     /// </summary>
     public class SendChatMessageAction : ActionBase
     {
-        private readonly string _roomCode;
-
-        public SendChatMessageAction(string roomCode)
-        {
-            _roomCode = roomCode;
-        }
-
         public override string Action()
-            => $"{_roomCode}_SendChatMessage";
+            => $"SendChatMessage";
+
+        /// <summary>
+        /// 暱稱
+        /// </summary>
+        public string RoomCode { get; set; }
 
         /// <summary>
         /// 暱稱

@@ -20,6 +20,7 @@ namespace TestChatTool.Service.ActionHandler
 
                 return (null, NotifyType.BroadCast, new BroadCastChatMessageAction()
                 {
+                    RoomCode = content.RoomCode,
                     NickName = content.NickName,
                     Message = content.Message,
                     CreateDateTime = content.CreateDateTime

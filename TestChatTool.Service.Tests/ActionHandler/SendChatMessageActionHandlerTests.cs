@@ -15,8 +15,9 @@ namespace TestChatTool.Service.Tests.ActionHandler
             var handler = new SendChatMessageActionHandler();
             var result = handler.ExecuteAction(new ActionModule()
             {
-                Content = JsonConvert.SerializeObject(new SendChatMessageAction("HALL")
+                Content = JsonConvert.SerializeObject(new SendChatMessageAction()
                 {
+                    RoomCode = "HALL",
                     NickName = "TEST001",
                     Message = "TEST123456",
                     CreateDateTime = DateTime.Now

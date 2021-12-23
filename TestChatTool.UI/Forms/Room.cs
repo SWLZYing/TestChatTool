@@ -56,11 +56,11 @@ namespace TestChatTool.UI.Forms
             _timer.Start();
         }
 
-        public void ChatMessageAppend(string roomCode, BroadCastChatMessageAction message)
+        public void ChatMessageAppend(BroadCastChatMessageAction message)
         {
             if (_user != null)
             {
-                if (roomCode != _room.Code)
+                if (message.RoomCode != _room.Code)
                 {
                     return;
                 }
@@ -203,8 +203,9 @@ namespace TestChatTool.UI.Forms
                 return;
             }
 
-            _hubClient.SendAction(new SendChatMessageAction(_room.Code)
+            _hubClient.SendAction(new SendChatMessageAction()
             {
+                RoomCode = _room.Code,
                 NickName = _user.NickName,
                 Message = txtTalk.Text,
                 CreateDateTime = DateTime.Now

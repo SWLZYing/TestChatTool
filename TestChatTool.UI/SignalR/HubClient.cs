@@ -127,9 +127,7 @@ namespace TestChatTool.UI.SignalR
             {
                 logger.Trace($"{GetType().Name} BroadCastAction Action: {action.Action}, Content: {action.Content}");
 
-                var actionName = action.Action.Split('_')[1];
-
-                if (handlerSets.TryGetValue(actionName.ToLower(), out var handler))
+                if (handlerSets.TryGetValue(action.Action.ToLower(), out var handler))
                 {
                     handler.Execute(action);
                 }

@@ -63,13 +63,7 @@ namespace TestChatTool.Service.Hubs
             {
                 using (var scope = AutofacConfig.Container.BeginLifetimeScope())
                 {
-                    // RoomCode => 需從名稱調整至物件中
-                    var roomName = action.Action.Split('_')[0];
-                    roomName = roomName.IsNullOrWhiteSpace() ? string.Empty : roomName + "_";
-                    var actionName = action.Action.Split('_')[1];
-                    // ---
-
-                    var actionHandler = scope.ResolveNamed<IActionHandler>(actionName.ToLower());
+                    var actionHandler = scope.ResolveNamed<IActionHandler>(action.Action.ToLower());
                     var excuteActionResult = actionHandler.ExecuteAction(action);
 
                     if (excuteActionResult.exception != null)
@@ -91,7 +85,7 @@ namespace TestChatTool.Service.Hubs
                     {
                         Clients.All.BroadCastAction(new ActionModule()
                         {
-                            Action = $"{roomName}{excuteActionResult.actionBase.Action()}",
+                            Action = excuteActionResult.actionBase.Action(),
                             Content = excuteActionResult.actionBase.ToString()
                         });
                     }
