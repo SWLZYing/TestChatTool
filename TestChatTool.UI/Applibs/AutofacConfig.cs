@@ -36,7 +36,6 @@ namespace TestChatTool.UI.Applibs
             var asm = Assembly.GetExecutingAssembly();
 
             // 取出當前執行assembly, 讓繼承IActionHandler且名稱結尾為ActionHandler的對應事件名稱
-            // ex LoginResultAction對應的是LoginResultActionHandler
             builder.RegisterAssemblyTypes(asm)
                 .Where(t => t.IsAssignableTo<IActionHandler>())
                 .Named<IActionHandler>(t => t.Name.Replace("ActionHandler", string.Empty).ToLower())
@@ -55,6 +54,7 @@ namespace TestChatTool.UI.Applibs
                 .As<IHttpHandler>()
                 .SingleInstance();
 
+            // UI註冊
             builder.RegisterType<Home>()
                 .SingleInstance();
 

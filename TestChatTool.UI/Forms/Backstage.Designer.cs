@@ -38,6 +38,8 @@ namespace TestChatTool.UI.Forms
             this.btnSend = new System.Windows.Forms.Button();
             this.txtTalk = new System.Windows.Forms.TextBox();
             this.txtMessage = new System.Windows.Forms.TextBox();
+            this.txtRoomUsers = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnCreate
@@ -126,18 +128,41 @@ namespace TestChatTool.UI.Forms
             // 
             // txtMessage
             // 
+            this.txtMessage.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.txtMessage.Location = new System.Drawing.Point(10, 60);
             this.txtMessage.Multiline = true;
             this.txtMessage.Name = "txtMessage";
             this.txtMessage.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtMessage.Size = new System.Drawing.Size(690, 320);
+            this.txtMessage.Size = new System.Drawing.Size(490, 320);
             this.txtMessage.TabIndex = 22;
+            // 
+            // txtRoomUsers
+            // 
+            this.txtRoomUsers.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtRoomUsers.Location = new System.Drawing.Point(510, 96);
+            this.txtRoomUsers.Multiline = true;
+            this.txtRoomUsers.Name = "txtRoomUsers";
+            this.txtRoomUsers.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtRoomUsers.Size = new System.Drawing.Size(190, 284);
+            this.txtRoomUsers.TabIndex = 26;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Location = new System.Drawing.Point(506, 60);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(175, 33);
+            this.label1.TabIndex = 27;
+            this.label1.Text = "聊天室會員";
             // 
             // Backstage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(714, 441);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtRoomUsers);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtTalk);
@@ -165,5 +190,7 @@ namespace TestChatTool.UI.Forms
         private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.TextBox txtTalk;
         private System.Windows.Forms.TextBox txtMessage;
+        private System.Windows.Forms.TextBox txtRoomUsers;
+        private System.Windows.Forms.Label label1;
     }
 }

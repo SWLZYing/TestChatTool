@@ -32,9 +32,10 @@ namespace TestChatTool.UI.Handlers
             {
                 var content = JsonConvert.DeserializeObject<BroadCastLogoutAction>(actionModule.Content);
 
-                if (_room.User?.NickName == content.NickName)
+                if (_room.User?.NickName != content.NickName)
                 {
-                    // 使用者登出後續事項
+                    _room.BroadCastLogout(content);
+                    _backstage.BroadCastLogout(content);
                 }
 
                 return true;

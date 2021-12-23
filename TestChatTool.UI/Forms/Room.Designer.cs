@@ -94,6 +94,7 @@ namespace TestChatTool.UI.Forms
             // 
             // txtMessage
             // 
+            this.txtMessage.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.txtMessage.Location = new System.Drawing.Point(10, 55);
             this.txtMessage.Multiline = true;
             this.txtMessage.Name = "txtMessage";

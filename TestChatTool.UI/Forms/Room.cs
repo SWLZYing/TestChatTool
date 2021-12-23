@@ -18,7 +18,7 @@ namespace TestChatTool.UI.Forms
 {
     public partial class Room : Form
     {
-        private readonly IHttpHandler _handler;
+        private readonly IHttpHandler _http;
         private readonly IHubClient _hubClient;
         private readonly ILogger _logger;
         private User _user;
@@ -32,7 +32,7 @@ namespace TestChatTool.UI.Forms
             InitializeComponent();
             MaximizeBox = false;
 
-            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
+            _http = AutofacConfig.Container.Resolve<IHttpHandler>();
             _hubClient = AutofacConfig.Container.Resolve<IHubClient>();
             _logger = LogManager.GetLogger("UIRoom");
 
@@ -47,8 +47,8 @@ namespace TestChatTool.UI.Forms
         public void SetUpUI(User user)
         {
             _user = user;
-
             txtNickName.Text = user.NickName;
+
             GetAllRoom();
             _timer.Start();
         }
@@ -63,6 +63,19 @@ namespace TestChatTool.UI.Forms
                 }
 
                 UpdateMessage($"{message.NickName}-{message.CreateDateTime.ToString("HH:mm:ss")}:{message.Message}");
+            }
+        }
+
+        public void BroadCastLogout(BroadCastLogoutAction message)
+        {
+            if (_user != null)
+            {
+                if (message.RoomCode != _room.Code)
+                {
+                    return;
+                }
+
+                UpdateMessage($"{message.NickName} 已離開聊天室");
             }
         }
 
@@ -97,10 +110,9 @@ namespace TestChatTool.UI.Forms
 
         private void SelectedValueChanged(object sender, EventArgs e)
         {
-            ChangeStatus();
             _room = cbbRoom.SelectedItem as RoomInfo;
-            UserOnLineUpsert(false);
             txtMessage.Clear();
+            UserOnLineUpsert(false);
         }
 
         private void DropDown(object sender, MouseEventArgs e)
@@ -108,11 +120,15 @@ namespace TestChatTool.UI.Forms
             GetAllRoom();
         }
 
+        /// <summary>
+        /// 更新人員在線狀態
+        /// </summary>
+        /// <param name="isSignOut">是否為會員登出</param>
         private void UserOnLineUpsert(bool isSignOut)
         {
             try
             {
-                var onLine = _handler.CallApiPost("Online/Upsert", new Dictionary<string, object>
+                var onLine = _http.CallApiPost("Online/Upsert", new Dictionary<string, object>
                 {
                     { "Account", _user.Account },
                     { "NickName", txtNickName.Text.IsNullOrWhiteSpace() ? _user.NickName : txtNickName.Text },
@@ -165,14 +181,14 @@ namespace TestChatTool.UI.Forms
 
         private void SignOut()
         {
-            _hubClient.SendAction(new SendChatMessageAction(_room.Code)
+            _hubClient.SendAction(new BroadCastLogoutAction()
             {
                 NickName = _user.NickName,
-                Message = "離開聊天室.",
-                CreateDateTime = DateTime.Now
+                RoomCode = _room.Code,
             });
 
             UserOnLineUpsert(true);
+
             Close();
         }
 
@@ -205,7 +221,7 @@ namespace TestChatTool.UI.Forms
                 return;
             }
 
-            var user = _handler.CallApiPut("User/Update", new Dictionary<string, object>
+            var user = _http.CallApiPut("User/Update", new Dictionary<string, object>
             {
                 { "Account", _user.Account },
                 { "NickName", txtNickName.Text },
@@ -228,7 +244,7 @@ namespace TestChatTool.UI.Forms
         {
             try
             {
-                var rooms = _handler.CallApiGet("ChatRoom/GetAll", null);
+                var rooms = _http.CallApiGet("ChatRoom/GetAll", null);
 
                 var response = JsonConvert.DeserializeObject<ChatRoomGetAllResponse>(rooms);
 

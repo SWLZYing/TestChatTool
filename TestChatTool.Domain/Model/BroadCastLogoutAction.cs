@@ -6,11 +6,12 @@
     public class BroadCastLogoutAction : ActionBase
     {
         public override string Action()
-            => "BroadCastLogout";
+            => "_BroadCastLogout";
 
         /// <summary>
         /// 被登出暱稱
         /// </summary>
         public string NickName { get; set; }
+        public string RoomCode { get; set; }
     }
 }

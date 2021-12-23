@@ -3,6 +3,7 @@ using Microsoft.AspNet.SignalR.Client;
 using Newtonsoft.Json;
 using NLog;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
@@ -17,28 +18,36 @@ namespace TestChatTool.UI.Forms
 {
     public partial class Backstage : Form
     {
-        private readonly IHttpHandler _handler;
+        private readonly IHttpHandler _http;
         private readonly IHubClient _hubClient;
         private readonly ILogger _logger;
         private ILifetimeScope _scope;
         private Admin _admin;
         private RoomInfo _room;
         private Timer _timer;
+        private Timer _timerForGetRoomUsers;
 
         public Backstage()
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
+            _http = AutofacConfig.Container.Resolve<IHttpHandler>();
             _hubClient = AutofacConfig.Container.Resolve<IHubClient>();
             _logger = LogManager.GetLogger("UIBackstage");
 
-            _timer = new Timer();
-            _timer.Interval = 500;
+            // 確認連線狀況
+            _timer = new Timer { Interval = 500 };
             _timer.Tick += (object sender, EventArgs e) =>
             {
                 ChangeStatus();
+            };
+
+            // 定時更新房間會員
+            _timerForGetRoomUsers = new Timer { Interval = 5000 };
+            _timerForGetRoomUsers.Tick += (object sender, EventArgs e) =>
+            {
+                GetRoomAllUsers();
             };
         }
 
@@ -50,6 +59,10 @@ namespace TestChatTool.UI.Forms
             }
         }
 
+        /// <summary>
+        /// 畫面開啟前設定
+        /// </summary>
+        /// <param name="admin"></param>
         public void SetUpUI(Admin admin)
         {
             _admin = admin;
@@ -65,6 +78,7 @@ namespace TestChatTool.UI.Forms
 
             GetAllRoom();
             _timer.Start();
+            _timerForGetRoomUsers.Start();
         }
 
         public void ChatMessageAppend(string roomCode, BroadCastChatMessageAction message)
@@ -77,6 +91,19 @@ namespace TestChatTool.UI.Forms
                 }
 
                 UpdateMessage($"{message.NickName}-{message.CreateDateTime.ToString("HH:mm:ss")}:{message.Message}");
+            }
+        }
+
+        public void BroadCastLogout(BroadCastLogoutAction message)
+        {
+            if (_admin != null)
+            {
+                if (message.RoomCode != _room.Code)
+                {
+                    return;
+                }
+
+                UpdateMessage($"{message.NickName} 已離開聊天室");
             }
         }
 
@@ -128,9 +155,9 @@ namespace TestChatTool.UI.Forms
 
         private void SelectedValueChanged(object sender, EventArgs e)
         {
-            ChangeStatus();
             _room = cbbRoom.SelectedItem as RoomInfo;
             txtMessage.Clear();
+            GetRoomAllUsers();
         }
 
         private void UpdateMessage(string text)
@@ -159,6 +186,37 @@ namespace TestChatTool.UI.Forms
             else
             {
                 btnSend.Enabled = false;
+            }
+        }
+
+        private void GetRoomAllUsers()
+        {
+            try
+            {
+                if (_room == null)
+                {
+                    return;
+                }
+
+                var users = _http.CallApiGet("Online/FindRoomUser", new Dictionary<string, object>
+                {
+                    { "roomCode", _room.Code },
+                });
+
+                var response = JsonConvert.DeserializeObject<OnLineUserFindRoomUserResponse>(users);
+
+                if (response.Code != (int)ErrorType.Success)
+                {
+                    MessageBox.Show(response.ErrorMsg);
+                    return;
+                }
+
+                txtRoomUsers.Text = string.Join("\r\n", response.Data.Select(s => s.NickName));
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"{GetType().Name} GetRoomAllUsers Exception");
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -198,7 +256,7 @@ namespace TestChatTool.UI.Forms
 
         private void Unlock()
         {
-            var users = _handler.CallApiGet("User/QueryAllForUnlock", null);
+            var users = _http.CallApiGet("User/QueryAllForUnlock", null);
 
             var response = JsonConvert.DeserializeObject<UserQueryAllForUnlockResponse>(users);
 
@@ -219,7 +277,7 @@ namespace TestChatTool.UI.Forms
 
         private void Verify()
         {
-            var users = _handler.CallApiGet("User/QueryAllForVerify", null);
+            var users = _http.CallApiGet("User/QueryAllForVerify", null);
 
             var response = JsonConvert.DeserializeObject<UserQueryAllForVerifyResponse>(users);
 
@@ -242,7 +300,7 @@ namespace TestChatTool.UI.Forms
         {
             try
             {
-                var rooms = _handler.CallApiGet("ChatRoom/GetAll", null);
+                var rooms = _http.CallApiGet("ChatRoom/GetAll", null);
 
                 var response = JsonConvert.DeserializeObject<ChatRoomGetAllResponse>(rooms);
 

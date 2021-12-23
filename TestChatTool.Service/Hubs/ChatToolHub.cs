@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Threading.Tasks;
+using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
 using TestChatTool.Service.ActionHandler;
 using TestChatTool.Service.AppLibs;
@@ -62,8 +63,11 @@ namespace TestChatTool.Service.Hubs
             {
                 using (var scope = AutofacConfig.Container.BeginLifetimeScope())
                 {
+                    // RoomCode => 需從名稱調整至物件中
                     var roomName = action.Action.Split('_')[0];
+                    roomName = roomName.IsNullOrWhiteSpace() ? string.Empty : roomName + "_";
                     var actionName = action.Action.Split('_')[1];
+                    // ---
 
                     var actionHandler = scope.ResolveNamed<IActionHandler>(actionName.ToLower());
                     var excuteActionResult = actionHandler.ExecuteAction(action);
@@ -87,7 +91,7 @@ namespace TestChatTool.Service.Hubs
                     {
                         Clients.All.BroadCastAction(new ActionModule()
                         {
-                            Action = $"{roomName}_{excuteActionResult.actionBase.Action()}",
+                            Action = $"{roomName}{excuteActionResult.actionBase.Action()}",
                             Content = excuteActionResult.actionBase.ToString()
                         });
                     }
