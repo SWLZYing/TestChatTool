@@ -14,15 +14,15 @@ namespace TestChatTool.UI.Forms
 {
     public partial class ChangePwd : Form
     {
-        private readonly IHttpHandler _handler;
+        private readonly IHttpHandler _http;
         private readonly ILogger _logger;
 
-        public ChangePwd()
+        public ChangePwd(IHttpHandler http)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
+            _http = http;
             _logger = LogManager.GetLogger("UIChangePwd");
         }
 
@@ -63,7 +63,7 @@ namespace TestChatTool.UI.Forms
                     return;
                 }
 
-                var user = _handler.CallApiPut("User/ResetPwd", new Dictionary<string, object>
+                var user = _http.CallApiPut("User/ResetPwd", new Dictionary<string, object>
                 {
                     { "Account", txtAcc.Text },
                     { "OldPassWord", txtOldPwd.Text },
@@ -74,6 +74,7 @@ namespace TestChatTool.UI.Forms
 
                 if (userResponse.Code == (int)ErrorType.Success)
                 {
+                    DialogResult = DialogResult.OK;
                     MessageBox.Show("密碼修改成功 請用新密碼登入.");
                     Close();
                 }

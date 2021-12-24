@@ -1,5 +1,4 @@
-﻿using Autofac;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -7,22 +6,26 @@ using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Response;
-using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Handlers.Interface;
+using TestChatTool.UI.Helpers.Interface;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class Register : Form
     {
-        private readonly IHttpHandler _handler;
+        private readonly IHttpHandler _http;
+        private readonly IAdminControllerApiHelper _adminControllerApi;
         private readonly ILogger _logger;
 
-        public Register()
+        public Register(
+            IHttpHandler http,
+            IAdminControllerApiHelper adminControllerApi)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
+            _http = http;
+            _adminControllerApi = adminControllerApi;
             _logger = LogManager.GetLogger("UIRegister");
 
             SetAdminType();
@@ -102,7 +105,7 @@ namespace TestChatTool.UI.Forms
 
         private void CreateUser()
         {
-            var user = _handler.CallApiPost("User/Create", new Dictionary<string, object>
+            var user = _http.CallApiPost("User/Create", new Dictionary<string, object>
                 {
                     { "Account", txtAcc.Text },
                     { "Password", txtPwd.Text },
@@ -130,23 +133,19 @@ namespace TestChatTool.UI.Forms
                 return;
             }
 
-            var admin = _handler.CallApiPost("Admin/Create", new Dictionary<string, object>
-                    {
-                        { "Account", txtAcc.Text },
-                        { "Password", txtPwd.Text },
-                        { "AccountType", (int)cbbAdminType.SelectedItem },
-                    });
+            var response = _adminControllerApi.Create(
+                txtAcc.Text,
+                txtPwd.Text,
+                (AdminType)cbbAdminType.SelectedItem);
 
-            var adminResponse = JsonConvert.DeserializeObject<AdminCreateResponse>(admin);
-
-            if (adminResponse.Code == (int)ErrorType.Success)
+            if (response.Code == (int)ErrorType.Success)
             {
                 MessageBox.Show("管理員創建成功.");
                 Close();
             }
             else
             {
-                MessageBox.Show(adminResponse.ErrorMsg);
+                MessageBox.Show(response.ErrorMsg);
             }
         }
 

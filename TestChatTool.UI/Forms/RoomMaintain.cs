@@ -13,15 +13,15 @@ namespace TestChatTool.UI.Forms
 {
     public partial class RoomMaintain : Form
     {
-        private readonly IHttpHandler _handler;
+        private readonly IHttpHandler _http;
         private readonly ILogger _logger;
 
-        public RoomMaintain()
+        public RoomMaintain(IHttpHandler http)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
+            _http = http;
             _logger = LogManager.GetLogger("UIRoomMaintain");
         }
 
@@ -59,7 +59,7 @@ namespace TestChatTool.UI.Forms
 
         private void UpdateRoom()
         {
-            var user = _handler.CallApiPut("ChatRoom/Update", new Dictionary<string, object>
+            var user = _http.CallApiPut("ChatRoom/Update", new Dictionary<string, object>
             {
                 { "Code", txtCode.Text },
                 { "Name", txtName.Text },
@@ -81,7 +81,7 @@ namespace TestChatTool.UI.Forms
 
         private void CreateRoom()
         {
-            var user = _handler.CallApiPost("ChatRoom/Create", new Dictionary<string, object>
+            var user = _http.CallApiPost("ChatRoom/Create", new Dictionary<string, object>
             {
                 { "Code", txtCode.Text },
                 { "Name", txtName.Text },

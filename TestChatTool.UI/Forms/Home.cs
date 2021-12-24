@@ -1,21 +1,18 @@
 ﻿using Autofac;
-using Newtonsoft.Json;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
-using TestChatTool.Domain.Response;
-using TestChatTool.UI.Applibs;
-using TestChatTool.UI.Handlers.Interface;
+using TestChatTool.UI.Helpers.Interface;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class Home : Form
     {
-        private readonly IHttpHandler _handler;
+        private readonly ISignControllerApiHelper _signControllerApi;
+        private readonly IUserControllerApiHelper _userControllerApi;
         private readonly ILogger _logger;
         private ILifetimeScope _scope;
 
@@ -26,12 +23,15 @@ namespace TestChatTool.UI.Forms
         public Admin Admin { get; set; }
         public User User { get; set; }
 
-        public Home()
+        public Home(
+            ISignControllerApiHelper signControllerApi,
+            IUserControllerApiHelper userControllerApi)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
+            _signControllerApi = signControllerApi;
+            _userControllerApi = userControllerApi;
             _logger = LogManager.GetLogger("UIHome");
 
             SetAuthType();
@@ -128,72 +128,58 @@ namespace TestChatTool.UI.Forms
 
         private void UserSignIn()
         {
-            var user = _handler.CallApiPost("Sign/UserSignIn", new Dictionary<string, object>
-            {
-                { "Account", txtAcc.Text },
-                { "Password", txtPwd.Text },
-            });
+            var user = _signControllerApi.UserSignIn(txtAcc.Text, txtPwd.Text);
 
-            var response = JsonConvert.DeserializeObject<UserSignInResponse>(user);
-
-            if (response.Code == (int)ErrorType.Success)
+            if (user.Code == (int)ErrorType.Success)
             {
                 // 解鎖後 需變更密碼重啟
-                if (response.Data.Status == UserStatusType.Unlock)
+                if (user.Data.Status == UserStatusType.Unlock)
                 {
                     var changePwd = _scope.Resolve<ChangePwd>();
 
                     changePwd.RefreshView();
-                    changePwd.ShowDialog();
 
-                    var change = _handler.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
+                    if (changePwd.ShowDialog() == DialogResult.OK)
                     {
-                        { "Account", response.Data.Account },
-                        { "ErrorCount", 0 },
-                        { "Status", (int)UserStatusType.Enable },
-                    });
+                        var userStatus = _userControllerApi.SetErrCountAndStatus(
+                            user.Data.Account,
+                            0,
+                            UserStatusType.Enable);
 
-                    var changeResponse = JsonConvert.DeserializeObject<UserSetErrCountAndStatusResponse>(change);
-
-                    if (changeResponse.Code != (int)ErrorType.Success)
-                    {
-                        MessageBox.Show(changeResponse.ErrorMsg);
+                        if (userStatus.Code != (int)ErrorType.Success)
+                        {
+                            MessageBox.Show(userStatus.ErrorMsg);
+                        }
                     }
 
                     return;
                 }
 
-                User = response.Data;
+                User = user.Data;
                 // 登入成功 切換User視窗
                 DialogResult = DialogResult.OK;
                 Close();
             }
             else
             {
-                MessageBox.Show(response.ErrorMsg);
+                MessageBox.Show(user.ErrorMsg);
             }
         }
 
         private void AdminSignIn()
         {
-            var admin = _handler.CallApiPost("Sign/AdminSignIn", new Dictionary<string, object>
-            {
-                { "Account", txtAcc.Text },
-                { "Password", txtPwd.Text },
-            });
+            var admin = _signControllerApi.AdminSignIn(txtAcc.Text, txtPwd.Text);
 
-            var response = JsonConvert.DeserializeObject<AdminSignInResponse>(admin);
-
-            if (response.Code == (int)ErrorType.Success)
+            if (admin.Code == (int)ErrorType.Success)
             {
-                Admin = response.Data;
+                Admin = admin.Data;
                 // 關閉登入頁
                 DialogResult = DialogResult.OK;
                 Close();
             }
             else
             {
-                MessageBox.Show(response.ErrorMsg);
+                MessageBox.Show(admin.ErrorMsg);
             }
         }
 

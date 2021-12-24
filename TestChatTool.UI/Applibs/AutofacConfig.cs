@@ -1,8 +1,12 @@
 ﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using TestChatTool.UI.Forms;
 using TestChatTool.UI.Handlers;
 using TestChatTool.UI.Handlers.Interface;
+using TestChatTool.UI.Helpers;
+using TestChatTool.UI.Helpers.Interface;
 using TestChatTool.UI.SignalR;
 
 namespace TestChatTool.UI.Applibs
@@ -32,7 +36,13 @@ namespace TestChatTool.UI.Applibs
         /// </summary>
         public static void Register()
         {
-            var builder = new ContainerBuilder();
+            // Create a service collection
+            // 注入IHttpClientFactory
+            var services = new ServiceCollection();
+            services.AddHttpClient();
+
+            var providerFactory = new AutofacServiceProviderFactory();
+            var builder = providerFactory.CreateBuilder(services);
             var asm = Assembly.GetExecutingAssembly();
 
             // 取出當前執行assembly, 讓繼承IActionHandler且名稱結尾為ActionHandler的對應事件名稱
@@ -47,6 +57,19 @@ namespace TestChatTool.UI.Applibs
                 .WithParameter("hubName", ConfigHelper.SignalrHubName)
                 .As<IHubClient>()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
+                .SingleInstance();
+
+            // 注入短連結物件ApiHelper
+            builder.RegisterType<AdminControllerApiHelper>()
+                .As<IAdminControllerApiHelper>()
+                .SingleInstance();
+
+            builder.RegisterType<SignControllerApiHelper>()
+                .As<ISignControllerApiHelper>()
+                .SingleInstance();
+
+            builder.RegisterType<UserControllerApiHelper>()
+                .As<IUserControllerApiHelper>()
                 .SingleInstance();
 
             builder.RegisterType<HttpHandler>()

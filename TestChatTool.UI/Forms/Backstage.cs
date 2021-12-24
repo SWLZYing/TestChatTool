@@ -21,19 +21,21 @@ namespace TestChatTool.UI.Forms
         private readonly IHttpHandler _http;
         private readonly IHubClient _hubClient;
         private readonly ILogger _logger;
+        private readonly Timer _timer;
+        private readonly Timer _timerForGetRoomUsers;
         private ILifetimeScope _scope;
         private Admin _admin;
         private RoomInfo _room;
-        private Timer _timer;
-        private Timer _timerForGetRoomUsers;
 
-        public Backstage()
+        public Backstage(
+            IHttpHandler http,
+            IHubClient hubClient)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _http = AutofacConfig.Container.Resolve<IHttpHandler>();
-            _hubClient = AutofacConfig.Container.Resolve<IHubClient>();
+            _http = http;
+            _hubClient = hubClient;
             _logger = LogManager.GetLogger("UIBackstage");
 
             // 確認連線狀況

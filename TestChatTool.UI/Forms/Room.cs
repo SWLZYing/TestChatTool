@@ -1,5 +1,4 @@
-﻿using Autofac;
-using Microsoft.AspNet.SignalR.Client;
+﻿using Microsoft.AspNet.SignalR.Client;
 using Newtonsoft.Json;
 using NLog;
 using System;
@@ -10,7 +9,6 @@ using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Response;
-using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Handlers.Interface;
 using TestChatTool.UI.SignalR;
 
@@ -27,13 +25,15 @@ namespace TestChatTool.UI.Forms
 
         public User User => _user;
 
-        public Room()
+        public Room(
+            IHttpHandler http,
+            IHubClient hubClient)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _http = AutofacConfig.Container.Resolve<IHttpHandler>();
-            _hubClient = AutofacConfig.Container.Resolve<IHubClient>();
+            _http = http;
+            _hubClient = hubClient;
             _logger = LogManager.GetLogger("UIRoom");
 
             _timer = new Timer { Interval = 500 };

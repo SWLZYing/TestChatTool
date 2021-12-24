@@ -14,16 +14,16 @@ namespace TestChatTool.UI.Forms
 {
     public partial class UserStatusMaintain : Form
     {
-        private readonly IHttpHandler _handler;
+        private readonly IHttpHandler _http;
         private readonly ILogger _logger;
         private List<string> _accs;
 
-        public UserStatusMaintain()
+        public UserStatusMaintain(IHttpHandler http)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _handler = AutofacConfig.Container.Resolve<IHttpHandler>();
+            _http = http;
             _logger = LogManager.GetLogger("UIUserStatusMaintain");
         }
 
@@ -86,7 +86,7 @@ namespace TestChatTool.UI.Forms
 
         private void Verify()
         {
-            var user = _handler.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
+            var user = _http.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
             {
                 { "Account", cbbAcc.SelectedItem.ToString() },
                 { "ErrorCount", 0 },
@@ -109,7 +109,7 @@ namespace TestChatTool.UI.Forms
 
         private void Unlock()
         {
-            var user = _handler.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
+            var user = _http.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
             {
                 { "Account", cbbAcc.SelectedItem.ToString() },
                 { "ErrorCount", 0 },
