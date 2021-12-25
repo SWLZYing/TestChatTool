@@ -150,7 +150,6 @@
     </Compile>
     <Compile Include="Handlers\BroadCastChatMessageActionHandler.cs" />
     <Compile Include="Handlers\BroadCastLogoutActionHandler.cs" />
-    <Compile Include="Handlers\HttpHandler.cs" />
     <Compile Include="Forms\Home.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -164,7 +163,6 @@
       <DependentUpon>Register.cs</DependentUpon>
     </Compile>
     <Compile Include="Handlers\Interface\IActionHandler.cs" />
-    <Compile Include="Handlers\Interface\IHttpHandler.cs" />
     <Compile Include="Helpers\AdminControllerApiHelper.cs" />
     <Compile Include="Helpers\ChatRoomControllerApiHelper.cs" />
     <Compile Include="Helpers\Interface\IAdminControllerApiHelper.cs" />

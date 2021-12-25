@@ -3,7 +3,6 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using TestChatTool.UI.Forms;
-using TestChatTool.UI.Handlers;
 using TestChatTool.UI.Handlers.Interface;
 using TestChatTool.UI.Helpers;
 using TestChatTool.UI.Helpers.Interface;
@@ -59,7 +58,7 @@ namespace TestChatTool.UI.Applibs
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
                 .SingleInstance();
 
-            // 注入短連結物件ApiHelper
+            // 註冊短連結物件 ApiHelper
             builder.RegisterType<AdminControllerApiHelper>()
                 .As<IAdminControllerApiHelper>()
                 .SingleInstance();
@@ -78,11 +77,6 @@ namespace TestChatTool.UI.Applibs
 
             builder.RegisterType<ChatRoomControllerApiHelper>()
                 .As<IChatRoomControllerApiHelper>()
-                .SingleInstance();
-
-            builder.RegisterType<HttpHandler>()
-                .WithParameter("serviceUrl", ConfigHelper.ServiceUrl)
-                .As<IHttpHandler>()
                 .SingleInstance();
 
             // UI註冊

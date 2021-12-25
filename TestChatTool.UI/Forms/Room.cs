@@ -1,22 +1,21 @@
 ﻿using Microsoft.AspNet.SignalR.Client;
-using Newtonsoft.Json;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
-using TestChatTool.Domain.Response;
-using TestChatTool.UI.Handlers.Interface;
+using TestChatTool.UI.Helpers.Interface;
 using TestChatTool.UI.SignalR;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class Room : Form
     {
-        private readonly IHttpHandler _http;
+        private readonly IUserControllerApiHelper _userControllerApi;
+        private readonly IOnLineUserControllerApiHelper _onLineUserControllerApi;
+        private readonly IChatRoomControllerApiHelper _chatRoomControllerApi;
         private readonly IHubClient _hubClient;
         private readonly ILogger _logger;
         private User _user;
@@ -26,13 +25,17 @@ namespace TestChatTool.UI.Forms
         public User User => _user;
 
         public Room(
-            IHttpHandler http,
+            IUserControllerApiHelper userControllerApi,
+            IOnLineUserControllerApiHelper onLineUserControllerApi,
+            IChatRoomControllerApiHelper chatRoomControllerApi,
             IHubClient hubClient)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _http = http;
+            _userControllerApi = userControllerApi;
+            _onLineUserControllerApi = onLineUserControllerApi;
+            _chatRoomControllerApi = chatRoomControllerApi;
             _hubClient = hubClient;
             _logger = LogManager.GetLogger("UIRoom");
 
@@ -50,7 +53,7 @@ namespace TestChatTool.UI.Forms
         public void SetUpUI(User user)
         {
             _user = user;
-            txtNickName.Text = user.NickName;
+            txtNickName.Text = _user.NickName;
 
             GetAllRoom();
             _timer.Start();
@@ -131,18 +134,12 @@ namespace TestChatTool.UI.Forms
         {
             try
             {
-                var onLine = _http.CallApiPost("Online/Upsert", new Dictionary<string, object>
-                {
-                    { "Account", _user.Account },
-                    { "NickName", txtNickName.Text.IsNullOrWhiteSpace() ? _user.NickName : txtNickName.Text },
-                    { "RoomCode", isSignOut ? "SignOut" : _room.Code },
-                });
+                var roomCode = isSignOut ? "SignOut" : _room.Code;
+                var onLine = _onLineUserControllerApi.Upsert(_user.Account, _user.NickName, roomCode);
 
-                var response = JsonConvert.DeserializeObject<OnLineUserUpsertResponse>(onLine);
-
-                if (response.Code != (int)ErrorType.Success)
+                if (onLine.Code != (int)ErrorType.Success)
                 {
-                    MessageBox.Show(response.ErrorMsg);
+                    MessageBox.Show(onLine.ErrorMsg);
                     return;
                 }
             }
@@ -225,22 +222,17 @@ namespace TestChatTool.UI.Forms
                 return;
             }
 
-            var user = _http.CallApiPut("User/Update", new Dictionary<string, object>
-            {
-                { "Account", _user.Account },
-                { "NickName", txtNickName.Text },
-            });
+            var user = _userControllerApi.Update(_user.Account, txtNickName.Text);
 
-            var response = JsonConvert.DeserializeObject<UserUpdateResponse>(user);
-
-            if (response.Code != (int)ErrorType.Success)
+            if (user.Code != (int)ErrorType.Success)
             {
-                MessageBox.Show(response.ErrorMsg);
+                txtNickName.Text = _user.NickName;
+                MessageBox.Show(user.ErrorMsg);
                 return;
             }
 
-            _user = response.User;
-            txtNickName.Text = response.User.NickName;
+            _user = user.User;
+            txtNickName.Text = _user.NickName;
             MessageBox.Show("暱稱修改成功");
         }
 
@@ -248,21 +240,19 @@ namespace TestChatTool.UI.Forms
         {
             try
             {
-                var rooms = _http.CallApiGet("ChatRoom/GetAll", null);
+                var rooms = _chatRoomControllerApi.GetAll();
 
-                var response = JsonConvert.DeserializeObject<ChatRoomGetAllResponse>(rooms);
-
-                if (response.Code != (int)ErrorType.Success)
+                if (rooms.Code != (int)ErrorType.Success)
                 {
-                    MessageBox.Show(response.ErrorMsg);
+                    MessageBox.Show(rooms.ErrorMsg);
                     return;
                 }
 
                 cbbRoom.Items.Clear();
 
-                if (response.Rooms.Any())
+                if (rooms.Rooms.Any())
                 {
-                    var items = response.Rooms.Select(s => new RoomInfo { Code = s.Code, Name = s.Name }).ToArray();
+                    var items = rooms.Rooms.Select(s => new RoomInfo { Code = s.Code, Name = s.Name }).ToArray();
 
                     // 將聊天室資訊帶入cbb
                     cbbRoom.Items.AddRange(items);

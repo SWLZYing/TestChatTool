@@ -1,27 +1,22 @@
-﻿using Autofac;
-using Newtonsoft.Json;
-using NLog;
+﻿using NLog;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
-using TestChatTool.Domain.Response;
-using TestChatTool.UI.Applibs;
-using TestChatTool.UI.Handlers.Interface;
+using TestChatTool.UI.Helpers.Interface;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class RoomMaintain : Form
     {
-        private readonly IHttpHandler _http;
+        private readonly IChatRoomControllerApiHelper _chatRoomControllerApi;
         private readonly ILogger _logger;
 
-        public RoomMaintain(IHttpHandler http)
+        public RoomMaintain(IChatRoomControllerApiHelper chatRoomControllerApi)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _http = http;
+            _chatRoomControllerApi = chatRoomControllerApi;
             _logger = LogManager.GetLogger("UIRoomMaintain");
         }
 
@@ -59,44 +54,32 @@ namespace TestChatTool.UI.Forms
 
         private void UpdateRoom()
         {
-            var user = _http.CallApiPut("ChatRoom/Update", new Dictionary<string, object>
-            {
-                { "Code", txtCode.Text },
-                { "Name", txtName.Text },
-            });
+            var user = _chatRoomControllerApi.Update(txtCode.Text, txtName.Text);
 
-            var response = JsonConvert.DeserializeObject<ChatRoomUpdateResponse>(user);
-
-            if (response.Code == (int)ErrorType.Success)
+            if (user.Code == (int)ErrorType.Success)
             {
                 MessageBox.Show("更新成功");
                 Close();
             }
             else
             {
-                MessageBox.Show(response.ErrorMsg);
+                MessageBox.Show(user.ErrorMsg);
                 return;
             }
         }
 
         private void CreateRoom()
         {
-            var user = _http.CallApiPost("ChatRoom/Create", new Dictionary<string, object>
-            {
-                { "Code", txtCode.Text },
-                { "Name", txtName.Text },
-            });
+            var user = _chatRoomControllerApi.Create(txtCode.Text, txtName.Text);
 
-            var response = JsonConvert.DeserializeObject<ChatRoomCreateResponse>(user);
-
-            if (response.Code == (int)ErrorType.Success)
+            if (user.Code == (int)ErrorType.Success)
             {
                 MessageBox.Show("創建成功");
                 Close();
             }
             else
             {
-                MessageBox.Show(response.ErrorMsg);
+                MessageBox.Show(user.ErrorMsg);
                 return;
             }
         }

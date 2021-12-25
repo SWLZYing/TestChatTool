@@ -1,30 +1,26 @@
-﻿using Newtonsoft.Json;
-using NLog;
+﻿using NLog;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
-using TestChatTool.Domain.Response;
-using TestChatTool.UI.Handlers.Interface;
 using TestChatTool.UI.Helpers.Interface;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class Register : Form
     {
-        private readonly IHttpHandler _http;
         private readonly IAdminControllerApiHelper _adminControllerApi;
+        private readonly IUserControllerApiHelper _userControllerApi;
         private readonly ILogger _logger;
 
         public Register(
-            IHttpHandler http,
-            IAdminControllerApiHelper adminControllerApi)
+            IAdminControllerApiHelper adminControllerApi,
+            IUserControllerApiHelper userControllerApi)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _http = http;
+            _userControllerApi = userControllerApi;
             _adminControllerApi = adminControllerApi;
             _logger = LogManager.GetLogger("UIRegister");
 
@@ -105,23 +101,17 @@ namespace TestChatTool.UI.Forms
 
         private void CreateUser()
         {
-            var user = _http.CallApiPost("User/Create", new Dictionary<string, object>
-                {
-                    { "Account", txtAcc.Text },
-                    { "Password", txtPwd.Text },
-                    { "NickName", txtNickName.Text.IsNullOrWhiteSpace() ? txtAcc.Text : txtNickName.Text },
-                });
+            var nickName = txtNickName.Text.IsNullOrWhiteSpace() ? txtAcc.Text : txtNickName.Text;
+            var user = _userControllerApi.Create(txtAcc.Text, txtPwd.Text, nickName);
 
-            var userResponse = JsonConvert.DeserializeObject<UserCreateResponse>(user);
-
-            if (userResponse.Code == (int)ErrorType.Success)
+            if (user.Code == (int)ErrorType.Success)
             {
                 MessageBox.Show("帳號註冊成功.");
                 Close();
             }
             else
             {
-                MessageBox.Show(userResponse.ErrorMsg);
+                MessageBox.Show(user.ErrorMsg);
             }
         }
 

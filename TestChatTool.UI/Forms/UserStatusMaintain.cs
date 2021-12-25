@@ -1,27 +1,25 @@
-﻿using Newtonsoft.Json;
-using NLog;
+﻿using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
-using TestChatTool.Domain.Response;
-using TestChatTool.UI.Handlers.Interface;
+using TestChatTool.UI.Helpers.Interface;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class UserStatusMaintain : Form
     {
-        private readonly IHttpHandler _http;
+        private readonly IUserControllerApiHelper _userControllerApi;
         private readonly ILogger _logger;
         private IEnumerable<string> _accs;
 
-        public UserStatusMaintain(IHttpHandler http)
+        public UserStatusMaintain(IUserControllerApiHelper userControllerApi)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _http = http;
+            _userControllerApi = userControllerApi;
             _logger = LogManager.GetLogger("UIUserStatusMaintain");
         }
 
@@ -84,46 +82,38 @@ namespace TestChatTool.UI.Forms
 
         private void Verify()
         {
-            var user = _http.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
-            {
-                { "Account", cbbAcc.SelectedItem.ToString() },
-                { "ErrorCount", 0 },
-                { "Status", UserStatusType.Enable },
-            });
+            var user = _userControllerApi.SetErrCountAndStatus(
+                cbbAcc.SelectedItem.ToString(),
+                0,
+                UserStatusType.Enable);
 
-            var userResponse = JsonConvert.DeserializeObject<UserSetErrCountAndStatusResponse>(user);
-
-            if (userResponse.Code == (int)ErrorType.Success)
+            if (user.Code == (int)ErrorType.Success)
             {
                 MessageBox.Show("已開通.");
                 Close();
             }
             else
             {
-                MessageBox.Show(userResponse.ErrorMsg);
+                MessageBox.Show(user.ErrorMsg);
                 return;
             }
         }
 
         private void Unlock()
         {
-            var user = _http.CallApiPut("User/SetErrCountAndStatus", new Dictionary<string, object>
-            {
-                { "Account", cbbAcc.SelectedItem.ToString() },
-                { "ErrorCount", 0 },
-                { "Status", UserStatusType.Unlock },
-            });
+            var user = _userControllerApi.SetErrCountAndStatus(
+                cbbAcc.SelectedItem.ToString(),
+                0,
+                UserStatusType.Unlock);
 
-            var userResponse = JsonConvert.DeserializeObject<UserSetErrCountAndStatusResponse>(user);
-
-            if (userResponse.Code == (int)ErrorType.Success)
+            if (user.Code == (int)ErrorType.Success)
             {
                 MessageBox.Show("已解鎖.");
                 Close();
             }
             else
             {
-                MessageBox.Show(userResponse.ErrorMsg);
+                MessageBox.Show(user.ErrorMsg);
                 return;
             }
         }

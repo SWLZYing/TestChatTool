@@ -1,28 +1,23 @@
-﻿using Autofac;
-using Newtonsoft.Json;
-using NLog;
+﻿using NLog;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
-using TestChatTool.Domain.Response;
-using TestChatTool.UI.Applibs;
-using TestChatTool.UI.Handlers.Interface;
+using TestChatTool.UI.Helpers.Interface;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class ChangePwd : Form
     {
-        private readonly IHttpHandler _http;
+        private readonly IUserControllerApiHelper _userControllerApi;
         private readonly ILogger _logger;
 
-        public ChangePwd(IHttpHandler http)
+        public ChangePwd(IUserControllerApiHelper userControllerApi)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _http = http;
+            _userControllerApi = userControllerApi;
             _logger = LogManager.GetLogger("UIChangePwd");
         }
 
@@ -63,16 +58,9 @@ namespace TestChatTool.UI.Forms
                     return;
                 }
 
-                var user = _http.CallApiPut("User/ResetPwd", new Dictionary<string, object>
-                {
-                    { "Account", txtAcc.Text },
-                    { "OldPassWord", txtOldPwd.Text },
-                    { "NewPassWord", txtNewPwd.Text },
-                });
+                var user = _userControllerApi.ResetPwd(txtAcc.Text, txtOldPwd.Text, txtNewPwd.Text);
 
-                var userResponse = JsonConvert.DeserializeObject<UserResetPwdResponse>(user);
-
-                if (userResponse.Code == (int)ErrorType.Success)
+                if (user.Code == (int)ErrorType.Success)
                 {
                     DialogResult = DialogResult.OK;
                     MessageBox.Show("密碼修改成功 請用新密碼登入.");
@@ -80,7 +68,7 @@ namespace TestChatTool.UI.Forms
                 }
                 else
                 {
-                    MessageBox.Show(userResponse.ErrorMsg);
+                    MessageBox.Show(user.ErrorMsg);
                     return;
                 }
             }
