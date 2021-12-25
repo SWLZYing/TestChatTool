@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using System;
+using System.Linq;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
@@ -55,7 +56,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.Query("query");
 
             Assert.IsNull(result.ex);
-            Console.WriteLine(result.result);
+            Console.WriteLine(result.user);
         }
 
         [TestMethod]
@@ -66,8 +67,8 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.Update(User.GenerateInstance("old", string.Empty, "new"));
 
             Assert.IsNull(result.ex);
-            Assert.AreEqual("new", result.result.NickName);
-            Console.WriteLine(result.result);
+            Assert.AreEqual("new", result.user.NickName);
+            Console.WriteLine(result.user);
         }
 
         [TestMethod]
@@ -111,7 +112,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.SignInRefresh("user");
 
             Assert.IsNull(result.ex);
-            Console.WriteLine(result.result);
+            Console.WriteLine(result.user);
         }
 
         [TestMethod]
@@ -120,10 +121,10 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             _repository.Create(User.GenerateInstance("user1", "pass", "u1"));
             _repository.Create(User.GenerateInstance("user2", "pass", "u2"));
 
-            var result = _repository.GetAllForVerify();
+            var result = _repository.GetAllForUserStatus(UserStatusType.Disabled);
 
             Assert.IsNull(result.ex);
-            Assert.AreEqual(2, result.accs.Count);
+            Assert.AreEqual(2, result.users.ToList().Count);
         }
 
         [TestMethod]
@@ -135,10 +136,10 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
 
             _repository.SetErrCountAndStatus("user2", 3, UserStatusType.Lock);
 
-            var result = _repository.GetAllForUnlock();
+            var result = _repository.GetAllForUserStatus(UserStatusType.Lock);
 
             Assert.IsNull(result.ex);
-            Assert.AreEqual(1, result.accs.Count);
+            Assert.AreEqual(1, result.users.ToList().Count);
         }
     }
 }

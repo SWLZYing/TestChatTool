@@ -6,9 +6,9 @@ namespace TestChatTool.Domain.Repository
 {
     public interface IOnLineUserRepository
     {
-        (Exception ex, OnLineUser result) Upsert(OnLineUser info);
+        (Exception ex, OnLineUser user) Upsert(OnLineUser info);
 
-        (Exception ex, List<OnLineUser> result) FindRoomUser(string code);
-        (Exception ex, List<(string, int)> result) FindAllUserCountByRoom();
+        (Exception ex, IEnumerable<OnLineUser> users) FindRoomUser(string code);
+        (Exception ex, IEnumerable<(string roomCode, int userCount)> result) FindAllUserCountByRoom();
     }
 }

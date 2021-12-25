@@ -1,5 +1,4 @@
-﻿using Autofac;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Response;
-using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Handlers.Interface;
 
 namespace TestChatTool.UI.Forms
@@ -16,7 +14,7 @@ namespace TestChatTool.UI.Forms
     {
         private readonly IHttpHandler _http;
         private readonly ILogger _logger;
-        private List<string> _accs;
+        private IEnumerable<string> _accs;
 
         public UserStatusMaintain(IHttpHandler http)
         {
@@ -27,7 +25,7 @@ namespace TestChatTool.UI.Forms
             _logger = LogManager.GetLogger("UIUserStatusMaintain");
         }
 
-        public List<string> Accs
+        public IEnumerable<string> Accs
         {
             set
             {

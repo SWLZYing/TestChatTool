@@ -49,7 +49,7 @@ namespace TestChatTool.Service.AppLibs
                     _logger.Error(adminQ.ex, $"QueryAdmin Exception");
                 }
 
-                if (adminQ.result == null)
+                if (adminQ.admin == null)
                 {
                     var pwd = "admin";
                     var admin = Admin.GenerateInstance("admin", pwd);
@@ -71,7 +71,7 @@ namespace TestChatTool.Service.AppLibs
                     _logger.Error(roomQ.ex, $"QueryChatRoom Exception");
                 }
 
-                if (roomQ.result == null)
+                if (roomQ.room == null)
                 {
                     var hall = ChatRoom.GenerateInstance("HALL", "大廳");
 
@@ -103,7 +103,7 @@ namespace TestChatTool.Service.AppLibs
                     _logger.Error(result.ex, $"FindAllUserCountByRoom Exception");
                 }
 
-                var joinString = result.result.Count > 0
+                var joinString = result.result.ToList().Count > 0
                     ? string.Join(", ", result.result.Select(s => $"{s.Item1}:{s.Item2}"))
                     : "No Any User.";
 

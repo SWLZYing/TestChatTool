@@ -4,6 +4,6 @@ namespace TestChatTool.Domain.Response
 {
     public class ChatRoomUpdateResponse : BasicResponse
     {
-        public ChatRoom Data { get; set; }
+        public ChatRoom Room { get; set; }
     }
 }

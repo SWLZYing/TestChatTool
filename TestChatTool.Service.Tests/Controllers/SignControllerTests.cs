@@ -34,8 +34,8 @@ namespace TestChatTool.Service.Tests.Controllers
 
             var response = controller.AdminSignIn(new SignInRequest { Account = "admin", Password = "pass" });
 
-            Assert.IsNotNull(response.Data);
-            Console.WriteLine(response.Data);
+            Assert.IsNotNull(response.Admin);
+            Console.WriteLine(response.Admin);
         }
 
         [TestMethod]
@@ -89,8 +89,8 @@ namespace TestChatTool.Service.Tests.Controllers
 
             var response = controller.UserSignIn(new SignInRequest { Account = "user", Password = "pass" });
 
-            Assert.IsNotNull(response.Data);
-            Console.WriteLine(response.Data);
+            Assert.IsNotNull(response.User);
+            Console.WriteLine(response.User);
         }
 
         [TestMethod]

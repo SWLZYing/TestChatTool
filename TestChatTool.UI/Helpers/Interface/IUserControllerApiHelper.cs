@@ -6,5 +6,6 @@ namespace TestChatTool.UI.Helpers.Interface
     public interface IUserControllerApiHelper
     {
         UserSetErrCountAndStatusResponse SetErrCountAndStatus(string account, int errorCount, UserStatusType userStatus = UserStatusType.Disabled);
+        UserQueryAllForUserStatusResponse QueryAllForUserStatus(UserStatusType userStatus = UserStatusType.Disabled);
     }
 }

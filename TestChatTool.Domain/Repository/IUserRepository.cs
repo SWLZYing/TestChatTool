@@ -8,13 +8,12 @@ namespace TestChatTool.Domain.Repository
     public interface IUserRepository
     {
         (Exception ex, bool isSuccess, bool isAccDuplicate) Create(User info);
-        (Exception ex, User result) Query(string acc);
-        (Exception ex, User result) Update(User info);
+        (Exception ex, User user) Query(string acc);
+        (Exception ex, User user) Update(User info);
 
         (Exception ex, bool isSuccess) ResetPwd(string acc, string oldPwd, string newPwd);
         (Exception ex, bool isSuccess) SetErrCountAndStatus(string acc, int errCount, UserStatusType status = UserStatusType.Disabled);
-        (Exception ex, User result) SignInRefresh(string acc);
-        (Exception ex, List<string> accs) GetAllForVerify();
-        (Exception ex, List<string> accs) GetAllForUnlock();
+        (Exception ex, User user) SignInRefresh(string acc);
+        (Exception ex, IEnumerable<User> users) GetAllForUserStatus(UserStatusType status);
     }
 }

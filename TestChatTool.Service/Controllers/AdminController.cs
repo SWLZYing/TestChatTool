@@ -117,7 +117,7 @@ namespace TestChatTool.Service.Controllers
                     };
                 }
 
-                if (result.result == null)
+                if (result.admin == null)
                 {
                     return new AdminQueryResponse
                     {
@@ -129,7 +129,7 @@ namespace TestChatTool.Service.Controllers
                 return new AdminQueryResponse
                 {
                     Code = (int)ErrorType.Success,
-                    Data = result.result
+                    Admin = result.admin
                 };
             }
             catch (Exception ex)

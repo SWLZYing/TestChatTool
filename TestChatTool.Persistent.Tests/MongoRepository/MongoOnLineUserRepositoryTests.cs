@@ -32,7 +32,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.Upsert(OnLineUser.GenerateInstance("USER001", "u1", "DCCAT"));
 
             Assert.IsNull(result.ex);
-            Console.WriteLine(result.result);
+            Console.WriteLine(result.user);
         }
 
         [TestMethod]
@@ -44,7 +44,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.Upsert(OnLineUser.GenerateInstance("USER001", string.Empty, "DCGOG"));
 
             Assert.IsNull(result.ex);
-            Console.WriteLine(result.result);
+            Console.WriteLine(result.user);
         }
 
         [TestMethod]
@@ -57,7 +57,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.FindRoomUser("DCGOG");
 
             Assert.IsNull(result.ex);
-            Assert.AreEqual(2, result.result.Count);
+            Assert.AreEqual(2, result.users.ToList().Count);
         }
 
         [TestMethod]
@@ -71,7 +71,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.FindAllUserCountByRoom();
 
             Assert.IsNull(result.ex);
-            Assert.AreEqual(3, result.result.Count);
+            Assert.AreEqual(3, result.result.ToList().Count);
 
             var str = string.Join(", ", result.result.Select(s => $"{s.Item1}:{s.Item2}"));
             Console.WriteLine($"Room's User Count => {str}.");

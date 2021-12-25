@@ -42,7 +42,7 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, Admin result) Query(string acc)
+        public (Exception ex, Admin admin) Query(string acc)
         {
             try
             {

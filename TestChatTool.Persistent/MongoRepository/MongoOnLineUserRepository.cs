@@ -25,7 +25,7 @@ namespace TestChatTool.Persistent.MongoRepository
             });
         }
 
-        public (Exception ex, OnLineUser result) Upsert(OnLineUser info)
+        public (Exception ex, OnLineUser user) Upsert(OnLineUser info)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, List<OnLineUser> result) FindRoomUser(string code)
+        public (Exception ex, IEnumerable<OnLineUser> users) FindRoomUser(string code)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, List<(string, int)> result) FindAllUserCountByRoom()
+        public (Exception ex, IEnumerable<(string roomCode, int userCount)> result) FindAllUserCountByRoom()
         {
             try
             {

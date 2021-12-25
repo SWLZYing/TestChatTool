@@ -1,24 +1,22 @@
 ﻿using Autofac;
 using Microsoft.AspNet.SignalR.Client;
-using Newtonsoft.Json;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
-using TestChatTool.Domain.Response;
-using TestChatTool.UI.Applibs;
-using TestChatTool.UI.Handlers.Interface;
+using TestChatTool.UI.Helpers.Interface;
 using TestChatTool.UI.SignalR;
 
 namespace TestChatTool.UI.Forms
 {
     public partial class Backstage : Form
     {
-        private readonly IHttpHandler _http;
+        private readonly IUserControllerApiHelper _userControllerApi;
+        private readonly IOnLineUserControllerApiHelper _onLineUserControllerApi;
+        private readonly IChatRoomControllerApiHelper _chatRoomControllerApi;
         private readonly IHubClient _hubClient;
         private readonly ILogger _logger;
         private readonly Timer _timer;
@@ -28,13 +26,17 @@ namespace TestChatTool.UI.Forms
         private RoomInfo _room;
 
         public Backstage(
-            IHttpHandler http,
+            IUserControllerApiHelper userControllerApi,
+            IOnLineUserControllerApiHelper onLineUserControllerApi,
+            IChatRoomControllerApiHelper chatRoomControllerApi,
             IHubClient hubClient)
         {
             InitializeComponent();
             MaximizeBox = false;
 
-            _http = http;
+            _userControllerApi = userControllerApi;
+            _onLineUserControllerApi = onLineUserControllerApi;
+            _chatRoomControllerApi = chatRoomControllerApi;
             _hubClient = hubClient;
             _logger = LogManager.GetLogger("UIBackstage");
 
@@ -212,20 +214,15 @@ namespace TestChatTool.UI.Forms
                     return;
                 }
 
-                var users = _http.CallApiGet("Online/FindRoomUser", new Dictionary<string, object>
-                {
-                    { "roomCode", _room.Code },
-                });
+                var users = _onLineUserControllerApi.FindRoomUser(_room.Code);
 
-                var response = JsonConvert.DeserializeObject<OnLineUserFindRoomUserResponse>(users);
-
-                if (response.Code != (int)ErrorType.Success)
+                if (users.Code != (int)ErrorType.Success)
                 {
-                    MessageBox.Show(response.ErrorMsg);
+                    MessageBox.Show(users.ErrorMsg);
                     return;
                 }
 
-                txtRoomUsers.Text = string.Join("\r\n", response.Data.Select(s => s.NickName));
+                txtRoomUsers.Text = string.Join("\r\n", users.Users.Select(s => s.NickName));
             }
             catch (Exception ex)
             {
@@ -271,20 +268,18 @@ namespace TestChatTool.UI.Forms
 
         private void Unlock()
         {
-            var users = _http.CallApiGet("User/QueryAllForUnlock", null);
+            var users = _userControllerApi.QueryAllForUserStatus(UserStatusType.Lock);
 
-            var response = JsonConvert.DeserializeObject<UserQueryAllForUnlockResponse>(users);
-
-            if (response.Code != (int)ErrorType.Success)
+            if (users.Code != (int)ErrorType.Success)
             {
-                MessageBox.Show(response.ErrorMsg);
+                MessageBox.Show(users.ErrorMsg);
                 return;
             }
 
             // 將需審核帳號帶入
             var userMaintain = _scope.Resolve<UserStatusMaintain>();
 
-            userMaintain.Accs = response.Data;
+            userMaintain.Accs = users.Users.Select(s => s.Account);
             userMaintain.SetAccs();
             userMaintain.SetUpUI(false);
             userMaintain.ShowDialog();
@@ -292,20 +287,18 @@ namespace TestChatTool.UI.Forms
 
         private void Verify()
         {
-            var users = _http.CallApiGet("User/QueryAllForVerify", null);
+            var users = _userControllerApi.QueryAllForUserStatus(UserStatusType.Disabled);
 
-            var response = JsonConvert.DeserializeObject<UserQueryAllForVerifyResponse>(users);
-
-            if (response.Code != (int)ErrorType.Success)
+            if (users.Code != (int)ErrorType.Success)
             {
-                MessageBox.Show(response.ErrorMsg);
+                MessageBox.Show(users.ErrorMsg);
                 return;
             }
 
             // 將需審核帳號帶入
             var userMaintain = _scope.Resolve<UserStatusMaintain>();
 
-            userMaintain.Accs = response.Data;
+            userMaintain.Accs = users.Users.Select(s => s.Account);
             userMaintain.SetAccs();
             userMaintain.SetUpUI(true);
             userMaintain.ShowDialog();
@@ -315,22 +308,20 @@ namespace TestChatTool.UI.Forms
         {
             try
             {
-                var rooms = _http.CallApiGet("ChatRoom/GetAll", null);
+                var rooms = _chatRoomControllerApi.GetAll();
 
-                var response = JsonConvert.DeserializeObject<ChatRoomGetAllResponse>(rooms);
-
-                if (response.Code != (int)ErrorType.Success)
+                if (rooms.Code != (int)ErrorType.Success)
                 {
-                    MessageBox.Show(response.ErrorMsg);
+                    MessageBox.Show(rooms.ErrorMsg);
                     return;
                 }
 
                 cbbRoom.Items.Clear();
 
-                if (response.Data.Any())
+                if (rooms.Rooms.Any())
                 {
                     // 將聊天室資訊帶入cbb
-                    var items = response.Data.Select(s => new RoomInfo { Code = s.Code, Name = s.Name }).ToArray();
+                    var items = rooms.Rooms.Select(s => new RoomInfo { Code = s.Code, Name = s.Name }).ToArray();
 
                     cbbRoom.Items.AddRange(items);
 

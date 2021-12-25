@@ -72,6 +72,14 @@ namespace TestChatTool.UI.Applibs
                 .As<IUserControllerApiHelper>()
                 .SingleInstance();
 
+            builder.RegisterType<OnLineUserControllerApiHelper>()
+                .As<IOnLineUserControllerApiHelper>()
+                .SingleInstance();
+
+            builder.RegisterType<ChatRoomControllerApiHelper>()
+                .As<IChatRoomControllerApiHelper>()
+                .SingleInstance();
+
             builder.RegisterType<HttpHandler>()
                 .WithParameter("serviceUrl", ConfigHelper.ServiceUrl)
                 .As<IHttpHandler>()

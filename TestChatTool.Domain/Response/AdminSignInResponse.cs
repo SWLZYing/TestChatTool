@@ -4,6 +4,6 @@ namespace TestChatTool.Domain.Response
 {
     public class AdminSignInResponse : BasicResponse
     {
-        public Admin Data { get; set; }
+        public Admin Admin { get; set; }
     }
 }

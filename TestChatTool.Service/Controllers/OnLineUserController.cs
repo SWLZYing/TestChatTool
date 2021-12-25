@@ -1,5 +1,6 @@
 ﻿using NLog;
 using System;
+using System.Linq;
 using System.Web.Http;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
@@ -57,7 +58,7 @@ namespace TestChatTool.Service.Controllers
                 return new OnLineUserUpsertResponse
                 {
                     Code = (int)ErrorType.Success,
-                    Data = result.result
+                    User = result.user
                 };
             }
             catch (Exception ex)
@@ -101,7 +102,7 @@ namespace TestChatTool.Service.Controllers
                 return new OnLineUserFindRoomUserResponse
                 {
                     Code = (int)ErrorType.Success,
-                    Data = result.result
+                    Users = result.users
                 };
             }
             catch (Exception ex)
@@ -135,7 +136,7 @@ namespace TestChatTool.Service.Controllers
                 return new OnLineUserFindAllUserCountByRoomResponse
                 {
                     Code = (int)ErrorType.Success,
-                    Data = result.result
+                    Data = result.result.ToList()
                 };
             }
             catch (Exception ex)

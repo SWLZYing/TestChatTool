@@ -116,7 +116,7 @@ namespace TestChatTool.Service.Controllers
                     };
                 }
 
-                if (result.result == null)
+                if (result.user == null)
                 {
                     return new UserQueryResponse
                     {
@@ -128,7 +128,7 @@ namespace TestChatTool.Service.Controllers
                 return new UserQueryResponse
                 {
                     Code = (int)ErrorType.Success,
-                    Data = result.result
+                    User = result.user
                 };
             }
             catch (Exception ex)
@@ -173,7 +173,7 @@ namespace TestChatTool.Service.Controllers
                     };
                 }
 
-                if (result.result == null)
+                if (result.user == null)
                 {
                     return new UserUpdateResponse
                     {
@@ -185,7 +185,7 @@ namespace TestChatTool.Service.Controllers
                 return new UserUpdateResponse
                 {
                     Code = (int)ErrorType.Success,
-                    Data = result.result
+                    User = result.user
                 };
             }
             catch (Exception ex)
@@ -297,84 +297,41 @@ namespace TestChatTool.Service.Controllers
         }
 
         [HttpGet]
-        public UserQueryAllForVerifyResponse QueryAllForVerify()
+        public UserQueryAllForUserStatusResponse QueryAllForUserStatus(UserStatusType status)
         {
             try
             {
-                var result = _userRepository.GetAllForVerify();
+                var result = _userRepository.GetAllForUserStatus(status);
 
                 if (result.ex != null)
                 {
-                    _logger.Error($"{nameof(UserController)}.{nameof(QueryAllForVerify)} Get Exception");
-                    return new UserQueryAllForVerifyResponse
+                    _logger.Error($"{nameof(UserController)}.{nameof(QueryAllForUserStatus)} Get Exception");
+                    return new UserQueryAllForUserStatusResponse
                     {
                         Code = (int)ErrorType.SystemError,
                         ErrorMsg = result.ex.Message,
                     };
                 }
 
-                if (result.accs == null)
+                if (result.users == null)
                 {
-                    return new UserQueryAllForVerifyResponse
+                    return new UserQueryAllForUserStatusResponse
                     {
                         Code = (int)ErrorType.Success,
-                        Data = new List<string>(),
+                        Users = default,
                     };
                 }
 
-                return new UserQueryAllForVerifyResponse
+                return new UserQueryAllForUserStatusResponse
                 {
                     Code = (int)ErrorType.Success,
-                    Data = result.accs
+                    Users = result.users,
                 };
             }
             catch (Exception ex)
             {
-                _logger.Error($"{nameof(UserController)}.{nameof(QueryAllForVerify)} Get Exception");
-                return new UserQueryAllForVerifyResponse
-                {
-                    Code = (int)ErrorType.SystemError,
-                    ErrorMsg = ex.Message,
-                };
-            }
-        }
-
-        [HttpGet]
-        public UserQueryAllForUnlockResponse QueryAllForUnlock()
-        {
-            try
-            {
-                var result = _userRepository.GetAllForUnlock();
-
-                if (result.ex != null)
-                {
-                    _logger.Error($"{nameof(UserController)}.{nameof(QueryAllForUnlock)} Get Exception");
-                    return new UserQueryAllForUnlockResponse
-                    {
-                        Code = (int)ErrorType.SystemError,
-                        ErrorMsg = result.ex.Message,
-                    };
-                }
-
-                if (result.accs == null)
-                {
-                    return new UserQueryAllForUnlockResponse
-                    {
-                        Code = (int)ErrorType.Success,
-                        Data = new List<string>(),
-                    };
-                }
-
-                return new UserQueryAllForUnlockResponse
-                {
-                    Code = (int)ErrorType.Success,
-                    Data = result.accs
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"{nameof(UserController)}.{nameof(QueryAllForUnlock)} Get Exception");
-                return new UserQueryAllForUnlockResponse
+                _logger.Error($"{nameof(UserController)}.{nameof(QueryAllForUserStatus)} Get Exception");
+                return new UserQueryAllForUserStatusResponse
                 {
                     Code = (int)ErrorType.SystemError,
                     ErrorMsg = ex.Message,

@@ -3,8 +3,8 @@ using TestChatTool.Domain.Model;
 
 namespace TestChatTool.Domain.Response
 {
-    public class ChatRoomGetAllResponse : BasicResponse
+    public class UserQueryAllForUserStatusResponse : BasicResponse
     {
-        public IEnumerable<ChatRoom> Rooms { get; set; }
+        public IEnumerable<User> Users { get; set; }
     }
 }

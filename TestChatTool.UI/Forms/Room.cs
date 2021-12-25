@@ -239,8 +239,8 @@ namespace TestChatTool.UI.Forms
                 return;
             }
 
-            _user = response.Data;
-            txtNickName.Text = response.Data.NickName;
+            _user = response.User;
+            txtNickName.Text = response.User.NickName;
             MessageBox.Show("暱稱修改成功");
         }
 
@@ -260,9 +260,9 @@ namespace TestChatTool.UI.Forms
 
                 cbbRoom.Items.Clear();
 
-                if (response.Data.Any())
+                if (response.Rooms.Any())
                 {
-                    var items = response.Data.Select(s => new RoomInfo { Code = s.Code, Name = s.Name }).ToArray();
+                    var items = response.Rooms.Select(s => new RoomInfo { Code = s.Code, Name = s.Name }).ToArray();
 
                     // 將聊天室資訊帶入cbb
                     cbbRoom.Items.AddRange(items);

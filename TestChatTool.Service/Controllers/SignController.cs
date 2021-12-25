@@ -57,7 +57,7 @@ namespace TestChatTool.Service.Controllers
                         };
                     }
 
-                    if (result.result == null)
+                    if (result.admin == null)
                     {
                         _logger.Warn($"{nameof(AdminSignIn)} 查無此帳號");
                         return new AdminSignInResponse
@@ -67,7 +67,7 @@ namespace TestChatTool.Service.Controllers
                         };
                     }
 
-                    if (result.result.Password != request.Password.ToMD5())
+                    if (result.admin.Password != request.Password.ToMD5())
                     {
                         _logger.Warn($"{nameof(AdminSignIn)} 密碼錯誤");
                         return new AdminSignInResponse
@@ -80,7 +80,7 @@ namespace TestChatTool.Service.Controllers
                     return new AdminSignInResponse
                     {
                         Code = (int)ErrorType.Success,
-                        Data = result.result,
+                        Admin = result.admin,
                     };
                 }
             }
@@ -125,7 +125,7 @@ namespace TestChatTool.Service.Controllers
                         };
                     }
 
-                    if (query.result == null)
+                    if (query.user == null)
                     {
                         _logger.Warn($"{nameof(UserSignIn)} 查無此帳號");
                         return new UserSignInResponse
@@ -136,25 +136,25 @@ namespace TestChatTool.Service.Controllers
                     }
 
                     // 帳號狀態 未啟用/鎖定
-                    if (query.result.Status == UserStatusType.Disabled || query.result.Status == UserStatusType.Lock)
+                    if (query.user.Status == UserStatusType.Disabled || query.user.Status == UserStatusType.Lock)
                     {
                         return new UserSignInResponse
                         {
-                            Code = query.result.Status == 0 ? (int)ErrorType.AccNotVerify : (int)ErrorType.AccLock,
-                            ErrorMsg = query.result.Status == 0 ? "帳號待審核" : "帳號鎖定中 請聯繫管理員解鎖",
+                            Code = query.user.Status == 0 ? (int)ErrorType.AccNotVerify : (int)ErrorType.AccLock,
+                            ErrorMsg = query.user.Status == 0 ? "帳號待審核" : "帳號鎖定中 請聯繫管理員解鎖",
                         };
                     }
 
                     // 帳號狀態 啟用/解鎖(未更換密碼)
                     // 密碼錯誤
-                    if (query.result.Password != request.Password.ToMD5())
+                    if (query.user.Password != request.Password.ToMD5())
                     {
-                        var errCount = query.result.ErrCount + 1;
+                        var errCount = query.user.ErrCount + 1;
 
                         // 更新錯誤次數 連續錯誤三次帳號鎖定
                         var err = errCount < 3
-                            ? _userRepository.SetErrCountAndStatus(query.result.Account, errCount)
-                            : _userRepository.SetErrCountAndStatus(query.result.Account, errCount, UserStatusType.Lock);
+                            ? _userRepository.SetErrCountAndStatus(query.user.Account, errCount)
+                            : _userRepository.SetErrCountAndStatus(query.user.Account, errCount, UserStatusType.Lock);
 
                         if (err.ex != null)
                         {
@@ -175,7 +175,7 @@ namespace TestChatTool.Service.Controllers
                     }
 
                     // 密碼正確
-                    var signIn = _userRepository.SignInRefresh(query.result.Account);
+                    var signIn = _userRepository.SignInRefresh(query.user.Account);
 
                     if (signIn.ex != null)
                     {
@@ -190,7 +190,7 @@ namespace TestChatTool.Service.Controllers
                     return new UserSignInResponse
                     {
                         Code = (int)ErrorType.Success,
-                        Data = signIn.result,
+                        User = signIn.user,
                     };
                 }
             }

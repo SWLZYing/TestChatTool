@@ -60,7 +60,7 @@ namespace TestChatTool.Service.Tests.Controllers
             var result = controller.Query("user");
 
             Assert.AreEqual((int)ErrorType.Success, result.Code);
-            Console.WriteLine(result.Data);
+            Console.WriteLine(result.Room);
         }
 
         [TestMethod]
@@ -101,7 +101,7 @@ namespace TestChatTool.Service.Tests.Controllers
             });
 
             Assert.AreEqual((int)ErrorType.Success, result.Code);
-            Assert.IsNotNull(result.Data);
+            Assert.IsNotNull(result.Room);
         }
 
         [TestMethod]
@@ -116,7 +116,7 @@ namespace TestChatTool.Service.Tests.Controllers
             });
 
             Assert.AreEqual((int)ErrorType.FieldNull, result.Code);
-            Assert.IsNull(result.Data);
+            Assert.IsNull(result.Room);
         }
 
         [TestMethod]
@@ -134,14 +134,14 @@ namespace TestChatTool.Service.Tests.Controllers
             });
 
             Assert.AreEqual((int)ErrorType.AccError, result.Code);
-            Assert.IsNull(result.Data);
+            Assert.IsNull(result.Room);
         }
 
         [TestMethod]
         public void get_all_room()
         {
             _repo.Setup(s => s.GetAll())
-                .Returns((null, new List<(string, string)>()));
+                .Returns((null, new List<ChatRoom>()));
 
             var controller = new ChatRoomController(_repo.Object);
 

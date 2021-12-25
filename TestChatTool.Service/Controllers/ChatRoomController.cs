@@ -111,7 +111,7 @@ namespace TestChatTool.Service.Controllers
                     };
                 }
 
-                if (result.result == null)
+                if (result.room == null)
                 {
                     return new ChatRoomQueryResponse
                     {
@@ -123,7 +123,7 @@ namespace TestChatTool.Service.Controllers
                 return new ChatRoomQueryResponse
                 {
                     Code = (int)ErrorType.Success,
-                    Data = result.result
+                    Room = result.room
                 };
             }
             catch (Exception ex)
@@ -164,7 +164,7 @@ namespace TestChatTool.Service.Controllers
                     };
                 }
 
-                if (result.result == null)
+                if (result.room == null)
                 {
                     return new ChatRoomUpdateResponse
                     {
@@ -176,7 +176,7 @@ namespace TestChatTool.Service.Controllers
                 return new ChatRoomUpdateResponse
                 {
                     Code = (int)ErrorType.Success,
-                    Data = result.result
+                    Room = result.room
                 };
             }
             catch (Exception ex)
@@ -212,14 +212,14 @@ namespace TestChatTool.Service.Controllers
                     return new ChatRoomGetAllResponse
                     {
                         Code = (int)ErrorType.Success,
-                        Data = new List<(string, string)>(),
+                        Rooms = new List<ChatRoom>(),
                     };
                 }
 
                 return new ChatRoomGetAllResponse
                 {
                     Code = (int)ErrorType.Success,
-                    Data = result.rooms,
+                    Rooms = result.rooms,
                 };
             }
             catch (Exception ex)

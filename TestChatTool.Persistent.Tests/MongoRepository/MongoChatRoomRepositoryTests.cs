@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using System;
+using System.Linq;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 using TestChatTool.Persistent.MongoRepository;
@@ -51,7 +52,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.Query("DCCAT");
 
             Assert.IsNull(result.ex);
-            Console.WriteLine(result.result);
+            Console.WriteLine(result.room);
         }
 
         [TestMethod]
@@ -62,7 +63,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.Update("DCCAT", "New Cat Room");
 
             Assert.IsNull(result.ex);
-            Console.WriteLine(result.result);
+            Console.WriteLine(result.room);
         }
 
         [TestMethod]
@@ -74,7 +75,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.GetAll();
 
             Assert.IsNull(result.ex);
-            Assert.AreEqual(3, result.rooms.Count);
+            Assert.AreEqual(3, result.rooms.ToList().Count);
         }
     }
 }

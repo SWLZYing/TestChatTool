@@ -2,6 +2,7 @@
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
@@ -60,7 +61,7 @@ namespace TestChatTool.Service.Tests.Controllers
             var result = controller.Query("user");
 
             Assert.AreEqual((int)ErrorType.Success, result.Code);
-            Console.WriteLine(result.Data);
+            Console.WriteLine(result.User);
         }
 
         [TestMethod]
@@ -101,7 +102,7 @@ namespace TestChatTool.Service.Tests.Controllers
             });
 
             Assert.AreEqual((int)ErrorType.Success, result.Code);
-            Assert.IsNotNull(result.Data);
+            Assert.IsNotNull(result.User);
         }
 
         [TestMethod]
@@ -116,7 +117,7 @@ namespace TestChatTool.Service.Tests.Controllers
             });
 
             Assert.AreEqual((int)ErrorType.FieldNull, result.Code);
-            Assert.IsNull(result.Data);
+            Assert.IsNull(result.User);
         }
 
         [TestMethod]
@@ -134,7 +135,7 @@ namespace TestChatTool.Service.Tests.Controllers
             });
 
             Assert.AreEqual((int)ErrorType.AccError, result.Code);
-            Assert.IsNull(result.Data);
+            Assert.IsNull(result.User);
         }
 
         [TestMethod]
@@ -212,29 +213,29 @@ namespace TestChatTool.Service.Tests.Controllers
         [TestMethod]
         public void query_all_account_for_verify()
         {
-            _repo.Setup(s => s.GetAllForVerify())
-                .Returns((null, new List<string> { "user1", "user2" }));
+            _repo.Setup(s => s.GetAllForUserStatus(It.IsAny<UserStatusType>()))
+                .Returns((null, new List<User> { new User(), new User() }));
 
             var controller = new UserController(_repo.Object);
 
-            var result = controller.QueryAllForVerify();
+            var result = controller.QueryAllForUserStatus(UserStatusType.Disabled);
 
             Assert.AreEqual((int)ErrorType.Success, result.Code);
-            Assert.AreEqual(2, result.Data.Count);
+            Assert.AreEqual(2, result.Users.ToList().Count);
         }
 
         [TestMethod]
         public void query_all_account_for_unlock()
         {
-            _repo.Setup(s => s.GetAllForUnlock())
-                .Returns((null, new List<string> { "user1", "user2", "user3" }));
+            _repo.Setup(s => s.GetAllForUserStatus(It.IsAny<UserStatusType>()))
+                .Returns((null, new List<User> { new User(), new User(), new User() }));
 
             var controller = new UserController(_repo.Object);
 
-            var result = controller.QueryAllForUnlock();
+            var result = controller.QueryAllForUserStatus(UserStatusType.Lock);
 
             Assert.AreEqual((int)ErrorType.Success, result.Code);
-            Assert.AreEqual(3, result.Data.Count);
+            Assert.AreEqual(3, result.Users.ToList().Count);
         }
     }
 }

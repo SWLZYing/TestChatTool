@@ -4,6 +4,6 @@ namespace TestChatTool.Domain.Response
 {
     public class UserSignInResponse : BasicResponse
     {
-        public User Data { get; set; }
+        public User User { get; set; }
     }
 }

@@ -47,14 +47,14 @@ namespace TestChatTool.UI.Helpers
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return new UserSetErrCountAndStatusResponse { Code = (int)ErrorType.SystemError, ErrorMsg = $"{GetType().Name} StatusCode Error" };
+                    return new UserSetErrCountAndStatusResponse { Code = (int)ErrorType.SystemError, ErrorMsg = $"{GetType().Name} Excute Exception" };
                 }
 
                 //取回傳值
                 var content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var result = JsonConvert.DeserializeObject<UserSetErrCountAndStatusResponse>(content);
 
-                if (!result.IsSuccess)
+                if (result.Code != (int)ErrorType.Success)
                 {
                     _logger.Warn(result.ErrorMsg, $"{GetType().Name} Excute Exception");
                 }
@@ -65,6 +65,38 @@ namespace TestChatTool.UI.Helpers
             {
                 _logger.Error(ex, $"{GetType().Name} Excute Exception");
                 return new UserSetErrCountAndStatusResponse { Code = (int)ErrorType.SystemError, ErrorMsg = $"{GetType().Name} Excute Exception" };
+            }
+        }
+
+        public UserQueryAllForUserStatusResponse QueryAllForUserStatus(UserStatusType userStatus = UserStatusType.Disabled)
+        {
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+                var uri = new Uri($"{_serviceUrl}User/QueryAllForUserStatus?status={(int)userStatus}");
+
+                var response = client.GetAsync(uri).GetAwaiter().GetResult();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new UserQueryAllForUserStatusResponse { Code = (int)ErrorType.SystemError, ErrorMsg = $"{GetType().Name} Excute Exception" };
+                }
+
+                //取回傳值
+                var content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                var result = JsonConvert.DeserializeObject<UserQueryAllForUserStatusResponse>(content);
+
+                if (result.Code != (int)ErrorType.Success)
+                {
+                    _logger.Warn(result.ErrorMsg, $"{GetType().Name} Excute Exception");
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"{GetType().Name} Excute Exception");
+                return new UserQueryAllForUserStatusResponse { Code = (int)ErrorType.SystemError, ErrorMsg = $"{GetType().Name} Excute Exception" };
             }
         }
     }

@@ -133,7 +133,7 @@ namespace TestChatTool.UI.Forms
             if (user.Code == (int)ErrorType.Success)
             {
                 // 解鎖後 需變更密碼重啟
-                if (user.Data.Status == UserStatusType.Unlock)
+                if (user.User.Status == UserStatusType.Unlock)
                 {
                     var changePwd = _scope.Resolve<ChangePwd>();
 
@@ -142,7 +142,7 @@ namespace TestChatTool.UI.Forms
                     if (changePwd.ShowDialog() == DialogResult.OK)
                     {
                         var userStatus = _userControllerApi.SetErrCountAndStatus(
-                            user.Data.Account,
+                            user.User.Account,
                             0,
                             UserStatusType.Enable);
 
@@ -155,7 +155,7 @@ namespace TestChatTool.UI.Forms
                     return;
                 }
 
-                User = user.Data;
+                User = user.User;
                 // 登入成功 切換User視窗
                 DialogResult = DialogResult.OK;
                 Close();
@@ -172,7 +172,7 @@ namespace TestChatTool.UI.Forms
 
             if (admin.Code == (int)ErrorType.Success)
             {
-                Admin = admin.Data;
+                Admin = admin.Admin;
                 // 關閉登入頁
                 DialogResult = DialogResult.OK;
                 Close();

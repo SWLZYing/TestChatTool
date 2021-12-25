@@ -54,7 +54,7 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
             var result = _repository.Query("admin");
 
             Assert.IsNull(result.ex);
-            Console.WriteLine(result.result);
+            Console.WriteLine(result.admin);
         }
     }
 }

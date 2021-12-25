@@ -5,6 +5,6 @@ namespace TestChatTool.Domain.Response
 {
     public class OnLineUserFindRoomUserResponse : BasicResponse
     {
-        public List<OnLineUser> Data { get; set; }
+        public IEnumerable<OnLineUser> Users { get; set; }
     }
 }

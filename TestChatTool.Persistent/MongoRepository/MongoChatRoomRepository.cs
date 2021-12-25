@@ -45,7 +45,7 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, ChatRoom result) Query(string code)
+        public (Exception ex, ChatRoom room) Query(string code)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, ChatRoom result) Update(string code, string name)
+        public (Exception ex, ChatRoom room) Update(string code, string name)
         {
             try
             {
@@ -81,16 +81,14 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, List<(string code, string name)> rooms) GetAll()
+        public (Exception ex, IEnumerable<ChatRoom> rooms) GetAll()
         {
             try
             {
                 var fiter = Builders<ChatRoom>.Filter.Empty;
                 var result = _collection.Find(fiter).ToList();
 
-                var rooms = result.Select(s => (s.Code, s.Name)).ToList();
-
-                return (null, rooms);
+                return (null, result);
             }
             catch (Exception ex)
             {

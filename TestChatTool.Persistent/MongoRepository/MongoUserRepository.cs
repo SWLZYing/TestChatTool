@@ -45,7 +45,7 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, User result) Query(string acc)
+        public (Exception ex, User user) Query(string acc)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, User result) Update(User info)
+        public (Exception ex, User user) Update(User info)
         {
             try
             {
@@ -133,7 +133,7 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, User result) SignInRefresh(string acc)
+        public (Exception ex, User user) SignInRefresh(string acc)
         {
             try
             {
@@ -157,31 +157,15 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
-        public (Exception ex, List<string> accs) GetAllForVerify()
+        public (Exception ex, IEnumerable<User> users) GetAllForUserStatus(UserStatusType status)
         {
             try
             {
-                var result = _collection.Find(f => f.Status == UserStatusType.Disabled).ToList();
+                var filter = Builders<User>.Filter.Eq(e => e.Status, status);
 
-                var accs = result.Select(s => s.Account).ToList();
+                var result = _collection.Find(filter).ToList();
 
-                return (null, accs);
-            }
-            catch (Exception ex)
-            {
-                return (ex, null);
-            }
-        }
-
-        public (Exception ex, List<string> accs) GetAllForUnlock()
-        {
-            try
-            {
-                var result = _collection.Find(f => f.Status == UserStatusType.Lock).ToList();
-
-                var accs = result.Select(s => s.Account).ToList();
-
-                return (null, accs);
+                return (null, result);
             }
             catch (Exception ex)
             {

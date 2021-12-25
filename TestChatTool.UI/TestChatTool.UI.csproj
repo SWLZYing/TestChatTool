@@ -166,9 +166,13 @@
     <Compile Include="Handlers\Interface\IActionHandler.cs" />
     <Compile Include="Handlers\Interface\IHttpHandler.cs" />
     <Compile Include="Helpers\AdminControllerApiHelper.cs" />
+    <Compile Include="Helpers\ChatRoomControllerApiHelper.cs" />
     <Compile Include="Helpers\Interface\IAdminControllerApiHelper.cs" />
+    <Compile Include="Helpers\Interface\IChatRoomControllerApiHelper.cs" />
+    <Compile Include="Helpers\Interface\IOnLineUserControllerApiHelper.cs" />
     <Compile Include="Helpers\Interface\ISignControllerApiHelper.cs" />
     <Compile Include="Helpers\Interface\IUserControllerApiHelper.cs" />
+    <Compile Include="Helpers\OnLineUserControllerApiHelper.cs" />
     <Compile Include="Helpers\SignControllerApiHelper.cs" />
     <Compile Include="Helpers\UserControllerApiHelper.cs" />
     <Compile Include="Program.cs" />

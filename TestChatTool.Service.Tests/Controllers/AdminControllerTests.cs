@@ -69,7 +69,7 @@ namespace TestChatTool.Service.Tests.Controllers
             var result = controller.Query("admin");
 
             Assert.AreEqual((int)ErrorType.Success, result.Code);
-            Console.WriteLine(result.Data);
+            Console.WriteLine(result.Admin);
         }
 
         [TestMethod]

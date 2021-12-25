@@ -31,7 +31,7 @@ namespace TestChatTool.Service.Tests.Controllers
             var result = controller.Upsert(new OnLineUserUpsertRequest { Account = "user", RoomCode = "ROOM01" });
 
             Assert.AreEqual((int)ErrorType.Success, result.Code);
-            Assert.IsNotNull(result.Data);
+            Assert.IsNotNull(result.User);
         }
 
         [TestMethod]
@@ -42,7 +42,7 @@ namespace TestChatTool.Service.Tests.Controllers
             var result = controller.Upsert(new OnLineUserUpsertRequest { Account = "user", RoomCode = string.Empty });
 
             Assert.AreEqual((int)ErrorType.FieldNull, result.Code);
-            Assert.IsNull(result.Data);
+            Assert.IsNull(result.User);
         }
 
         [TestMethod]
@@ -56,7 +56,7 @@ namespace TestChatTool.Service.Tests.Controllers
             var result = controller.FindRoomUser("ROOM01");
 
             Assert.AreEqual((int)ErrorType.Success, result.Code);
-            Assert.IsNotNull(result.Data);
+            Assert.IsNotNull(result.Users);
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace TestChatTool.Service.Tests.Controllers
             var result = controller.FindRoomUser(string.Empty);
 
             Assert.AreEqual((int)ErrorType.FieldNull, result.Code);
-            Assert.IsNull(result.Data);
+            Assert.IsNull(result.Users);
         }
 
         [TestMethod]
