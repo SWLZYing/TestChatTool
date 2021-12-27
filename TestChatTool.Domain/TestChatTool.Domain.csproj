@@ -132,7 +132,8 @@
     <Compile Include="Model\ActionBase.cs" />
     <Compile Include="Model\ActionModule.cs" />
     <Compile Include="Model\BroadCastChatMessageAction.cs" />
-    <Compile Include="Model\BroadCastLogoutAction.cs" />
+    <Compile Include="Model\BroadCastEnterRoomAction.cs" />
+    <Compile Include="Model\BroadCastLeaveRoomAction.cs" />
     <Compile Include="Model\SendChatMessageAction.cs" />
     <Compile Include="Enum\AdminType.cs" />
     <Compile Include="Enum\ErrorType.cs" />

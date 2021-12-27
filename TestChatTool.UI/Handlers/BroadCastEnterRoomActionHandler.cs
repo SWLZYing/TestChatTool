@@ -1,45 +1,42 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NLog;
+using System;
 using TestChatTool.Domain.Model;
 using TestChatTool.UI.Forms;
 using TestChatTool.UI.Handlers.Interface;
 
 namespace TestChatTool.UI.Handlers
 {
-    /// <summary>
-    /// 廣播聊天訊息處理
-    /// </summary>
-    public class BroadCastChatMessageActionHandler : IActionHandler
+    public class BroadCastEnterRoomActionHandler : IActionHandler
     {
         /// <summary>
         /// 紀錄Log
         /// </summary>
-        private ILogger _logger = LogManager.GetLogger("ChatToolUI");
+        private readonly ILogger _logger;
+        private readonly Room _room;
+        private readonly Backstage _backstage;
 
-        private Room _room;
-        private Backstage _backstage;
-
-        public BroadCastChatMessageActionHandler(Room room, Backstage backstage)
+        public BroadCastEnterRoomActionHandler(Room room, Backstage backstage)
         {
             _room = room;
             _backstage = backstage;
+            _logger = LogManager.GetLogger("ChatToolUI");
         }
 
         public bool Execute(ActionModule actionModule)
         {
             try
             {
-                var content = JsonConvert.DeserializeObject<BroadCastChatMessageAction>(actionModule.Content);
+                var content = JsonConvert.DeserializeObject<BroadCastEnterRoomAction>(actionModule.Content);
 
-                if (_room.User != null)
+                if (_room.User?.NickName != content.NickName)
                 {
-                    _room.ChatMessageAppend(content);
+                    _room.BroadCastEnterRoom(content);
                 }
 
                 if (_backstage.Admin != null)
                 {
-                    _backstage.ChatMessageAppend(content);
+                    _backstage.BroadCastEnterRoom(content);
                 }
 
                 return true;

@@ -1,16 +1,16 @@
-﻿using TestChatTool.UI.Forms;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using TestChatTool.UI.Handlers;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using TestChatTool.Domain.Model;
-using TestChatTool.UI.SignalR;
+using TestChatTool.UI.Forms;
+using TestChatTool.UI.Handlers;
 using TestChatTool.UI.Helpers.Interface;
+using TestChatTool.UI.SignalR;
 
 namespace TestChatTool.UI.Tests.ActionHandlerTests
 {
     [TestClass]
-    public class BroadCastLogoutActionHandlerTest
+    public class BroadCastEnterRoomActionHandlerTest
     {
         private Mock<IUserControllerApiHelper> _userControllerApi;
         private Mock<IOnLineUserControllerApiHelper> _onLineUserControllerApi;
@@ -27,16 +27,17 @@ namespace TestChatTool.UI.Tests.ActionHandlerTests
         }
 
         [TestMethod]
-        public void 使用者移除單元測試()
+        public void user_leave_room()
         {
-            var handler = new BroadCastLogoutActionHandler(
+            var handler = new BroadCastEnterRoomActionHandler(
                 new Room(_userControllerApi.Object, _onLineUserControllerApi.Object, _chatRoomControllerApi.Object, _hubClient.Object),
                 new Backstage(_userControllerApi.Object, _onLineUserControllerApi.Object, _chatRoomControllerApi.Object, _hubClient.Object));
             var result = handler.Execute(new ActionModule()
             {
-                Content = JsonConvert.SerializeObject(new BroadCastLogoutAction()
+                Content = JsonConvert.SerializeObject(new BroadCastEnterRoomAction()
                 {
-                    NickName = "TEST001"
+                    NickName = "TEST001",
+                    RoomCode = "HALL",
                 })
             });
 

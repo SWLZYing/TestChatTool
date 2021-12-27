@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Threading.Tasks;
-using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
 using TestChatTool.Service.ActionHandler;
 using TestChatTool.Service.AppLibs;

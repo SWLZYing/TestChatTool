@@ -18,9 +18,10 @@ namespace TestChatTool.UI.Forms
         private readonly IChatRoomControllerApiHelper _chatRoomControllerApi;
         private readonly IHubClient _hubClient;
         private readonly ILogger _logger;
+        private readonly Timer _timer;
         private User _user;
         private RoomInfo _room;
-        private Timer _timer;
+        private RoomInfo _hall;
 
         public User User => _user;
 
@@ -52,13 +53,19 @@ namespace TestChatTool.UI.Forms
         /// <param name="user"></param>
         public void SetUpUI(User user)
         {
+            _timer.Start();
             _user = user;
-            txtNickName.Text = _user.NickName;
 
             GetAllRoom();
-            _timer.Start();
+
+            txtNickName.Text = _user.NickName;
+            cbbRoom.SelectedItem = _hall;
         }
 
+        /// <summary>
+        /// 接收聊天訊息
+        /// </summary>
+        /// <param name="message"></param>
         public void ChatMessageAppend(BroadCastChatMessageAction message)
         {
             if (_user != null)
@@ -72,7 +79,11 @@ namespace TestChatTool.UI.Forms
             }
         }
 
-        public void BroadCastLogout(BroadCastLogoutAction message)
+        /// <summary>
+        /// 接收登出廣播
+        /// </summary>
+        /// <param name="message"></param>
+        public void BroadCastLeaveRoom(BroadCastLeaveRoomAction message)
         {
             if (_user != null)
             {
@@ -82,6 +93,23 @@ namespace TestChatTool.UI.Forms
                 }
 
                 UpdateMessage($"{message.NickName} 已離開聊天室");
+            }
+        }
+
+        /// <summary>
+        /// 接收登入廣播
+        /// </summary>
+        /// <param name="message"></param>
+        public void BroadCastEnterRoom(BroadCastEnterRoomAction message)
+        {
+            if (_user != null)
+            {
+                if (message.RoomCode != _room.Code)
+                {
+                    return;
+                }
+
+                UpdateMessage($"{message.NickName} 已進入聊天室");
             }
         }
 
@@ -116,9 +144,18 @@ namespace TestChatTool.UI.Forms
 
         private void SelectedValueChanged(object sender, EventArgs e)
         {
+            // 第一次進入不顯示
+            if (_room != null)
+            {
+                LeaveRoom();
+            }
+
             _room = cbbRoom.SelectedItem as RoomInfo;
             txtMessage.Clear();
+
             UserOnLineUpsert(false);
+
+            EnterRoom();
         }
 
         private void DropDown(object sender, MouseEventArgs e)
@@ -179,14 +216,27 @@ namespace TestChatTool.UI.Forms
             }
         }
 
-        private void SignOut()
+        private void EnterRoom()
         {
-            _hubClient.SendAction(new BroadCastLogoutAction()
+            _hubClient.SendAction(new BroadCastEnterRoomAction()
             {
                 NickName = _user.NickName,
                 RoomCode = _room.Code,
             });
+        }
 
+        private void LeaveRoom()
+        {
+            _hubClient.SendAction(new BroadCastLeaveRoomAction()
+            {
+                NickName = _user.NickName,
+                RoomCode = _room.Code,
+            });
+        }
+
+        private void SignOut()
+        {
+            LeaveRoom();
             UserOnLineUpsert(true);
 
             Close();
@@ -253,11 +303,10 @@ namespace TestChatTool.UI.Forms
                 if (rooms.Rooms.Any())
                 {
                     var items = rooms.Rooms.Select(s => new RoomInfo { Code = s.Code, Name = s.Name }).ToArray();
+                    _hall = items.FirstOrDefault(f => f.Code == "HALL");
 
                     // 將聊天室資訊帶入cbb
                     cbbRoom.Items.AddRange(items);
-
-                    cbbRoom.SelectedItem = items.FirstOrDefault(f => f.Code == "HALL");
                 }
             }
             catch (Exception ex)

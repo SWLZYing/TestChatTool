@@ -10,32 +10,36 @@ namespace TestChatTool.UI.Handlers
     /// <summary>
     /// 使用者登出通知
     /// </summary>
-    public class BroadCastLogoutActionHandler : IActionHandler
+    public class BroadCastLeaveRoomActionHandler : IActionHandler
     {
         /// <summary>
         /// 紀錄Log
         /// </summary>
-        private ILogger _logger = LogManager.GetLogger("ChatToolUI");
+        private readonly ILogger _logger;
+        private readonly Room _room;
+        private readonly Backstage _backstage;
 
-        private Room _room;
-        private Backstage _backstage;
-
-        public BroadCastLogoutActionHandler(Room room, Backstage backstage)
+        public BroadCastLeaveRoomActionHandler(Room room, Backstage backstage)
         {
             _room = room;
             _backstage = backstage;
+            _logger = LogManager.GetLogger("ChatToolUI");
         }
 
         public bool Execute(ActionModule actionModule)
         {
             try
             {
-                var content = JsonConvert.DeserializeObject<BroadCastLogoutAction>(actionModule.Content);
+                var content = JsonConvert.DeserializeObject<BroadCastLeaveRoomAction>(actionModule.Content);
 
                 if (_room.User?.NickName != content.NickName)
                 {
-                    _room.BroadCastLogout(content);
-                    _backstage.BroadCastLogout(content);
+                    _room.BroadCastLeaveRoom(content);
+                }
+
+                if (_backstage.Admin != null)
+                {
+                    _backstage.BroadCastLeaveRoom(content);
                 }
 
                 return true;

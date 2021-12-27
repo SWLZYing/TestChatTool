@@ -20,10 +20,11 @@ namespace TestChatTool.UI.Forms
         private readonly IHubClient _hubClient;
         private readonly ILogger _logger;
         private readonly Timer _timer;
-        private readonly Timer _timerForGetRoomUsers;
         private ILifetimeScope _scope;
         private Admin _admin;
         private RoomInfo _room;
+
+        public Admin Admin => _admin;
 
         public Backstage(
             IUserControllerApiHelper userControllerApi,
@@ -46,16 +47,6 @@ namespace TestChatTool.UI.Forms
             {
                 ChangeStatus();
             };
-
-            // 定時更新房間會員
-            _timerForGetRoomUsers = new Timer { Interval = 5000 };
-            _timerForGetRoomUsers.Tick += (object sender, EventArgs e) =>
-            {
-                if (_hubClient.State == ConnectionState.Connected)
-                {
-                    GetRoomAllUsers();
-                }
-            };
         }
 
         public ILifetimeScope Scope
@@ -72,6 +63,7 @@ namespace TestChatTool.UI.Forms
         /// <param name="admin"></param>
         public void SetUpUI(Admin admin)
         {
+            _timer.Start();
             _admin = admin;
 
             if (admin.AccountType == AdminType.Normal)
@@ -84,8 +76,7 @@ namespace TestChatTool.UI.Forms
             }
 
             GetAllRoom();
-            _timer.Start();
-            _timerForGetRoomUsers.Start();
+            UpdateRoomUser();
         }
 
         /// <summary>
@@ -110,7 +101,7 @@ namespace TestChatTool.UI.Forms
         /// 接收登出訊息
         /// </summary>
         /// <param name="message"></param>
-        public void BroadCastLogout(BroadCastLogoutAction message)
+        public void BroadCastLeaveRoom(BroadCastLeaveRoomAction message)
         {
             if (_admin != null)
             {
@@ -120,6 +111,21 @@ namespace TestChatTool.UI.Forms
                 }
 
                 UpdateMessage($"{message.NickName} 已離開聊天室");
+                UpdateRoomUser();
+            }
+        }
+
+        public void BroadCastEnterRoom(BroadCastEnterRoomAction message)
+        {
+            if (_admin != null)
+            {
+                if (message.RoomCode != _room.Code)
+                {
+                    return;
+                }
+
+                UpdateMessage($"{message.NickName} 已進入聊天室");
+                UpdateRoomUser();
             }
         }
 
@@ -190,6 +196,18 @@ namespace TestChatTool.UI.Forms
                 }
 
                 txtMessage.AppendText($"{text}\r\n");
+            }
+        }
+
+        private void UpdateRoomUser()
+        {
+            if (txtRoomUsers.InvokeRequired)
+            {
+                txtRoomUsers.Invoke((Action)GetRoomAllUsers);
+            }
+            else
+            {
+                GetRoomAllUsers();
             }
         }
 

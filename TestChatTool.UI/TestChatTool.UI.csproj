@@ -149,7 +149,8 @@
       <DependentUpon>UserStatusMaintain.cs</DependentUpon>
     </Compile>
     <Compile Include="Handlers\BroadCastChatMessageActionHandler.cs" />
-    <Compile Include="Handlers\BroadCastLogoutActionHandler.cs" />
+    <Compile Include="Handlers\BroadCastEnterRoomActionHandler.cs" />
+    <Compile Include="Handlers\BroadCastLeaveRoomActionHandler.cs" />
     <Compile Include="Forms\Home.cs">
       <SubType>Form</SubType>
     </Compile>
