@@ -86,9 +86,8 @@ namespace TestChatTool.UI.Forms
         }
 
         /// <summary>
-        /// 接收聊天訊息
+        /// 接收長連結事件
         /// </summary>
-        /// <param name="roomCode"></param>
         /// <param name="eventData"></param>
         public void CallBackEvent(CallBackEventData eventData)
         {

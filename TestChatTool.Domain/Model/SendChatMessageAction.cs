@@ -11,7 +11,7 @@ namespace TestChatTool.Domain.Model
             => $"SendChatMessage";
 
         /// <summary>
-        /// 暱稱
+        /// 聊天室代碼
         /// </summary>
         public string RoomCode { get; set; }
 

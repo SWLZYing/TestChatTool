@@ -11,9 +11,14 @@ namespace TestChatTool.Domain.Model
         public CallBackActionType Action { get; set; }
 
         /// <summary>
-        /// 房間代碼
+        /// 聊天室代碼
         /// </summary>
         public string RoomCode { get; set; }
+
+        /// <summary>
+        /// 帳號
+        /// </summary>
+        public string Account { get; set; }
 
         /// <summary>
         /// 暱稱

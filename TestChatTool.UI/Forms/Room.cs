@@ -44,7 +44,7 @@ namespace TestChatTool.UI.Forms
             _hubClient = hubClient;
             _logger = LogManager.GetLogger("UIRoom");
 
-            _callBackEvent.Add(ChatMessageAppend);
+            _callBackEvent.Add(CallBackEvent);
 
             _timer = new Timer { Interval = 500 };
             _timer.Tick += (object sender, EventArgs e) =>
@@ -69,10 +69,10 @@ namespace TestChatTool.UI.Forms
         }
 
         /// <summary>
-        /// 接收聊天訊息
+        /// 接收長連結事件
         /// </summary>
         /// <param name="eventData"></param>
-        public void ChatMessageAppend(CallBackEventData eventData)
+        public void CallBackEvent(CallBackEventData eventData)
         {
             if (_user == null || eventData.RoomCode != _room.Code)
             {
@@ -88,7 +88,7 @@ namespace TestChatTool.UI.Forms
 
                 case CallBackActionType.EnterRoom:
 
-                    if (eventData.NickName != _user.NickName)
+                    if (eventData.Account != _user.Account)
                     {
                         UpdateMessage($"{eventData.NickName} 已進入聊天室");
                     }
@@ -96,7 +96,7 @@ namespace TestChatTool.UI.Forms
 
                 case CallBackActionType.LeaveRoom:
 
-                    if (eventData.NickName != _user.NickName)
+                    if (eventData.Account != _user.Account)
                     {
                         UpdateMessage($"{eventData.NickName} 已離開聊天室");
                     }
@@ -214,8 +214,9 @@ namespace TestChatTool.UI.Forms
         {
             _hubClient.SendAction(new BroadCastEnterRoomAction()
             {
-                NickName = _user.NickName,
                 RoomCode = _room.Code,
+                Account = _user.Account,
+                NickName = _user.NickName,
             });
         }
 
@@ -223,8 +224,9 @@ namespace TestChatTool.UI.Forms
         {
             _hubClient.SendAction(new BroadCastLeaveRoomAction()
             {
-                NickName = _user.NickName,
                 RoomCode = _room.Code,
+                Account = _user.Account,
+                NickName = _user.NickName,
             });
         }
 

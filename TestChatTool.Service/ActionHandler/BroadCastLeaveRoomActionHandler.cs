@@ -15,11 +15,7 @@ namespace TestChatTool.Service.ActionHandler
             {
                 var content = JsonConvert.DeserializeObject<BroadCastLeaveRoomAction>(action.Content);
 
-                return (null, NotifyType.BroadCast, new BroadCastLeaveRoomAction()
-                {
-                    NickName = content.NickName,
-                    RoomCode = content.RoomCode,
-                });
+                return (null, NotifyType.BroadCast, content);
             }
             catch (Exception ex)
             {

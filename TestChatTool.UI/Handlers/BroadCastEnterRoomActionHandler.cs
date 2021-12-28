@@ -32,6 +32,7 @@ namespace TestChatTool.UI.Handlers
                 {
                     Action = CallBackActionType.EnterRoom,
                     RoomCode = content.RoomCode,
+                    Account = content.Account,
                     NickName = content.NickName,
                 });
 
