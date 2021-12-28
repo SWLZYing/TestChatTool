@@ -14,11 +14,7 @@ namespace TestChatTool.Service.Hubs
     {
         private ILogger logger = LogManager.GetLogger("ChatToolServer");
 
-        private IHubContext hubContext
-        {
-            get
-                => GlobalHost.ConnectionManager.GetHubContext<ChatToolHub>();
-        }
+        private IHubContext hubContext => GlobalHost.ConnectionManager.GetHubContext<ChatToolHub>();
 
         /// <summary>
         /// 廣撥用

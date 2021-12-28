@@ -208,6 +208,7 @@
   <ItemGroup>
     <Compile Include="ActionHandler\BroadCastEnterRoomActionHandler.cs" />
     <Compile Include="ActionHandler\BroadCastLeaveRoomActionHandler.cs" />
+    <Compile Include="ActionHandler\BroadCastCheckConnectActionHandler.cs" />
     <Compile Include="ActionHandler\IActionHandler.cs" />
     <Compile Include="ActionHandler\SendChatMessageActionHandler.cs" />
     <Compile Include="AppLibs\AutofacConfig.cs" />

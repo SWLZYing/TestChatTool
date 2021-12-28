@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionHandlerTests\BroadCastChatMessageActionHandlerTests.cs" />
+    <Compile Include="ActionHandlerTests\BroadCastCheckConnectActionHandlerTests.cs" />
     <Compile Include="ActionHandlerTests\BroadCastEnterRoomActionHandlerTest.cs" />
     <Compile Include="ActionHandlerTests\BroadCastLeaveRoomActionHandlerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -21,7 +21,6 @@ namespace TestChatTool.UI.Forms
         private readonly ICallBackEventHandler _callBackEvent;
         private readonly IHubClient _hubClient;
         private readonly ILogger _logger;
-        private readonly Timer _timer;
         private ILifetimeScope _scope;
         private Admin _admin;
         private RoomInfo _room;
@@ -46,13 +45,6 @@ namespace TestChatTool.UI.Forms
             _logger = LogManager.GetLogger("UIBackstage");
 
             _callBackEvent.Add(CallBackEvent);
-
-            // 確認連線狀況
-            _timer = new Timer { Interval = 500 };
-            _timer.Tick += (object sender, EventArgs e) =>
-            {
-                ChangeStatus();
-            };
         }
 
         public ILifetimeScope Scope
@@ -69,7 +61,6 @@ namespace TestChatTool.UI.Forms
         /// <param name="admin"></param>
         public void SetUpUI(Admin admin)
         {
-            _timer.Start();
             _admin = admin;
 
             if (admin.AccountType == AdminType.Normal)
@@ -91,7 +82,7 @@ namespace TestChatTool.UI.Forms
         /// <param name="eventData"></param>
         public void CallBackEvent(CallBackEventData eventData)
         {
-            if (_admin == null || eventData.RoomCode != _room.Code)
+            if (_admin == null)
             {
                 return;
             }
@@ -100,19 +91,33 @@ namespace TestChatTool.UI.Forms
             {
                 case CallBackActionType.ChatMessage:
 
-                    UpdateMessage($"{eventData.NickName}-{eventData.CreateDateTime?.ToString("HH:mm:ss")}:{eventData.Message}");
+                    if (eventData.RoomCode == _room.Code)
+                    {
+                        UpdateMessage($"{eventData.NickName}-{eventData.CreateDateTime?.ToString("HH:mm:ss")}:{eventData.Message}");
+                    }
                     break;
 
                 case CallBackActionType.EnterRoom:
 
-                    UpdateMessage($"{eventData.NickName} 已進入聊天室");
-                    UpdateRoomUser();
+                    if (eventData.RoomCode == _room.Code)
+                    {
+                        UpdateMessage($"{eventData.NickName} 已進入聊天室");
+                        UpdateRoomUser();
+                    }
                     break;
 
                 case CallBackActionType.LeaveRoom:
 
-                    UpdateMessage($"{eventData.NickName} 已離開聊天室");
-                    UpdateRoomUser();
+                    if (eventData.RoomCode == _room.Code)
+                    {
+                        UpdateMessage($"{eventData.NickName} 已離開聊天室");
+                        UpdateRoomUser();
+                    }
+                    break;
+
+                case CallBackActionType.CheckConnect:
+
+                    ChangeStatus();
                     break;
 
                 default:

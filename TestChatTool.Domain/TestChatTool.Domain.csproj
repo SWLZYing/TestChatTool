@@ -133,6 +133,7 @@
     <Compile Include="Model\ActionBase.cs" />
     <Compile Include="Model\ActionModule.cs" />
     <Compile Include="Model\BroadCastChatMessageAction.cs" />
+    <Compile Include="Model\BroadCastCheckConnectAction.cs" />
     <Compile Include="Model\BroadCastEnterRoomAction.cs" />
     <Compile Include="Model\BroadCastLeaveRoomAction.cs" />
     <Compile Include="Model\CallBackEventData.cs" />

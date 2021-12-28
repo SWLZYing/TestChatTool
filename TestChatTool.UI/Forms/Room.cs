@@ -20,7 +20,6 @@ namespace TestChatTool.UI.Forms
         private readonly ICallBackEventHandler _callBackEvent;
         private readonly IHubClient _hubClient;
         private readonly ILogger _logger;
-        private readonly Timer _timer;
         private User _user;
         private RoomInfo _room;
         private RoomInfo _hall;
@@ -45,12 +44,6 @@ namespace TestChatTool.UI.Forms
             _logger = LogManager.GetLogger("UIRoom");
 
             _callBackEvent.Add(CallBackEvent);
-
-            _timer = new Timer { Interval = 500 };
-            _timer.Tick += (object sender, EventArgs e) =>
-            {
-                ChangeStatus();
-            };
         }
 
         /// <summary>
@@ -59,7 +52,6 @@ namespace TestChatTool.UI.Forms
         /// <param name="user"></param>
         public void SetUpUI(User user)
         {
-            _timer.Start();
             _user = user;
 
             GetAllRoom();
@@ -74,7 +66,7 @@ namespace TestChatTool.UI.Forms
         /// <param name="eventData"></param>
         public void CallBackEvent(CallBackEventData eventData)
         {
-            if (_user == null || eventData.RoomCode != _room.Code)
+            if (_user == null)
             {
                 return;
             }
@@ -83,12 +75,15 @@ namespace TestChatTool.UI.Forms
             {
                 case CallBackActionType.ChatMessage:
 
-                    UpdateMessage($"{eventData.NickName}-{eventData.CreateDateTime?.ToString("HH:mm:ss")}:{eventData.Message}");
+                    if (eventData.RoomCode == _room.Code)
+                    {
+                        UpdateMessage($"{eventData.NickName}-{eventData.CreateDateTime?.ToString("HH:mm:ss")}:{eventData.Message}");
+                    }
                     break;
 
                 case CallBackActionType.EnterRoom:
 
-                    if (eventData.Account != _user.Account)
+                    if (eventData.Account != _user.Account && eventData.RoomCode == _room.Code)
                     {
                         UpdateMessage($"{eventData.NickName} 已進入聊天室");
                     }
@@ -96,10 +91,15 @@ namespace TestChatTool.UI.Forms
 
                 case CallBackActionType.LeaveRoom:
 
-                    if (eventData.Account != _user.Account)
+                    if (eventData.Account != _user.Account && eventData.RoomCode == _room.Code)
                     {
                         UpdateMessage($"{eventData.NickName} 已離開聊天室");
                     }
+                    break;
+
+                case CallBackActionType.CheckConnect:
+
+                    ChangeStatus();
                     break;
 
                 default:

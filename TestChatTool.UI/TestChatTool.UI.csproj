@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Applibs\AutofacConfig.cs" />
+    <Compile Include="Applibs\CheckConnectServer.cs" />
     <Compile Include="Applibs\ConfigHelper.cs" />
     <Compile Include="Events\CallBackEventHandler.cs" />
     <Compile Include="Events\Interface\ICallBackEventHandler.cs" />
@@ -151,6 +152,7 @@
       <DependentUpon>UserStatusMaintain.cs</DependentUpon>
     </Compile>
     <Compile Include="Handlers\BroadCastChatMessageActionHandler.cs" />
+    <Compile Include="Handlers\BroadCastCheckConnectActionHandler.cs" />
     <Compile Include="Handlers\BroadCastEnterRoomActionHandler.cs" />
     <Compile Include="Handlers\BroadCastLeaveRoomActionHandler.cs" />
     <Compile Include="Forms\Home.cs">

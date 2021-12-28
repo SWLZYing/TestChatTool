@@ -16,5 +16,10 @@
         /// 離開聊天室通知
         /// </summary>
         LeaveRoom,
+
+        /// <summary>
+        /// 確認連線
+        /// </summary>
+        CheckConnect,
     }
 }

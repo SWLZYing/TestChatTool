@@ -33,6 +33,8 @@ namespace TestChatTool.UI
                 {
                     if (home.IsAdmin)
                     {
+                        CheckConnectServer.ServerStart(home.IsAdmin, home.Admin.Account);
+
                         var backstage = scope.Resolve<Backstage>();
 
                         backstage.Scope = scope;
@@ -41,6 +43,8 @@ namespace TestChatTool.UI
                     }
                     else
                     {
+                        CheckConnectServer.ServerStart(home.IsAdmin, home.User.Account, home.User.NickName);
+
                         var room = scope.Resolve<Room>();
 
                         room.SetUpUI(home.User);
