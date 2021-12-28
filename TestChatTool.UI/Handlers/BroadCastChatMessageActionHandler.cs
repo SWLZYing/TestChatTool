@@ -1,8 +1,9 @@
 ﻿using System;
 using Newtonsoft.Json;
 using NLog;
+using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Model;
-using TestChatTool.UI.Forms;
+using TestChatTool.UI.Events.Interface;
 using TestChatTool.UI.Handlers.Interface;
 
 namespace TestChatTool.UI.Handlers
@@ -15,15 +16,13 @@ namespace TestChatTool.UI.Handlers
         /// <summary>
         /// 紀錄Log
         /// </summary>
-        private ILogger _logger = LogManager.GetLogger("ChatToolUI");
+        private readonly ILogger _logger;
+        private readonly ICallBackEventHandler _callBack;
 
-        private Room _room;
-        private Backstage _backstage;
-
-        public BroadCastChatMessageActionHandler(Room room, Backstage backstage)
+        public BroadCastChatMessageActionHandler(ICallBackEventHandler callBack)
         {
-            _room = room;
-            _backstage = backstage;
+            _callBack = callBack;
+            _logger = LogManager.GetLogger("ChatToolUI");
         }
 
         public bool Execute(ActionModule actionModule)
@@ -32,15 +31,14 @@ namespace TestChatTool.UI.Handlers
             {
                 var content = JsonConvert.DeserializeObject<BroadCastChatMessageAction>(actionModule.Content);
 
-                if (_room.User != null)
+                _callBack.DoWork(new CallBackEventData
                 {
-                    _room.ChatMessageAppend(content);
-                }
-
-                if (_backstage.Admin != null)
-                {
-                    _backstage.ChatMessageAppend(content);
-                }
+                    Action = CallBackActionType.ChatMessage,
+                    RoomCode = content.RoomCode,
+                    NickName = content.NickName,
+                    Message = content.Message,
+                    CreateDateTime = content.CreateDateTime,
+                });
 
                 return true;
             }

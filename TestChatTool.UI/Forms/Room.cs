@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
+using TestChatTool.UI.Events.Interface;
 using TestChatTool.UI.Helpers.Interface;
 using TestChatTool.UI.SignalR;
 
@@ -16,6 +17,7 @@ namespace TestChatTool.UI.Forms
         private readonly IUserControllerApiHelper _userControllerApi;
         private readonly IOnLineUserControllerApiHelper _onLineUserControllerApi;
         private readonly IChatRoomControllerApiHelper _chatRoomControllerApi;
+        private readonly ICallBackEventHandler _callBackEvent;
         private readonly IHubClient _hubClient;
         private readonly ILogger _logger;
         private readonly Timer _timer;
@@ -29,6 +31,7 @@ namespace TestChatTool.UI.Forms
             IUserControllerApiHelper userControllerApi,
             IOnLineUserControllerApiHelper onLineUserControllerApi,
             IChatRoomControllerApiHelper chatRoomControllerApi,
+            ICallBackEventHandler callBackEvent,
             IHubClient hubClient)
         {
             InitializeComponent();
@@ -37,8 +40,11 @@ namespace TestChatTool.UI.Forms
             _userControllerApi = userControllerApi;
             _onLineUserControllerApi = onLineUserControllerApi;
             _chatRoomControllerApi = chatRoomControllerApi;
+            _callBackEvent = callBackEvent;
             _hubClient = hubClient;
             _logger = LogManager.GetLogger("UIRoom");
+
+            _callBackEvent.Add(ChatMessageAppend);
 
             _timer = new Timer { Interval = 500 };
             _timer.Tick += (object sender, EventArgs e) =>
@@ -65,51 +71,39 @@ namespace TestChatTool.UI.Forms
         /// <summary>
         /// 接收聊天訊息
         /// </summary>
-        /// <param name="message"></param>
-        public void ChatMessageAppend(BroadCastChatMessageAction message)
+        /// <param name="eventData"></param>
+        public void ChatMessageAppend(CallBackEventData eventData)
         {
-            if (_user != null)
+            if (_user == null || eventData.RoomCode != _room.Code)
             {
-                if (message.RoomCode != _room.Code)
-                {
-                    return;
-                }
-
-                UpdateMessage($"{message.NickName}-{message.CreateDateTime.ToString("HH:mm:ss")}:{message.Message}");
+                return;
             }
-        }
 
-        /// <summary>
-        /// 接收登出廣播
-        /// </summary>
-        /// <param name="message"></param>
-        public void BroadCastLeaveRoom(BroadCastLeaveRoomAction message)
-        {
-            if (_user != null)
+            switch (eventData.Action)
             {
-                if (message.RoomCode != _room.Code)
-                {
-                    return;
-                }
+                case CallBackActionType.ChatMessage:
 
-                UpdateMessage($"{message.NickName} 已離開聊天室");
-            }
-        }
+                    UpdateMessage($"{eventData.NickName}-{eventData.CreateDateTime?.ToString("HH:mm:ss")}:{eventData.Message}");
+                    break;
 
-        /// <summary>
-        /// 接收登入廣播
-        /// </summary>
-        /// <param name="message"></param>
-        public void BroadCastEnterRoom(BroadCastEnterRoomAction message)
-        {
-            if (_user != null)
-            {
-                if (message.RoomCode != _room.Code)
-                {
-                    return;
-                }
+                case CallBackActionType.EnterRoom:
 
-                UpdateMessage($"{message.NickName} 已進入聊天室");
+                    if (eventData.NickName != _user.NickName)
+                    {
+                        UpdateMessage($"{eventData.NickName} 已進入聊天室");
+                    }
+                    break;
+
+                case CallBackActionType.LeaveRoom:
+
+                    if (eventData.NickName != _user.NickName)
+                    {
+                        UpdateMessage($"{eventData.NickName} 已離開聊天室");
+                    }
+                    break;
+
+                default:
+                    break;
             }
         }
 

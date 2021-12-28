@@ -118,6 +118,8 @@
   <ItemGroup>
     <Compile Include="Applibs\AutofacConfig.cs" />
     <Compile Include="Applibs\ConfigHelper.cs" />
+    <Compile Include="Events\CallBackEventHandler.cs" />
+    <Compile Include="Events\Interface\ICallBackEventHandler.cs" />
     <Compile Include="Forms\Backstage.cs">
       <SubType>Form</SubType>
     </Compile>

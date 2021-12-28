@@ -2,6 +2,8 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using TestChatTool.UI.Events;
+using TestChatTool.UI.Events.Interface;
 using TestChatTool.UI.Forms;
 using TestChatTool.UI.Handlers.Interface;
 using TestChatTool.UI.Helpers;
@@ -56,6 +58,11 @@ namespace TestChatTool.UI.Applibs
                 .WithParameter("hubName", ConfigHelper.SignalrHubName)
                 .As<IHubClient>()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
+                .SingleInstance();
+
+            // 註冊EventHandler
+            builder.RegisterType<CallBackEventHandler>()
+                .As<ICallBackEventHandler>()
                 .SingleInstance();
 
             // 註冊短連結物件 ApiHelper
