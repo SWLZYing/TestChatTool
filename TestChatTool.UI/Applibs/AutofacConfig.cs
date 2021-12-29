@@ -88,24 +88,31 @@ namespace TestChatTool.UI.Applibs
 
             // UI註冊
             builder.RegisterType<Home>()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
                 .SingleInstance();
 
             builder.RegisterType<Register>()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
                 .SingleInstance();
 
             builder.RegisterType<ChangePwd>()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
                 .SingleInstance();
 
             builder.RegisterType<Backstage>()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
                 .SingleInstance();
 
             builder.RegisterType<UserStatusMaintain>()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
                 .SingleInstance();
 
             builder.RegisterType<RoomMaintain>()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
                 .SingleInstance();
 
             builder.RegisterType<Room>()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
                 .SingleInstance();
 
             container = builder.Build();

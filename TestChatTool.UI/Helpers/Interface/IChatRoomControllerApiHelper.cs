@@ -6,6 +6,7 @@ namespace TestChatTool.UI.Helpers.Interface
     {
         ChatRoomCreateResponse Create(string code, string name);
         ChatRoomUpdateResponse Update(string code, string name);
+        ChatRoomDeleteResponse Delete(string code);
         ChatRoomGetAllResponse GetAll();
     }
 }

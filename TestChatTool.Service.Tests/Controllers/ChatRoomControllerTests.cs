@@ -105,6 +105,19 @@ namespace TestChatTool.Service.Tests.Controllers
         }
 
         [TestMethod]
+        public void delete_room()
+        {
+            _repo.Setup(s => s.Delete(It.IsAny<string>()))
+                .Returns((null, true));
+
+            var controller = new ChatRoomController(_repo.Object);
+
+            var result = controller.Delete("ROOM01");
+
+            Assert.AreEqual((int)ErrorType.Success, result.Code);
+        }
+
+        [TestMethod]
         public void update_not_into_room_code()
         {
             var controller = new ChatRoomController(_repo.Object);

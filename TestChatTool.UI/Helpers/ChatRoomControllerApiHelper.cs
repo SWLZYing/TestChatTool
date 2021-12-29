@@ -110,6 +110,38 @@ namespace TestChatTool.UI.Helpers
             }
         }
 
+        public ChatRoomDeleteResponse Delete(string code)
+        {
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+                var uri = new Uri($"{_serviceUrl}ChatRoom/Delete?roomCode={code}");
+
+                var response = client.DeleteAsync(uri).GetAwaiter().GetResult();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new ChatRoomDeleteResponse { Code = (int)ErrorType.SystemError, ErrorMsg = $"{GetType().Name} Excute Exception" };
+                }
+
+                //取回傳值
+                var content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                var result = JsonConvert.DeserializeObject<ChatRoomDeleteResponse>(content);
+
+                if (result.Code != (int)ErrorType.Success)
+                {
+                    _logger.Warn(result.ErrorMsg, $"{GetType().Name} Excute Exception");
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"{GetType().Name} Excute Exception");
+                return new ChatRoomDeleteResponse { Code = (int)ErrorType.SystemError, ErrorMsg = $"{GetType().Name} Excute Exception" };
+            }
+        }
+
         public ChatRoomGetAllResponse GetAll()
         {
             try

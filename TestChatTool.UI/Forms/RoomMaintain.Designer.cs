@@ -34,8 +34,8 @@ namespace TestChatTool.UI.Forms
             this.lblTitle = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnCreate = new System.Windows.Forms.Button();
-            this.btnUpdate = new System.Windows.Forms.Button();
+            this.btnOk = new System.Windows.Forms.Button();
+            this.cbbRoom = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // txtCode
@@ -84,35 +84,35 @@ namespace TestChatTool.UI.Forms
             this.label1.TabIndex = 14;
             this.label1.Text = "聊天室名稱";
             // 
-            // btnCreate
+            // btnOk
             // 
-            this.btnCreate.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnCreate.Location = new System.Drawing.Point(200, 195);
-            this.btnCreate.Name = "btnCreate";
-            this.btnCreate.Size = new System.Drawing.Size(100, 40);
-            this.btnCreate.TabIndex = 17;
-            this.btnCreate.Text = "新增";
-            this.btnCreate.UseVisualStyleBackColor = true;
-            this.btnCreate.Click += new System.EventHandler(this.ButtonClick);
+            this.btnOk.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnOk.Location = new System.Drawing.Point(270, 200);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.Size = new System.Drawing.Size(100, 40);
+            this.btnOk.TabIndex = 17;
+            this.btnOk.Text = "確定";
+            this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.ButtonClick);
             // 
-            // btnUpdate
+            // cbbRoom
             // 
-            this.btnUpdate.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnUpdate.Location = new System.Drawing.Point(80, 195);
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(100, 40);
-            this.btnUpdate.TabIndex = 16;
-            this.btnUpdate.Text = "更新";
-            this.btnUpdate.UseVisualStyleBackColor = true;
-            this.btnUpdate.Click += new System.EventHandler(this.ButtonClick);
+            this.cbbRoom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbRoom.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.cbbRoom.FormattingEnabled = true;
+            this.cbbRoom.Location = new System.Drawing.Point(190, 80);
+            this.cbbRoom.Name = "cbbRoom";
+            this.cbbRoom.Size = new System.Drawing.Size(190, 35);
+            this.cbbRoom.TabIndex = 18;
+            this.cbbRoom.SelectedValueChanged += new System.EventHandler(this.SelectedValueChanged);
             // 
             // RoomMaintain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(399, 251);
-            this.Controls.Add(this.btnCreate);
-            this.Controls.Add(this.btnUpdate);
+            this.Controls.Add(this.cbbRoom);
+            this.Controls.Add(this.btnOk);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblTitle);
@@ -132,7 +132,7 @@ namespace TestChatTool.UI.Forms
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnCreate;
-        private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.Button btnOk;
+        private System.Windows.Forms.ComboBox cbbRoom;
     }
 }

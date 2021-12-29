@@ -9,6 +9,7 @@ namespace TestChatTool.Domain.Repository
         (Exception ex, bool isSuccess, bool isAccDuplicate) Create(ChatRoom info);
         (Exception ex, ChatRoom room) Query(string code);
         (Exception ex, ChatRoom room) Update(string code, string name);
+        (Exception ex, bool isSuccess) Delete(string code);
         (Exception ex, IEnumerable<ChatRoom> rooms) GetAll();
     }
 }

@@ -8,6 +8,7 @@ using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
 using TestChatTool.UI.Events.Interface;
 using TestChatTool.UI.Helpers.Interface;
+using TestChatTool.UI.Models;
 using TestChatTool.UI.SignalR;
 
 namespace TestChatTool.UI.Forms
@@ -22,7 +23,7 @@ namespace TestChatTool.UI.Forms
         private readonly ILogger _logger;
         private User _user;
         private RoomInfo _room;
-        private RoomInfo _hall;
+        private RoomInfo[] _rooms;
 
         public User User => _user;
 
@@ -54,10 +55,9 @@ namespace TestChatTool.UI.Forms
         {
             _user = user;
 
-            GetAllRoom();
-
             txtNickName.Text = _user.NickName;
-            cbbRoom.SelectedItem = _hall;
+
+            GetAllRoom(false);
         }
 
         /// <summary>
@@ -99,7 +99,17 @@ namespace TestChatTool.UI.Forms
 
                 case CallBackActionType.CheckConnect:
 
-                    ChangeStatus();
+                    btnSend.Invoke((Action)ChangeStatus);
+                    break;
+
+                case CallBackActionType.UpsertChatRoom:
+
+                    cbbRoom.Invoke((Action<bool>)GetAllRoom, false);
+                    break;
+
+                case CallBackActionType.DeleteChatRoom:
+
+                    cbbRoom.Invoke((Action<bool>)GetAllRoom, true);
                     break;
 
                 default:
@@ -138,6 +148,14 @@ namespace TestChatTool.UI.Forms
 
         private void SelectedValueChanged(object sender, EventArgs e)
         {
+            // 無變更聊天室
+            if (_room?.Code == ((RoomInfo)cbbRoom.SelectedItem)?.Code)
+            {
+                _room = cbbRoom.SelectedItem as RoomInfo;
+
+                return;
+            }
+
             // 第一次進入不顯示
             if (_room != null)
             {
@@ -150,11 +168,6 @@ namespace TestChatTool.UI.Forms
             UserOnLineUpsert(false);
 
             EnterRoom();
-        }
-
-        private void DropDown(object sender, MouseEventArgs e)
-        {
-            GetAllRoom();
         }
 
         /// <summary>
@@ -212,7 +225,7 @@ namespace TestChatTool.UI.Forms
 
         private void EnterRoom()
         {
-            _hubClient.SendAction(new BroadCastEnterRoomAction()
+            _hubClient.SendAction(new SendEnterRoomAction()
             {
                 RoomCode = _room.Code,
                 Account = _user.Account,
@@ -222,7 +235,7 @@ namespace TestChatTool.UI.Forms
 
         private void LeaveRoom()
         {
-            _hubClient.SendAction(new BroadCastLeaveRoomAction()
+            _hubClient.SendAction(new SendLeaveRoomAction()
             {
                 RoomCode = _room.Code,
                 Account = _user.Account,
@@ -282,7 +295,7 @@ namespace TestChatTool.UI.Forms
             MessageBox.Show("暱稱修改成功");
         }
 
-        private void GetAllRoom()
+        private void GetAllRoom(bool isDelete)
         {
             try
             {
@@ -298,11 +311,27 @@ namespace TestChatTool.UI.Forms
 
                 if (rooms.Rooms.Any())
                 {
-                    var items = rooms.Rooms.Select(s => new RoomInfo { Code = s.Code, Name = s.Name }).ToArray();
-                    _hall = items.FirstOrDefault(f => f.Code == "HALL");
-
                     // 將聊天室資訊帶入cbb
-                    cbbRoom.Items.AddRange(items);
+                    _rooms = rooms.Rooms.Select(s => new RoomInfo { Code = s.Code, Name = s.Name }).ToArray();
+                    cbbRoom.Items.AddRange(_rooms);
+                }
+
+                // 確認原本聊天室
+                var mapRoom = _rooms.FirstOrDefault(f => f.Code == _room?.Code);
+
+                if (mapRoom == default)
+                {
+                    if (isDelete)
+                    {
+                        MessageBox.Show("當前聊天室已被刪除，所有會員移往大廳");
+                    }
+
+                    // 不存在則指向大廳
+                    cbbRoom.SelectedItem = _rooms.FirstOrDefault(f => f.Code == "HALL");
+                }
+                else
+                {
+                    cbbRoom.SelectedItem = mapRoom;
                 }
             }
             catch (Exception ex)
@@ -317,16 +346,5 @@ namespace TestChatTool.UI.Forms
         /// </summary>
         /// <param name="text"></param>
         private delegate void SafeCallDelegate(string text);
-
-        private class RoomInfo
-        {
-            public string Code { get; set; }
-            public string Name { get; set; }
-
-            public override string ToString()
-            {
-                return Name;
-            }
-        }
     }
 }

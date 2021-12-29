@@ -1,5 +1,5 @@
 ﻿using System;
-using TestChatTool.Domain.Model;
+using TestChatTool.UI.Models;
 
 namespace TestChatTool.UI.Events.Interface
 {

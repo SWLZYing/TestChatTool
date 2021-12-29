@@ -9,6 +9,7 @@ using TestChatTool.Domain.Extension;
 using TestChatTool.Domain.Model;
 using TestChatTool.UI.Events.Interface;
 using TestChatTool.UI.Helpers.Interface;
+using TestChatTool.UI.Models;
 using TestChatTool.UI.SignalR;
 
 namespace TestChatTool.UI.Forms
@@ -24,6 +25,7 @@ namespace TestChatTool.UI.Forms
         private ILifetimeScope _scope;
         private Admin _admin;
         private RoomInfo _room;
+        private RoomInfo[] _rooms;
 
         public Admin Admin => _admin;
 
@@ -117,7 +119,13 @@ namespace TestChatTool.UI.Forms
 
                 case CallBackActionType.CheckConnect:
 
-                    ChangeStatus();
+                    btnSend.Invoke((Action)ChangeStatus);
+                    break;
+
+                case CallBackActionType.UpsertChatRoom:
+                case CallBackActionType.DeleteChatRoom:
+
+                    cbbRoom.Invoke((Action)GetAllRoom);
                     break;
 
                 default:
@@ -143,10 +151,19 @@ namespace TestChatTool.UI.Forms
                         Unlock();
                         break;
 
-                    // 聊天室設定
-                    case "btnRoomMaintain":
-                        RoomMaintain();
-                        GetAllRoom();
+                    // 聊天室新增
+                    case "btnRoomCreate":
+                        RoomMaintain(btn.Name);
+                        break;
+
+                    // 聊天室修改
+                    case "btnRoomUpdate":
+                        RoomMaintain(btn.Name);
+                        break;
+
+                    // 聊天室刪除
+                    case "btnRoomDelete":
+                        RoomMaintain(btn.Name);
                         break;
 
                     // 管理員發話
@@ -173,8 +190,12 @@ namespace TestChatTool.UI.Forms
 
         private void SelectedValueChanged(object sender, EventArgs e)
         {
+            if (_room?.Code != ((RoomInfo)cbbRoom.SelectedItem)?.Code)
+            {
+                txtMessage.Clear();
+            }
+
             _room = cbbRoom.SelectedItem as RoomInfo;
-            txtMessage.Clear();
             GetRoomAllUsers();
         }
 
@@ -272,12 +293,17 @@ namespace TestChatTool.UI.Forms
             txtTalk.Clear();
         }
 
-        private void RoomMaintain()
+        private void RoomMaintain(string btnName)
         {
-            var changePwd = _scope.Resolve<RoomMaintain>();
+            var roomMaintain = _scope.Resolve<RoomMaintain>();
 
-            changePwd.RefreshView();
-            changePwd.ShowDialog();
+            if (btnName != "btnRoomCreate")
+            {
+                roomMaintain.Rooms = _rooms;
+            }
+
+            roomMaintain.SetUpUI(btnName);
+            roomMaintain.ShowDialog();
         }
 
         private void Unlock()
@@ -335,11 +361,21 @@ namespace TestChatTool.UI.Forms
                 if (rooms.Rooms.Any())
                 {
                     // 將聊天室資訊帶入cbb
-                    var items = rooms.Rooms.Select(s => new RoomInfo { Code = s.Code, Name = s.Name }).ToArray();
+                    _rooms = rooms.Rooms.Select(s => new RoomInfo { Code = s.Code, Name = s.Name }).ToArray();
+                    cbbRoom.Items.AddRange(_rooms);
+                }
 
-                    cbbRoom.Items.AddRange(items);
+                // 確認原本聊天室
+                var mapRoom = _rooms.FirstOrDefault(f => f.Code == _room?.Code);
 
-                    cbbRoom.SelectedItem = items.FirstOrDefault(f => f.Code == "HALL");
+                if (mapRoom == default)
+                {
+                    // 不存在則指向大廳
+                    cbbRoom.SelectedItem = _rooms.FirstOrDefault(f => f.Code == "HALL");
+                }
+                else
+                {
+                    cbbRoom.SelectedItem = mapRoom;
                 }
             }
             catch (Exception ex)
@@ -354,16 +390,5 @@ namespace TestChatTool.UI.Forms
         /// </summary>
         /// <param name="text"></param>
         private delegate void SafeCallDelegate(string text);
-
-        private class RoomInfo
-        {
-            public string Code { get; set; }
-            public string Name { get; set; }
-
-            public override string ToString()
-            {
-                return Name;
-            }
-        }
     }
 }

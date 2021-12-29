@@ -5,7 +5,7 @@ using TestChatTool.Domain.Model;
 
 namespace TestChatTool.Service.ActionHandler
 {
-    public class BroadCastLeaveRoomActionHandler : IActionHandler
+    public class SendLeaveRoomActionHandler : IActionHandler
     {
         private ILogger logger = LogManager.GetLogger("ChatToolServer");
 
@@ -13,9 +13,14 @@ namespace TestChatTool.Service.ActionHandler
         {
             try
             {
-                var content = JsonConvert.DeserializeObject<BroadCastLeaveRoomAction>(action.Content);
+                var content = JsonConvert.DeserializeObject<SendLeaveRoomAction>(action.Content);
 
-                return (null, NotifyType.BroadCast, content);
+                return (null, NotifyType.BroadCast, new BroadCastLeaveRoomAction
+                {
+                    RoomCode = content.RoomCode,
+                    Account = content.Account,
+                    NickName = content.NickName,
+                });
             }
             catch (Exception ex)
             {

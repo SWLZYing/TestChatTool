@@ -152,7 +152,7 @@
       <DependentUpon>UserStatusMaintain.cs</DependentUpon>
     </Compile>
     <Compile Include="Handlers\BroadCastChatMessageActionHandler.cs" />
-    <Compile Include="Handlers\BroadCastCheckConnectActionHandler.cs" />
+    <Compile Include="Handlers\BroadCastDeleteChatRoomActionHandler.cs" />
     <Compile Include="Handlers\BroadCastEnterRoomActionHandler.cs" />
     <Compile Include="Handlers\BroadCastLeaveRoomActionHandler.cs" />
     <Compile Include="Forms\Home.cs">
@@ -167,6 +167,7 @@
     <Compile Include="Forms\Register.Designer.cs">
       <DependentUpon>Register.cs</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\BroadCastUpsertChatRoomActionHandler.cs" />
     <Compile Include="Handlers\Interface\IActionHandler.cs" />
     <Compile Include="Helpers\AdminControllerApiHelper.cs" />
     <Compile Include="Helpers\ChatRoomControllerApiHelper.cs" />
@@ -178,6 +179,8 @@
     <Compile Include="Helpers\OnLineUserControllerApiHelper.cs" />
     <Compile Include="Helpers\SignControllerApiHelper.cs" />
     <Compile Include="Helpers\UserControllerApiHelper.cs" />
+    <Compile Include="Models\CallBackEventData.cs" />
+    <Compile Include="Models\RoomInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\HubClient.cs" />

@@ -1,6 +1,6 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NLog;
+using System;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Model;
 using TestChatTool.UI.Events.Interface;
@@ -9,10 +9,7 @@ using TestChatTool.UI.Models;
 
 namespace TestChatTool.UI.Handlers
 {
-    /// <summary>
-    /// 使用者登出通知
-    /// </summary>
-    public class BroadCastLeaveRoomActionHandler : IActionHandler
+    public class BroadCastDeleteChatRoomActionHandler : IActionHandler
     {
         /// <summary>
         /// 紀錄Log
@@ -20,7 +17,7 @@ namespace TestChatTool.UI.Handlers
         private readonly ILogger _logger;
         private readonly ICallBackEventHandler _callBack;
 
-        public BroadCastLeaveRoomActionHandler(ICallBackEventHandler callBack)
+        public BroadCastDeleteChatRoomActionHandler(ICallBackEventHandler callBack)
         {
             _callBack = callBack;
             _logger = LogManager.GetLogger("ChatToolUI");
@@ -30,14 +27,11 @@ namespace TestChatTool.UI.Handlers
         {
             try
             {
-                var content = JsonConvert.DeserializeObject<BroadCastLeaveRoomAction>(actionModule.Content);
+                var content = JsonConvert.DeserializeObject<BroadCastDeleteChatRoomAction>(actionModule.Content);
 
                 _callBack.DoWork(new CallBackEventData
                 {
-                    Action = CallBackActionType.LeaveRoom,
-                    RoomCode = content.RoomCode,
-                    Account = content.Account,
-                    NickName = content.NickName,
+                    Action = CallBackActionType.DeleteChatRoom,
                 });
 
                 return true;

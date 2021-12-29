@@ -1,7 +1,7 @@
 ﻿using System;
 using TestChatTool.Domain.Enum;
 
-namespace TestChatTool.Domain.Model
+namespace TestChatTool.UI.Models
 {
     public class CallBackEventData
     {

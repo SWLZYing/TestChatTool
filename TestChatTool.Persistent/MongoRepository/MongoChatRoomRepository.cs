@@ -81,6 +81,22 @@ namespace TestChatTool.Persistent.MongoRepository
             }
         }
 
+        public (Exception ex, bool isSuccess) Delete(string code)
+        {
+            try
+            {
+                var filter = Builders<ChatRoom>.Filter.Eq(e => e.Code, code);
+
+                var result = _collection.DeleteOne(filter);
+
+                return (null, result.IsAcknowledged);
+            }
+            catch (Exception ex)
+            {
+                return (ex, false);
+            }
+        }
+
         public (Exception ex, IEnumerable<ChatRoom> rooms) GetAll()
         {
             try

@@ -21,5 +21,15 @@
         /// 確認連線
         /// </summary>
         CheckConnect,
+
+        /// <summary>
+        /// 聊天室異動
+        /// </summary>
+        UpsertChatRoom,
+
+        /// <summary>
+        /// 聊天室刪除
+        /// </summary>
+        DeleteChatRoom,
     }
 }

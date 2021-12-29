@@ -5,10 +5,14 @@ using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Model;
 using TestChatTool.UI.Events.Interface;
 using TestChatTool.UI.Handlers.Interface;
+using TestChatTool.UI.Models;
 
 namespace TestChatTool.UI.Handlers
 {
-    public class BroadCastCheckConnectActionHandler : IActionHandler
+    /// <summary>
+    /// 通知聊天室異動
+    /// </summary>
+    public class BroadCastUpsertChatRoomActionHandler : IActionHandler
     {
         /// <summary>
         /// 紀錄Log
@@ -16,7 +20,7 @@ namespace TestChatTool.UI.Handlers
         private readonly ILogger _logger;
         private readonly ICallBackEventHandler _callBack;
 
-        public BroadCastCheckConnectActionHandler(ICallBackEventHandler callBack)
+        public BroadCastUpsertChatRoomActionHandler(ICallBackEventHandler callBack)
         {
             _callBack = callBack;
             _logger = LogManager.GetLogger("ChatToolUI");
@@ -26,11 +30,11 @@ namespace TestChatTool.UI.Handlers
         {
             try
             {
-                var content = JsonConvert.DeserializeObject<BroadCastCheckConnectAction>(actionModule.Content);
+                var content = JsonConvert.DeserializeObject<BroadCastUpsertChatRoomAction>(actionModule.Content);
 
                 _callBack.DoWork(new CallBackEventData
                 {
-                    Action = CallBackActionType.CheckConnect,
+                    Action = CallBackActionType.UpsertChatRoom,
                 });
 
                 return true;

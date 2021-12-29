@@ -3,8 +3,11 @@ using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Microsoft.AspNet.SignalR.Client;
 using NLog;
+using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Model;
+using TestChatTool.UI.Events.Interface;
 using TestChatTool.UI.Handlers.Interface;
+using TestChatTool.UI.Models;
 
 namespace TestChatTool.UI.SignalR
 {
@@ -50,14 +53,21 @@ namespace TestChatTool.UI.SignalR
         /// </summary>
         private IIndex<string, IActionHandler> handlerSets;
 
+        /// <summary>
+        /// CallBackEvent
+        /// </summary>
+        private readonly ICallBackEventHandler callBackEvent;
+
         public HubClient(
             string url,
             string hubName,
-            IIndex<string, IActionHandler> handlerSets)
+            IIndex<string, IActionHandler> handlerSets,
+            ICallBackEventHandler callBackEvent)
         {
             this.url = url;
             this.hubName = hubName;
             this.handlerSets = handlerSets;
+            this.callBackEvent = callBackEvent;
         }
 
         /// <summary>
@@ -144,6 +154,8 @@ namespace TestChatTool.UI.SignalR
         /// <param name="obj"></param>
         private void HubConnection_StateChanged(StateChange obj)
         {
+            // 變更UI狀態
+            callBackEvent.DoWork(new CallBackEventData { Action = CallBackActionType.CheckConnect });
         }
 
         /// <summary>

@@ -206,9 +206,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionHandler\BroadCastEnterRoomActionHandler.cs" />
-    <Compile Include="ActionHandler\BroadCastLeaveRoomActionHandler.cs" />
-    <Compile Include="ActionHandler\BroadCastCheckConnectActionHandler.cs" />
+    <Compile Include="ActionHandler\SendDeleteChatRoomActionHandler.cs" />
+    <Compile Include="ActionHandler\SendEnterRoomActionHandler.cs" />
+    <Compile Include="ActionHandler\SendLeaveRoomActionHandler.cs" />
+    <Compile Include="ActionHandler\CheckConnectActionHandler.cs" />
+    <Compile Include="ActionHandler\SendUpsertChatRoomActionHandler.cs" />
     <Compile Include="ActionHandler\IActionHandler.cs" />
     <Compile Include="ActionHandler\SendChatMessageActionHandler.cs" />
     <Compile Include="AppLibs\AutofacConfig.cs" />

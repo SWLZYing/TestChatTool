@@ -67,6 +67,26 @@ namespace TestChatTool.Persistent.Tests.MongoRepository
         }
 
         [TestMethod]
+        public void delete_room()
+        {
+            Console.WriteLine(_repository.Create(ChatRoom.GenerateInstance("DCCAT", "Cat Room")));
+
+            var result = _repository.Delete("DCCAT");
+
+            Assert.IsNull(result.ex);
+            Assert.IsTrue(result.isSuccess);
+        }
+
+        [TestMethod]
+        public void delete_room_not_exist()
+        {
+            var result = _repository.Delete("DCCAT");
+
+            Assert.IsNull(result.ex);
+            Assert.IsTrue(result.isSuccess);
+        }
+
+        [TestMethod]
         public void get_all_room()
         {
             _repository.Create(ChatRoom.GenerateInstance("DCCAT", "Cat Room"));

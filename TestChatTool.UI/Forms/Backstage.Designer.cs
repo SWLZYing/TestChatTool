@@ -31,7 +31,7 @@ namespace TestChatTool.UI.Forms
         {
             this.btnCreate = new System.Windows.Forms.Button();
             this.btnVerify = new System.Windows.Forms.Button();
-            this.btnRoomMaintain = new System.Windows.Forms.Button();
+            this.btnRoomCreate = new System.Windows.Forms.Button();
             this.btnUnlock = new System.Windows.Forms.Button();
             this.cbbRoom = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -40,6 +40,9 @@ namespace TestChatTool.UI.Forms
             this.txtMessage = new System.Windows.Forms.TextBox();
             this.txtRoomUsers = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnRoomUpdate = new System.Windows.Forms.Button();
+            this.btnRoomDelete = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnCreate
@@ -58,29 +61,29 @@ namespace TestChatTool.UI.Forms
             this.btnVerify.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnVerify.Location = new System.Drawing.Point(10, 10);
             this.btnVerify.Name = "btnVerify";
-            this.btnVerify.Size = new System.Drawing.Size(160, 40);
+            this.btnVerify.Size = new System.Drawing.Size(150, 40);
             this.btnVerify.TabIndex = 11;
             this.btnVerify.Text = "帳號審核";
             this.btnVerify.UseVisualStyleBackColor = true;
             this.btnVerify.Click += new System.EventHandler(this.ButtonClick);
             // 
-            // btnRoomMaintain
+            // btnRoomCreate
             // 
-            this.btnRoomMaintain.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnRoomMaintain.Location = new System.Drawing.Point(340, 10);
-            this.btnRoomMaintain.Name = "btnRoomMaintain";
-            this.btnRoomMaintain.Size = new System.Drawing.Size(160, 40);
-            this.btnRoomMaintain.TabIndex = 12;
-            this.btnRoomMaintain.Text = "聊天室管理";
-            this.btnRoomMaintain.UseVisualStyleBackColor = true;
-            this.btnRoomMaintain.Click += new System.EventHandler(this.ButtonClick);
+            this.btnRoomCreate.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnRoomCreate.Location = new System.Drawing.Point(450, 10);
+            this.btnRoomCreate.Name = "btnRoomCreate";
+            this.btnRoomCreate.Size = new System.Drawing.Size(80, 40);
+            this.btnRoomCreate.TabIndex = 12;
+            this.btnRoomCreate.Text = "新增";
+            this.btnRoomCreate.UseVisualStyleBackColor = true;
+            this.btnRoomCreate.Click += new System.EventHandler(this.ButtonClick);
             // 
             // btnUnlock
             // 
             this.btnUnlock.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnUnlock.Location = new System.Drawing.Point(175, 10);
+            this.btnUnlock.Location = new System.Drawing.Point(165, 10);
             this.btnUnlock.Name = "btnUnlock";
-            this.btnUnlock.Size = new System.Drawing.Size(160, 40);
+            this.btnUnlock.Size = new System.Drawing.Size(150, 40);
             this.btnUnlock.TabIndex = 13;
             this.btnUnlock.Text = "帳號解鎖";
             this.btnUnlock.UseVisualStyleBackColor = true;
@@ -91,7 +94,7 @@ namespace TestChatTool.UI.Forms
             this.cbbRoom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbRoom.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cbbRoom.FormattingEnabled = true;
-            this.cbbRoom.Location = new System.Drawing.Point(510, 10);
+            this.cbbRoom.Location = new System.Drawing.Point(510, 60);
             this.cbbRoom.Name = "cbbRoom";
             this.cbbRoom.Size = new System.Drawing.Size(190, 35);
             this.cbbRoom.TabIndex = 14;
@@ -139,28 +142,63 @@ namespace TestChatTool.UI.Forms
             // txtRoomUsers
             // 
             this.txtRoomUsers.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtRoomUsers.Location = new System.Drawing.Point(510, 96);
+            this.txtRoomUsers.Location = new System.Drawing.Point(510, 145);
             this.txtRoomUsers.Multiline = true;
             this.txtRoomUsers.Name = "txtRoomUsers";
             this.txtRoomUsers.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtRoomUsers.Size = new System.Drawing.Size(190, 284);
+            this.txtRoomUsers.Size = new System.Drawing.Size(190, 235);
             this.txtRoomUsers.TabIndex = 26;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(506, 60);
+            this.label1.Location = new System.Drawing.Point(515, 105);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(175, 33);
             this.label1.TabIndex = 27;
             this.label1.Text = "聊天室會員";
+            // 
+            // btnRoomUpdate
+            // 
+            this.btnRoomUpdate.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnRoomUpdate.Location = new System.Drawing.Point(540, 10);
+            this.btnRoomUpdate.Name = "btnRoomUpdate";
+            this.btnRoomUpdate.Size = new System.Drawing.Size(80, 40);
+            this.btnRoomUpdate.TabIndex = 28;
+            this.btnRoomUpdate.Text = "修改";
+            this.btnRoomUpdate.UseVisualStyleBackColor = true;
+            this.btnRoomUpdate.Click += new System.EventHandler(this.ButtonClick);
+            // 
+            // btnRoomDelete
+            // 
+            this.btnRoomDelete.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnRoomDelete.Location = new System.Drawing.Point(630, 10);
+            this.btnRoomDelete.Name = "btnRoomDelete";
+            this.btnRoomDelete.Size = new System.Drawing.Size(80, 40);
+            this.btnRoomDelete.TabIndex = 29;
+            this.btnRoomDelete.Text = "刪除";
+            this.btnRoomDelete.UseVisualStyleBackColor = true;
+            this.btnRoomDelete.Click += new System.EventHandler(this.ButtonClick);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.Location = new System.Drawing.Point(330, 15);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(111, 33);
+            this.label2.TabIndex = 30;
+            this.label2.Text = "聊天室";
             // 
             // Backstage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(714, 441);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.btnRoomDelete);
+            this.Controls.Add(this.btnRoomUpdate);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtRoomUsers);
             this.Controls.Add(this.label3);
@@ -169,7 +207,7 @@ namespace TestChatTool.UI.Forms
             this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.cbbRoom);
             this.Controls.Add(this.btnUnlock);
-            this.Controls.Add(this.btnRoomMaintain);
+            this.Controls.Add(this.btnRoomCreate);
             this.Controls.Add(this.btnVerify);
             this.Controls.Add(this.btnCreate);
             this.Name = "Backstage";
@@ -183,7 +221,7 @@ namespace TestChatTool.UI.Forms
 
         private System.Windows.Forms.Button btnCreate;
         private System.Windows.Forms.Button btnVerify;
-        private System.Windows.Forms.Button btnRoomMaintain;
+        private System.Windows.Forms.Button btnRoomCreate;
         private System.Windows.Forms.Button btnUnlock;
         private System.Windows.Forms.ComboBox cbbRoom;
         private System.Windows.Forms.Label label3;
@@ -192,5 +230,8 @@ namespace TestChatTool.UI.Forms
         private System.Windows.Forms.TextBox txtMessage;
         private System.Windows.Forms.TextBox txtRoomUsers;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnRoomUpdate;
+        private System.Windows.Forms.Button btnRoomDelete;
+        private System.Windows.Forms.Label label2;
     }
 }

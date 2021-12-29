@@ -190,6 +190,53 @@ namespace TestChatTool.Service.Controllers
             }
         }
 
+        [HttpDelete]
+        public ChatRoomDeleteResponse Delete(string roomCode)
+        {
+            try
+            {
+                if (roomCode.IsNullOrWhiteSpace())
+                {
+                    _logger.Warn($"{nameof(ChatRoomController)}.{nameof(Delete)} 房間代碼必填");
+                    return new ChatRoomDeleteResponse
+                    {
+                        Code = (int)ErrorType.FieldNull,
+                        IsSuccess = false,
+                        ErrorMsg = "房間代碼為必填",
+                    };
+                }
+
+                var result = _chatRoomRepository.Delete(roomCode);
+
+                if (result.ex != null)
+                {
+                    _logger.Error($"{nameof(ChatRoomController)}.{nameof(Delete)} Get Exception");
+                    return new ChatRoomDeleteResponse
+                    {
+                        Code = (int)ErrorType.SystemError,
+                        IsSuccess = false,
+                        ErrorMsg = result.ex.Message,
+                    };
+                }
+
+                return new ChatRoomDeleteResponse
+                {
+                    Code = (int)ErrorType.Success,
+                    IsSuccess = result.isSuccess,
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"{nameof(ChatRoomController)}.{nameof(Delete)} Get Exception");
+                return new ChatRoomDeleteResponse
+                {
+                    Code = (int)ErrorType.SystemError,
+                    IsSuccess = false,
+                    ErrorMsg = ex.Message,
+                };
+            }
+        }
+
         [HttpGet]
         public ChatRoomGetAllResponse GetAll()
         {

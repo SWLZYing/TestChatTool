@@ -6,12 +6,12 @@ using TestChatTool.Domain.Repository;
 
 namespace TestChatTool.Service.ActionHandler
 {
-    public class BroadCastCheckConnectActionHandler : IActionHandler
+    public class CheckConnectActionHandler : IActionHandler
     {
         private readonly ILogger _logger;
         private readonly IOnLineUserRepository _onLineUserRepository;
 
-        public BroadCastCheckConnectActionHandler(IOnLineUserRepository onLineUserRepository)
+        public CheckConnectActionHandler(IOnLineUserRepository onLineUserRepository)
         {
             _onLineUserRepository = onLineUserRepository;
             _logger = LogManager.GetLogger("ChatToolServer");
@@ -21,7 +21,7 @@ namespace TestChatTool.Service.ActionHandler
         {
             try
             {
-                var content = JsonConvert.DeserializeObject<BroadCastCheckConnectAction>(action.Content);
+                var content = JsonConvert.DeserializeObject<CheckConnectAction>(action.Content);
 
                 _onLineUserRepository.Upsert(new OnLineUser
                 {
@@ -30,7 +30,7 @@ namespace TestChatTool.Service.ActionHandler
                     RoomCode = string.Empty,
                 });
 
-                return (null, NotifyType.Single, content);
+                return (null, NotifyType.None, null);
             }
             catch (Exception ex)
             {

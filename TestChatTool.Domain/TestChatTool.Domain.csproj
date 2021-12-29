@@ -133,10 +133,11 @@
     <Compile Include="Model\ActionBase.cs" />
     <Compile Include="Model\ActionModule.cs" />
     <Compile Include="Model\BroadCastChatMessageAction.cs" />
-    <Compile Include="Model\BroadCastCheckConnectAction.cs" />
+    <Compile Include="Model\CheckConnectAction.cs" />
+    <Compile Include="Model\BroadCastDeleteChatRoomAction.cs" />
     <Compile Include="Model\BroadCastEnterRoomAction.cs" />
     <Compile Include="Model\BroadCastLeaveRoomAction.cs" />
-    <Compile Include="Model\CallBackEventData.cs" />
+    <Compile Include="Model\BroadCastUpsertChatRoomAction.cs" />
     <Compile Include="Model\SendChatMessageAction.cs" />
     <Compile Include="Enum\AdminType.cs" />
     <Compile Include="Enum\ErrorType.cs" />
@@ -146,6 +147,10 @@
     <Compile Include="Model\Admin.cs" />
     <Compile Include="Model\ChatRoom.cs" />
     <Compile Include="Model\OnLineUser.cs" />
+    <Compile Include="Model\SendDeleteChatRoomAction.cs" />
+    <Compile Include="Model\SendEnterRoomAction.cs" />
+    <Compile Include="Model\SendLeaveRoomAction.cs" />
+    <Compile Include="Model\SendUpsertChatRoomAction.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\IAdminRepository.cs" />
@@ -157,6 +162,7 @@
     <Compile Include="Response\AdminSignInResponse.cs" />
     <Compile Include="Response\BasicResponse.cs" />
     <Compile Include="Response\ChatRoomCreateResponse.cs" />
+    <Compile Include="Response\ChatRoomDeleteResponse.cs" />
     <Compile Include="Response\ChatRoomGetAllResponse.cs" />
     <Compile Include="Response\ChatRoomQueryResponse.cs" />
     <Compile Include="Response\ChatRoomUpdateResponse.cs" />

@@ -1,14 +1,14 @@
 ﻿namespace TestChatTool.Domain.Model
 {
-    public class BroadCastCheckConnectAction : ActionBase
+    public class SendLeaveRoomAction : ActionBase
     {
         public override string Action()
-            => "BroadCastCheckConnect";
+            => "SendLeaveRoom";
 
         /// <summary>
-        /// 身分
+        /// 聊天室代碼
         /// </summary>
-        public bool IsAdmin { get; set; }
+        public string RoomCode { get; set; }
 
         /// <summary>
         /// 帳號
@@ -16,7 +16,7 @@
         public string Account { get; set; }
 
         /// <summary>
-        /// 暱稱
+        /// 被登出暱稱
         /// </summary>
         public string NickName { get; set; }
     }
