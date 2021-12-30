@@ -25,8 +25,6 @@ namespace TestChatTool.UI.Forms
         private RoomInfo _room;
         private RoomInfo[] _rooms;
 
-        public User User => _user;
-
         public Room(
             IUserControllerApiHelper userControllerApi,
             IOnLineUserControllerApiHelper onLineUserControllerApi,

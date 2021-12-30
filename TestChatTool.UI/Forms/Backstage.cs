@@ -27,8 +27,6 @@ namespace TestChatTool.UI.Forms
         private RoomInfo _room;
         private RoomInfo[] _rooms;
 
-        public Admin Admin => _admin;
-
         public Backstage(
             IOnLineUserControllerApiHelper onLineUserControllerApi,
             IChatRoomControllerApiHelper chatRoomControllerApi,
