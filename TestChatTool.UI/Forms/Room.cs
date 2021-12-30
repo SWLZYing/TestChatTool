@@ -168,6 +168,15 @@ namespace TestChatTool.UI.Forms
             EnterRoom();
         }
 
+        private void RoomFormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_hubClient.State == ConnectionState.Connected)
+            {
+                LeaveRoom();
+                UserOnLineUpsert(true);
+            }
+        }
+
         /// <summary>
         /// 更新人員在線狀態
         /// </summary>
@@ -349,11 +358,5 @@ namespace TestChatTool.UI.Forms
         /// </summary>
         /// <param name="text"></param>
         private delegate void SafeCallDelegate(string text);
-
-        private void Room_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            LeaveRoom();
-            UserOnLineUpsert(true);
-        }
     }
 }

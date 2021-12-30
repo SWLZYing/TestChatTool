@@ -158,7 +158,7 @@ namespace TestChatTool.UI.Forms
             this.Controls.Add(this.label2);
             this.Name = "Room";
             this.Text = "聊天室";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Room_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RoomFormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
