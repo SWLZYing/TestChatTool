@@ -23,12 +23,18 @@ namespace TestChatTool.Service.ActionHandler
             {
                 var content = JsonConvert.DeserializeObject<CheckConnectAction>(action.Content);
 
-                _onLineUserRepository.Upsert(new OnLineUser
+                var upsert = _onLineUserRepository.Upsert(new OnLineUser
                 {
                     Account = content.Account,
                     NickName = content.NickName,
-                    RoomCode = string.Empty,
+                    RoomCode = content.RoomCode,
                 });
+
+                if (upsert.ex != null)
+                {
+                    _logger.Error(upsert.ex, $"{GetType().Name} Upsert Exception");
+                    return (upsert.ex, NotifyType.None, null);
+                }
 
                 return (null, NotifyType.None, null);
             }

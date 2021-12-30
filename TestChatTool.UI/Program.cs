@@ -19,34 +19,31 @@ namespace TestChatTool.UI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            // 設定基本連線數
             ServicePointManager.DefaultConnectionLimit = 50;
 
             using (var scope = AutofacConfig.Container.BeginLifetimeScope())
             {
+                // 啟動長連結
                 var hubClient = scope.Resolve<IHubClient>();
                 hubClient.StartAsync();
 
                 var home = scope.Resolve<Home>();
-                home.Scope = scope;
 
                 if (home.ShowDialog() == DialogResult.OK)
                 {
                     if (home.IsAdmin)
                     {
-                        CheckConnectServer.ServerStart(home.IsAdmin, home.Admin.Account);
-
                         var backstage = scope.Resolve<Backstage>();
-
-                        backstage.Scope = scope;
-                        backstage.SetUpUI(home.Admin); // 層級為Normal 不顯示創建按鍵
+                        backstage.SetUpUI(home.Admin);
                         backstage.ShowDialog();
                     }
                     else
                     {
-                        CheckConnectServer.ServerStart(home.IsAdmin, home.User.Account, home.User.NickName);
+                        // 使用者登入成功啟動HC
+                        CheckConnectServer.ServerStart();
 
                         var room = scope.Resolve<Room>();
-
                         room.SetUpUI(home.User);
                         room.ShowDialog();
                     }

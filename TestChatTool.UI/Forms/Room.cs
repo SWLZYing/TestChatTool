@@ -199,6 +199,14 @@ namespace TestChatTool.UI.Forms
             if (_hubClient.State == ConnectionState.Connected)
             {
                 btnSend.Enabled = true;
+
+                // 連線中更新會員在線狀態
+                _hubClient.SendAction(new CheckConnectAction
+                {
+                    Account = _user.Account,
+                    NickName = _user.NickName,
+                    RoomCode = _room.Code,
+                });
             }
             else
             {

@@ -1,14 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using TestChatTool.UI.Handlers;
 using Moq;
+using Newtonsoft.Json;
 using TestChatTool.Domain.Model;
 using TestChatTool.UI.Events.Interface;
+using TestChatTool.UI.Handlers;
 
 namespace TestChatTool.UI.Tests.ActionHandlerTests
 {
     [TestClass]
-    public class BroadCastLeaveRoomActionHandlerTest
+    public class BroadCastEnterRoomActionHandlerTests
     {
         private Mock<ICallBackEventHandler> _callBackEvent;
 
@@ -19,14 +19,15 @@ namespace TestChatTool.UI.Tests.ActionHandlerTests
         }
 
         [TestMethod]
-        public void 使用者移除單元測試()
+        public void user_enter_room()
         {
-            var handler = new BroadCastLeaveRoomActionHandler(_callBackEvent.Object);
+            var handler = new BroadCastEnterRoomActionHandler(_callBackEvent.Object);
             var result = handler.Execute(new ActionModule()
             {
-                Content = JsonConvert.SerializeObject(new BroadCastLeaveRoomAction()
+                Content = JsonConvert.SerializeObject(new BroadCastEnterRoomAction()
                 {
-                    NickName = "TEST001"
+                    NickName = "TEST001",
+                    RoomCode = "HALL",
                 })
             });
 

@@ -1,5 +1,4 @@
-﻿using Autofac;
-using Microsoft.AspNet.SignalR.Client;
+﻿using Microsoft.AspNet.SignalR.Client;
 using NLog;
 using System;
 using System.Linq;
@@ -21,8 +20,10 @@ namespace TestChatTool.UI.Forms
         private readonly IChatRoomControllerApiHelper _chatRoomControllerApi;
         private readonly ICallBackEventHandler _callBackEvent;
         private readonly IHubClient _hubClient;
+        private readonly Register _register;
+        private readonly RoomMaintain _roomMaintain;
+        private readonly UserStatusMaintain _userMaintain;
         private readonly ILogger _logger;
-        private ILifetimeScope _scope;
         private Admin _admin;
         private RoomInfo _room;
         private RoomInfo[] _rooms;
@@ -34,7 +35,10 @@ namespace TestChatTool.UI.Forms
             IOnLineUserControllerApiHelper onLineUserControllerApi,
             IChatRoomControllerApiHelper chatRoomControllerApi,
             ICallBackEventHandler callBackEvent,
-            IHubClient hubClient)
+            IHubClient hubClient,
+            Register register,
+            RoomMaintain roomMaintain,
+            UserStatusMaintain userMaintain)
         {
             InitializeComponent();
             MaximizeBox = false;
@@ -44,17 +48,12 @@ namespace TestChatTool.UI.Forms
             _chatRoomControllerApi = chatRoomControllerApi;
             _callBackEvent = callBackEvent;
             _hubClient = hubClient;
+            _register = register;
+            _roomMaintain = roomMaintain;
+            _userMaintain = userMaintain;
             _logger = LogManager.GetLogger("UIBackstage");
 
             _callBackEvent.Add(CallBackEvent);
-        }
-
-        public ILifetimeScope Scope
-        {
-            set
-            {
-                _scope = value;
-            }
         }
 
         /// <summary>
@@ -268,10 +267,8 @@ namespace TestChatTool.UI.Forms
 
         private void CreateAdmin()
         {
-            var register = _scope.Resolve<Register>();
-
-            register.RefreshView(false);
-            register.ShowDialog();
+            _register.RefreshView(false);
+            _register.ShowDialog();
         }
 
         private void Send()
@@ -295,15 +292,13 @@ namespace TestChatTool.UI.Forms
 
         private void RoomMaintain(string btnName)
         {
-            var roomMaintain = _scope.Resolve<RoomMaintain>();
-
             if (btnName != "btnRoomCreate")
             {
-                roomMaintain.Rooms = _rooms;
+                _roomMaintain.Rooms = _rooms;
             }
 
-            roomMaintain.SetUpUI(btnName);
-            roomMaintain.ShowDialog();
+            _roomMaintain.SetUpUI(btnName);
+            _roomMaintain.ShowDialog();
         }
 
         private void Unlock()
@@ -317,12 +312,10 @@ namespace TestChatTool.UI.Forms
             }
 
             // 將需審核帳號帶入
-            var userMaintain = _scope.Resolve<UserStatusMaintain>();
-
-            userMaintain.Accs = users.Users.Select(s => s.Account);
-            userMaintain.SetAccs();
-            userMaintain.SetUpUI(false);
-            userMaintain.ShowDialog();
+            _userMaintain.Accs = users.Users.Select(s => s.Account);
+            _userMaintain.SetAccs();
+            _userMaintain.SetUpUI(false);
+            _userMaintain.ShowDialog();
         }
 
         private void Verify()
@@ -336,12 +329,10 @@ namespace TestChatTool.UI.Forms
             }
 
             // 將需審核帳號帶入
-            var userMaintain = _scope.Resolve<UserStatusMaintain>();
-
-            userMaintain.Accs = users.Users.Select(s => s.Account);
-            userMaintain.SetAccs();
-            userMaintain.SetUpUI(true);
-            userMaintain.ShowDialog();
+            _userMaintain.Accs = users.Users.Select(s => s.Account);
+            _userMaintain.SetAccs();
+            _userMaintain.SetUpUI(true);
+            _userMaintain.ShowDialog();
         }
 
         private void GetAllRoom()

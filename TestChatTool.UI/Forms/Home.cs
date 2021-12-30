@@ -1,5 +1,4 @@
-﻿using Autofac;
-using NLog;
+﻿using NLog;
 using System;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
@@ -13,8 +12,9 @@ namespace TestChatTool.UI.Forms
     {
         private readonly ISignControllerApiHelper _signControllerApi;
         private readonly IUserControllerApiHelper _userControllerApi;
+        private readonly ChangePwd _changePwd;
+        private readonly Register _register;
         private readonly ILogger _logger;
-        private ILifetimeScope _scope;
 
         /// <summary>
         /// 是否為管理者登入
@@ -25,24 +25,20 @@ namespace TestChatTool.UI.Forms
 
         public Home(
             ISignControllerApiHelper signControllerApi,
-            IUserControllerApiHelper userControllerApi)
+            IUserControllerApiHelper userControllerApi,
+            ChangePwd changePwd,
+            Register register)
         {
             InitializeComponent();
             MaximizeBox = false;
 
             _signControllerApi = signControllerApi;
             _userControllerApi = userControllerApi;
+            _changePwd = changePwd;
+            _register = register;
             _logger = LogManager.GetLogger("UIHome");
 
             SetAuthType();
-        }
-
-        public ILifetimeScope Scope
-        {
-            set
-            {
-                _scope = value;
-            }
         }
 
         private void ButtonClick(object sender, EventArgs e)
@@ -76,18 +72,14 @@ namespace TestChatTool.UI.Forms
 
         private void ChangePwd()
         {
-            var changePwd = _scope.Resolve<ChangePwd>();
-
-            changePwd.RefreshView();
-            changePwd.ShowDialog();
+            _changePwd.RefreshView();
+            _changePwd.ShowDialog();
         }
 
         private void Register()
         {
-            var register = _scope.Resolve<Register>();
-
-            register.RefreshView(true);
-            register.ShowDialog();
+            _register.RefreshView(true);
+            _register.ShowDialog();
         }
 
         private void SignIn()
@@ -135,11 +127,9 @@ namespace TestChatTool.UI.Forms
                 // 解鎖後 需變更密碼重啟
                 if (user.User.Status == UserStatusType.Unlock)
                 {
-                    var changePwd = _scope.Resolve<ChangePwd>();
+                    _changePwd.RefreshView();
 
-                    changePwd.RefreshView();
-
-                    if (changePwd.ShowDialog() == DialogResult.OK)
+                    if (_changePwd.ShowDialog() == DialogResult.OK)
                     {
                         var userStatus = _userControllerApi.SetErrCountAndStatus(
                             user.User.Account,

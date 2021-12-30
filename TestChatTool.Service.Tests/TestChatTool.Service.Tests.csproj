@@ -107,7 +107,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionHandler\CheckConnectActionHandlerTests.cs" />
     <Compile Include="ActionHandler\SendChatMessageActionHandlerTests.cs" />
+    <Compile Include="ActionHandler\SendDeleteChatRoomActionHandlerTests.cs" />
+    <Compile Include="ActionHandler\SendEnterRoomActionHandlerTests.cs" />
+    <Compile Include="ActionHandler\SendLeaveRoomActionHandlerTests.cs" />
+    <Compile Include="ActionHandler\SendUpsertChatRoomActionHandlerTests.cs" />
     <Compile Include="Controllers\AdminControllerTests.cs" />
     <Compile Include="Controllers\ChatRoomControllerTests.cs" />
     <Compile Include="Controllers\OnLineUserControllerTests.cs" />

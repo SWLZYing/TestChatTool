@@ -6,11 +6,6 @@
             => "CheckConnect";
 
         /// <summary>
-        /// 身分
-        /// </summary>
-        public bool IsAdmin { get; set; }
-
-        /// <summary>
         /// 帳號
         /// </summary>
         public string Account { get; set; }
@@ -19,5 +14,10 @@
         /// 暱稱
         /// </summary>
         public string NickName { get; set; }
+
+        /// <summary>
+        /// 聊天室代碼
+        /// </summary>
+        public string RoomCode { get; set; }
     }
 }

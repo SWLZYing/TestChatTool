@@ -8,7 +8,7 @@ using TestChatTool.UI.Handlers;
 namespace TestChatTool.UI.Tests.ActionHandlerTests
 {
     [TestClass]
-    public class BroadCastEnterRoomActionHandlerTest
+    public class BroadCastDeleteChatRoomActionHandlerTests
     {
         private Mock<ICallBackEventHandler> _callBackEvent;
 
@@ -19,16 +19,13 @@ namespace TestChatTool.UI.Tests.ActionHandlerTests
         }
 
         [TestMethod]
-        public void user_leave_room()
+        public void room_delete_broad_cast()
         {
-            var handler = new BroadCastEnterRoomActionHandler(_callBackEvent.Object);
+            var handler = new BroadCastDeleteChatRoomActionHandler(_callBackEvent.Object);
             var result = handler.Execute(new ActionModule()
             {
-                Content = JsonConvert.SerializeObject(new BroadCastEnterRoomAction()
-                {
-                    NickName = "TEST001",
-                    RoomCode = "HALL",
-                })
+                Action = "TEST_TEST",
+                Content = JsonConvert.SerializeObject(new BroadCastDeleteChatRoomAction())
             });
 
             Assert.IsTrue(result);
