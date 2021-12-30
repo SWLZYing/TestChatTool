@@ -9,6 +9,7 @@ using TestChatTool.UI.Handlers.Interface;
 using TestChatTool.UI.Helpers;
 using TestChatTool.UI.Helpers.Interface;
 using TestChatTool.UI.SignalR;
+using TestChatTool.UI.SignalR.Interface;
 
 namespace TestChatTool.UI.Applibs
 {

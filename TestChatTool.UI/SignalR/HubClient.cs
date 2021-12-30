@@ -8,6 +8,7 @@ using TestChatTool.Domain.Model;
 using TestChatTool.UI.Events.Interface;
 using TestChatTool.UI.Handlers.Interface;
 using TestChatTool.UI.Models;
+using TestChatTool.UI.SignalR.Interface;
 
 namespace TestChatTool.UI.SignalR
 {

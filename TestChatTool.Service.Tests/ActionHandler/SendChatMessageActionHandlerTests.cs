@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using TestChatTool.Domain.Model;
 using TestChatTool.Service.ActionHandler;
+using TestChatTool.Service.Enums;
 
 namespace TestChatTool.Service.Tests.ActionHandler
 {

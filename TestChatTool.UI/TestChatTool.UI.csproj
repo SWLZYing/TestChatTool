@@ -117,7 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Applibs\AutofacConfig.cs" />
-    <Compile Include="Applibs\CheckConnectServer.cs" />
+    <Compile Include="BackgroundServers\CheckConnectServer.cs" />
     <Compile Include="Applibs\ConfigHelper.cs" />
     <Compile Include="Events\CallBackEventHandler.cs" />
     <Compile Include="Events\Interface\ICallBackEventHandler.cs" />
@@ -184,7 +184,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\HubClient.cs" />
-    <Compile Include="SignalR\IHubClient.cs" />
+    <Compile Include="SignalR\Interface\IHubClient.cs" />
     <EmbeddedResource Include="Forms\Backstage.resx">
       <DependentUpon>Backstage.cs</DependentUpon>
     </EmbeddedResource>

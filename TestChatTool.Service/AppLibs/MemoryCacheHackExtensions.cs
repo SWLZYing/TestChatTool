@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.Caching;
 
-namespace TestChatTool.Service.AppLibs
+namespace TestChatTool.Service.Applibs
 {
     public static class MemoryCacheHackExtensions
     {

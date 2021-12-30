@@ -2,7 +2,7 @@
 using Microsoft.AspNet.SignalR.Client;
 using TestChatTool.Domain.Model;
 
-namespace TestChatTool.UI.SignalR
+namespace TestChatTool.UI.SignalR.Interface
 {
     /// <summary>
     /// hubclient 介面

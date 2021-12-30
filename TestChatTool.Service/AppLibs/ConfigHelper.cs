@@ -1,4 +1,4 @@
-﻿namespace TestChatTool.Service.AppLibs
+﻿namespace TestChatTool.Service.Applibs
 {
     internal static class ConfigHelper
     {

@@ -6,8 +6,9 @@ using NLog;
 using System;
 using System.Threading.Tasks;
 using TestChatTool.Domain.Model;
-using TestChatTool.Service.ActionHandler;
-using TestChatTool.Service.AppLibs;
+using TestChatTool.Service.ActionHandler.Interface;
+using TestChatTool.Service.Applibs;
+using TestChatTool.Service.Enums;
 
 namespace TestChatTool.Service.Hubs
 {

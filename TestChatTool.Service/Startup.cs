@@ -4,7 +4,7 @@ using Microsoft.Owin.Cors;
 using Owin;
 using System.Web.Http;
 using TestChatTool.Service;
-using TestChatTool.Service.AppLibs;
+using TestChatTool.Service.Applibs;
 
 [assembly: Microsoft.Owin.OwinStartup(typeof(Startup))]
 

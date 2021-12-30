@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using TestChatTool.Domain.Model;
 using TestChatTool.Domain.Repository;
 
-namespace TestChatTool.Service.AppLibs
+namespace TestChatTool.Service.Applibs
 {
     internal static class ChatToolServer
     {

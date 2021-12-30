@@ -1,6 +1,6 @@
 ﻿using TestChatTool.Domain.Model;
 
-namespace TestChatTool.Service.Hubs
+namespace TestChatTool.Service.Hubs.Interface
 {
     /// <summary>
     /// hubclient 介面

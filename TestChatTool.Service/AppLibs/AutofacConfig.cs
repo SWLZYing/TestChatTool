@@ -4,10 +4,11 @@ using MongoDB.Driver;
 using System.Reflection;
 using TestChatTool.Domain.Repository;
 using TestChatTool.Persistent.MongoRepository;
-using TestChatTool.Service.ActionHandler;
+using TestChatTool.Service.ActionHandler.Interface;
 using TestChatTool.Service.Hubs;
+using TestChatTool.Service.Hubs.Interface;
 
-namespace TestChatTool.Service.AppLibs
+namespace TestChatTool.Service.Applibs
 {
     internal static class AutofacConfig
     {

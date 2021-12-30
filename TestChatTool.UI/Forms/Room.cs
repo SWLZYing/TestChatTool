@@ -9,7 +9,7 @@ using TestChatTool.Domain.Model;
 using TestChatTool.UI.Events.Interface;
 using TestChatTool.UI.Helpers.Interface;
 using TestChatTool.UI.Models;
-using TestChatTool.UI.SignalR;
+using TestChatTool.UI.SignalR.Interface;
 
 namespace TestChatTool.UI.Forms
 {

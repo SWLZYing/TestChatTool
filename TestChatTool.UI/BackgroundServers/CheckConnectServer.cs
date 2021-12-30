@@ -3,10 +3,11 @@ using NLog;
 using System.Threading;
 using System.Threading.Tasks;
 using TestChatTool.Domain.Enum;
+using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Events.Interface;
 using TestChatTool.UI.Models;
 
-namespace TestChatTool.UI.Applibs
+namespace TestChatTool.UI.BackgroundServers
 {
     internal static class CheckConnectServer
     {

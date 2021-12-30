@@ -1,15 +1,9 @@
 ﻿using System;
 using TestChatTool.Domain.Model;
+using TestChatTool.Service.Enums;
 
-namespace TestChatTool.Service.ActionHandler
+namespace TestChatTool.Service.ActionHandler.Interface
 {
-    public enum NotifyType
-    {
-        None,
-        Single,
-        BroadCast
-    }
-
     /// <summary>
     /// Action 處理介面
     /// </summary>

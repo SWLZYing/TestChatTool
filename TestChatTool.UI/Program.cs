@@ -3,8 +3,9 @@ using System;
 using System.Net;
 using System.Windows.Forms;
 using TestChatTool.UI.Applibs;
+using TestChatTool.UI.BackgroundServers;
 using TestChatTool.UI.Forms;
-using TestChatTool.UI.SignalR;
+using TestChatTool.UI.SignalR.Interface;
 
 namespace TestChatTool.UI
 {

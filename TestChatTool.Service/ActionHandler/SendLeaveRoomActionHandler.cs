@@ -2,6 +2,8 @@
 using NLog;
 using System;
 using TestChatTool.Domain.Model;
+using TestChatTool.Service.ActionHandler.Interface;
+using TestChatTool.Service.Enums;
 
 namespace TestChatTool.Service.ActionHandler
 {

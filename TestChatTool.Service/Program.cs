@@ -1,7 +1,7 @@
 ﻿using Microsoft.Owin.Hosting;
 using System;
 using System.Runtime.InteropServices;
-using TestChatTool.Service.AppLibs;
+using TestChatTool.Service.Applibs;
 
 namespace TestChatTool.Service
 {

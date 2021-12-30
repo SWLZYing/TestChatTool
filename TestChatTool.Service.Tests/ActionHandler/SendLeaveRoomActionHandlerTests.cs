@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using TestChatTool.Domain.Model;
 using TestChatTool.Service.ActionHandler;
+using TestChatTool.Service.Enums;
 
 namespace TestChatTool.Service.Tests.ActionHandler
 {

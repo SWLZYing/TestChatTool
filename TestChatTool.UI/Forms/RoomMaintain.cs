@@ -7,7 +7,7 @@ using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Model;
 using TestChatTool.UI.Helpers.Interface;
 using TestChatTool.UI.Models;
-using TestChatTool.UI.SignalR;
+using TestChatTool.UI.SignalR.Interface;
 
 namespace TestChatTool.UI.Forms
 {

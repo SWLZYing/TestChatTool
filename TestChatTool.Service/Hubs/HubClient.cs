@@ -4,6 +4,7 @@ using Microsoft.AspNet.SignalR;
 using Newtonsoft.Json;
 using NLog;
 using TestChatTool.Domain.Model;
+using TestChatTool.Service.Hubs.Interface;
 
 namespace TestChatTool.Service.Hubs
 {
