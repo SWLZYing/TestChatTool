@@ -142,14 +142,11 @@ namespace TestChatTool.UI.Forms
         private void SetAdminType()
         {
             cbbAdminType.Items.Clear();
-            cbbAdminType.Items.Add("請選擇");
 
             foreach (var type in Enum.GetValues(typeof(AdminType)))
             {
                 cbbAdminType.Items.Add(type);
             }
-
-            cbbAdminType.SelectedIndex = default;
         }
     }
 }

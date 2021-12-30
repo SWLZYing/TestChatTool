@@ -1,37 +1,37 @@
 ﻿using Newtonsoft.Json;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Response;
-using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Helpers.Interface;
 
 namespace TestChatTool.UI.Helpers
 {
     public class SignControllerApiHelper : ISignControllerApiHelper
     {
+        private readonly string _serviceUrl;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger _logger;
-        private readonly string _serviceUrl;
 
-        public SignControllerApiHelper(IHttpClientFactory httpClientFactory)
+        public SignControllerApiHelper(
+            string serviceUrl,
+            IHttpClientFactory httpClientFactory)
         {
+            _serviceUrl = serviceUrl;
             _httpClientFactory = httpClientFactory;
             _logger = LogManager.GetLogger("ChatToolUI");
-            _serviceUrl = ConfigHelper.ServiceUrl;
         }
 
         public AdminSignInResponse AdminSignIn(string account, string password)
         {
             try
             {
-                var parameters = new Dictionary<string, object>
+                var parameters = new
                 {
-                    { "Account", account },
-                    { "Password", password },
+                    Account = account,
+                    Password = password,
                 };
                 var client = _httpClientFactory.CreateClient();
                 client.BaseAddress = new Uri(_serviceUrl);
@@ -70,10 +70,10 @@ namespace TestChatTool.UI.Helpers
         {
             try
             {
-                var parameters = new Dictionary<string, object>
+                var parameters = new
                 {
-                    { "Account", account },
-                    { "Password", password },
+                    Account = account,
+                    Password = password,
                 };
 
                 var client = _httpClientFactory.CreateClient();

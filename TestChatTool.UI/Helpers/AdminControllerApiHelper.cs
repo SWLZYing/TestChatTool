@@ -1,38 +1,38 @@
 ﻿using Newtonsoft.Json;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Response;
-using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Helpers.Interface;
 
 namespace TestChatTool.UI.Helpers
 {
     public class AdminControllerApiHelper : IAdminControllerApiHelper
     {
+        private readonly string _serviceUrl;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger _logger;
-        private readonly string _serviceUrl;
 
-        public AdminControllerApiHelper(IHttpClientFactory httpClientFactory)
+        public AdminControllerApiHelper(
+            string serviceUrl,
+            IHttpClientFactory httpClientFactory)
         {
+            _serviceUrl = serviceUrl;
             _httpClientFactory = httpClientFactory;
             _logger = LogManager.GetLogger("ChatToolUI");
-            _serviceUrl = ConfigHelper.ServiceUrl;
         }
 
         public AdminCreateResponse Create(string account, string password, AdminType adminType)
         {
             try
             {
-                var parameters = new Dictionary<string, object>
+                var parameters = new
                 {
-                    { "Account", account },
-                    { "Password", password },
-                    { "AccountType", (int)adminType },
+                    Account = account,
+                    Password = password,
+                    AccountType = adminType,
                 };
 
                 var client = _httpClientFactory.CreateClient();

@@ -1,38 +1,38 @@
 ﻿using Newtonsoft.Json;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Response;
-using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Helpers.Interface;
 
 namespace TestChatTool.UI.Helpers
 {
     public class UserControllerApiHelper : IUserControllerApiHelper
     {
+        private readonly string _serviceUrl;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger _logger;
-        private readonly string _serviceUrl;
 
-        public UserControllerApiHelper(IHttpClientFactory httpClientFactory)
+        public UserControllerApiHelper(
+            string serviceUrl,
+            IHttpClientFactory httpClientFactory)
         {
+            _serviceUrl = serviceUrl;
             _httpClientFactory = httpClientFactory;
             _logger = LogManager.GetLogger("ChatToolUI");
-            _serviceUrl = ConfigHelper.ServiceUrl;
         }
 
         public UserCreateResponse Create(string account, string password, string nickName)
         {
             try
             {
-                var parameters = new Dictionary<string, object>
+                var parameters = new
                 {
-                    { "Account", account },
-                    { "Password", password },
-                    { "NickName", nickName },
+                    Account = account,
+                    Password = password,
+                    NickName = nickName,
                 };
 
                 var client = _httpClientFactory.CreateClient();
@@ -72,10 +72,10 @@ namespace TestChatTool.UI.Helpers
         {
             try
             {
-                var parameters = new Dictionary<string, object>
+                var parameters = new
                 {
-                    { "Account", account },
-                    { "NickName", nickName },
+                    Account = account,
+                    NickName = nickName,
                 };
 
                 var client = _httpClientFactory.CreateClient();
@@ -115,11 +115,11 @@ namespace TestChatTool.UI.Helpers
         {
             try
             {
-                var parameters = new Dictionary<string, object>
+                var parameters = new
                 {
-                    { "Account", account },
-                    { "OldPassWord", oldPassword },
-                    { "NewPassWord", newPassword },
+                    Account = account,
+                    OldPassWord = oldPassword,
+                    NewPassWord = newPassword,
                 };
 
                 var client = _httpClientFactory.CreateClient();
@@ -159,11 +159,11 @@ namespace TestChatTool.UI.Helpers
         {
             try
             {
-                var parameters = new Dictionary<string, object>
+                var parameters = new
                 {
-                    { "Account", account },
-                    { "ErrorCount", errorCount },
-                    { "Status", (int)userStatus },
+                    Account = account,
+                    ErrorCount = errorCount,
+                    Status = userStatus,
                 };
 
                 var client = _httpClientFactory.CreateClient();

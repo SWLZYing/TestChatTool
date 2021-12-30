@@ -1,38 +1,38 @@
 ﻿using Newtonsoft.Json;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using TestChatTool.Domain.Enum;
 using TestChatTool.Domain.Response;
-using TestChatTool.UI.Applibs;
 using TestChatTool.UI.Helpers.Interface;
 
 namespace TestChatTool.UI.Helpers
 {
     public class OnLineUserControllerApiHelper : IOnLineUserControllerApiHelper
     {
+        private readonly string _serviceUrl;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger _logger;
-        private readonly string _serviceUrl;
 
-        public OnLineUserControllerApiHelper(IHttpClientFactory httpClientFactory)
+        public OnLineUserControllerApiHelper(
+            string serviceUrl,
+            IHttpClientFactory httpClientFactory)
         {
+            _serviceUrl = serviceUrl;
             _httpClientFactory = httpClientFactory;
             _logger = LogManager.GetLogger("ChatToolUI");
-            _serviceUrl = ConfigHelper.ServiceUrl;
         }
 
         public OnLineUserUpsertResponse Upsert(string account, string nickName, string roomCode)
         {
             try
             {
-                var parameters = new Dictionary<string, object>
+                var parameters = new
                 {
-                    { "Account", account },
-                    { "NickName", nickName },
-                    { "RoomCode", roomCode },
+                    Account = account,
+                    NickName = nickName,
+                    RoomCode = roomCode,
                 };
 
                 var client = _httpClientFactory.CreateClient();

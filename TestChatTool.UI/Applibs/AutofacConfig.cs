@@ -68,22 +68,27 @@ namespace TestChatTool.UI.Applibs
 
             // 註冊短連結物件 ApiHelper
             builder.RegisterType<AdminControllerApiHelper>()
+                .WithParameter("serviceUrl", ConfigHelper.ServiceUrl)
                 .As<IAdminControllerApiHelper>()
                 .SingleInstance();
 
             builder.RegisterType<SignControllerApiHelper>()
+                .WithParameter("serviceUrl", ConfigHelper.ServiceUrl)
                 .As<ISignControllerApiHelper>()
                 .SingleInstance();
 
             builder.RegisterType<UserControllerApiHelper>()
+                .WithParameter("serviceUrl", ConfigHelper.ServiceUrl)
                 .As<IUserControllerApiHelper>()
                 .SingleInstance();
 
             builder.RegisterType<OnLineUserControllerApiHelper>()
+                .WithParameter("serviceUrl", ConfigHelper.ServiceUrl)
                 .As<IOnLineUserControllerApiHelper>()
                 .SingleInstance();
 
             builder.RegisterType<ChatRoomControllerApiHelper>()
+                .WithParameter("serviceUrl", ConfigHelper.ServiceUrl)
                 .As<IChatRoomControllerApiHelper>()
                 .SingleInstance();
 
