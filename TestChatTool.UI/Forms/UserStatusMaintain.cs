@@ -1,6 +1,5 @@
 ﻿using NLog;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using TestChatTool.Domain.Enum;
@@ -12,7 +11,6 @@ namespace TestChatTool.UI.Forms
     {
         private readonly IUserControllerApiHelper _userControllerApi;
         private readonly ILogger _logger;
-        private IEnumerable<string> _accs;
 
         public UserStatusMaintain(IUserControllerApiHelper userControllerApi)
         {
@@ -23,35 +21,10 @@ namespace TestChatTool.UI.Forms
             _logger = LogManager.GetLogger("UIUserStatusMaintain");
         }
 
-        public IEnumerable<string> Accs
-        {
-            set
-            {
-                _accs = value;
-            }
-        }
-
-        public void SetAccs()
-        {
-            cbbAcc.Items.Clear();
-
-            btnOk.Enabled = false;
-
-            if (_accs.Any())
-            {
-                foreach (var acc in _accs)
-                {
-                    cbbAcc.Items.Add(acc);
-                }
-
-                cbbAcc.SelectedIndex = 0;
-                btnOk.Enabled = true;
-            }
-        }
-
         public void SetUpUI(bool isVerify)
         {
             btnOk.Text = isVerify ? "開通" : "解鎖";
+            SetAccs(isVerify ? UserStatusType.Disabled : UserStatusType.Lock);
         }
 
         private void ButtonClick(object sender, EventArgs e)
@@ -77,6 +50,31 @@ namespace TestChatTool.UI.Forms
             {
                 _logger.Error(ex, $"{GetType().Name} ButtonClick Exception");
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void SetAccs(UserStatusType statusType)
+        {
+            cbbAcc.Items.Clear();
+            btnOk.Enabled = false;
+
+            var users = _userControllerApi.QueryAllForUserStatus(statusType);
+
+            if (users.Code != (int)ErrorType.Success)
+            {
+                MessageBox.Show(users.ErrorMsg);
+                return;
+            }
+
+            if (users.Users.Any())
+            {
+                foreach (var user in users.Users)
+                {
+                    cbbAcc.Items.Add(user.Account);
+                }
+
+                cbbAcc.SelectedIndex = 0;
+                btnOk.Enabled = true;
             }
         }
 

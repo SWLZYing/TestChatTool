@@ -42,7 +42,7 @@ namespace TestChatTool.Service.Controllers
                 {
                     Account = request.Account,
                     NickName = request.NickName.IsNullOrWhiteSpace() ? request.Account : request.NickName,
-                    RoomCode = request.RoomCode == "SignOut" ? string.Empty : request.RoomCode
+                    RoomCode = request.RoomCode
                 });
 
                 if (result.ex != null)

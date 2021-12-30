@@ -15,7 +15,6 @@ namespace TestChatTool.UI.Forms
 {
     public partial class Backstage : Form
     {
-        private readonly IUserControllerApiHelper _userControllerApi;
         private readonly IOnLineUserControllerApiHelper _onLineUserControllerApi;
         private readonly IChatRoomControllerApiHelper _chatRoomControllerApi;
         private readonly ICallBackEventHandler _callBackEvent;
@@ -31,7 +30,6 @@ namespace TestChatTool.UI.Forms
         public Admin Admin => _admin;
 
         public Backstage(
-            IUserControllerApiHelper userControllerApi,
             IOnLineUserControllerApiHelper onLineUserControllerApi,
             IChatRoomControllerApiHelper chatRoomControllerApi,
             ICallBackEventHandler callBackEvent,
@@ -43,7 +41,6 @@ namespace TestChatTool.UI.Forms
             InitializeComponent();
             MaximizeBox = false;
 
-            _userControllerApi = userControllerApi;
             _onLineUserControllerApi = onLineUserControllerApi;
             _chatRoomControllerApi = chatRoomControllerApi;
             _callBackEvent = callBackEvent;
@@ -303,34 +300,12 @@ namespace TestChatTool.UI.Forms
 
         private void Unlock()
         {
-            var users = _userControllerApi.QueryAllForUserStatus(UserStatusType.Lock);
-
-            if (users.Code != (int)ErrorType.Success)
-            {
-                MessageBox.Show(users.ErrorMsg);
-                return;
-            }
-
-            // 將需審核帳號帶入
-            _userMaintain.Accs = users.Users.Select(s => s.Account);
-            _userMaintain.SetAccs();
             _userMaintain.SetUpUI(false);
             _userMaintain.ShowDialog();
         }
 
         private void Verify()
         {
-            var users = _userControllerApi.QueryAllForUserStatus(UserStatusType.Disabled);
-
-            if (users.Code != (int)ErrorType.Success)
-            {
-                MessageBox.Show(users.ErrorMsg);
-                return;
-            }
-
-            // 將需審核帳號帶入
-            _userMaintain.Accs = users.Users.Select(s => s.Account);
-            _userMaintain.SetAccs();
             _userMaintain.SetUpUI(true);
             _userMaintain.ShowDialog();
         }

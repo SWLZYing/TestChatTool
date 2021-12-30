@@ -255,7 +255,6 @@ namespace TestChatTool.UI.Forms
         {
             LeaveRoom();
             UserOnLineUpsert(true);
-
             Close();
         }
 
@@ -274,8 +273,6 @@ namespace TestChatTool.UI.Forms
                 Message = txtTalk.Text,
                 CreateDateTime = DateTime.Now
             });
-
-            UserOnLineUpsert(false);
 
             txtTalk.Clear();
         }
@@ -354,5 +351,11 @@ namespace TestChatTool.UI.Forms
         /// </summary>
         /// <param name="text"></param>
         private delegate void SafeCallDelegate(string text);
+
+        private void Room_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            LeaveRoom();
+            UserOnLineUpsert(true);
+        }
     }
 }
