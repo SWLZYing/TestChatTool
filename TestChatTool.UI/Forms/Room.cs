@@ -83,7 +83,7 @@ namespace TestChatTool.UI.Forms
 
                     if (eventData.Account != _user.Account && eventData.RoomCode == _room.Code)
                     {
-                        UpdateMessage($"{eventData.NickName} 已進入聊天室");
+                        UpdateMessage($"{eventData.NickName}-{eventData.CreateDateTime?.ToString("HH:mm:ss")} 已進入聊天室");
                     }
                     break;
 
@@ -91,7 +91,7 @@ namespace TestChatTool.UI.Forms
 
                     if (eventData.Account != _user.Account && eventData.RoomCode == _room.Code)
                     {
-                        UpdateMessage($"{eventData.NickName} 已離開聊天室");
+                        UpdateMessage($"{eventData.NickName}-{eventData.CreateDateTime?.ToString("HH:mm:ss")} 已離開聊天室");
                     }
                     break;
 
@@ -154,6 +154,8 @@ namespace TestChatTool.UI.Forms
                 return;
             }
 
+            UserOnLineUpsert(false);
+
             // 第一次進入不顯示
             if (_room != null)
             {
@@ -162,8 +164,6 @@ namespace TestChatTool.UI.Forms
 
             _room = cbbRoom.SelectedItem as RoomInfo;
             txtMessage.Clear();
-
-            UserOnLineUpsert(false);
 
             EnterRoom();
         }
@@ -185,7 +185,7 @@ namespace TestChatTool.UI.Forms
         {
             try
             {
-                var roomCode = isSignOut ? "SignOut" : _room.Code;
+                var roomCode = isSignOut ? "SignOut" : ((RoomInfo)cbbRoom.SelectedItem).Code;
                 var onLine = _onLineUserControllerApi.Upsert(_user.Account, _user.NickName, roomCode);
 
                 if (onLine.Code != (int)ErrorType.Success)

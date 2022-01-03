@@ -97,7 +97,7 @@ namespace TestChatTool.UI.Forms
 
                     if (eventData.RoomCode == _room.Code)
                     {
-                        UpdateMessage($"{eventData.NickName} 已進入聊天室");
+                        UpdateMessage($"{eventData.NickName}-{eventData.CreateDateTime?.ToString("HH:mm:ss")} 已進入聊天室");
                         UpdateRoomUser();
                     }
                     break;
@@ -106,7 +106,7 @@ namespace TestChatTool.UI.Forms
 
                     if (eventData.RoomCode == _room.Code)
                     {
-                        UpdateMessage($"{eventData.NickName} 已離開聊天室");
+                        UpdateMessage($"{eventData.NickName}-{eventData.CreateDateTime?.ToString("HH:mm:ss")} 已離開聊天室");
                         UpdateRoomUser();
                     }
                     break;
